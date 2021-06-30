@@ -18,6 +18,19 @@ size of board and grid image is : 410 x 454. offset (margin) put a 0,0 cordinate
 *  410 x 454.
             * board-width and height with this scaling will be 246 x 272
 */
+
+.wrapper {
+    display:grid;
+    width:309px;
+    grid-template-columns: 309px;
+    grid-auto-rows: auto;
+}
+.row-on-hand {
+    position:relative;
+    height:32px;
+    padding:5px;
+}
+.button-bar-grid { margin-top:10px; margin-bottom:10px;}
 .onMove { z-index : 100;}
 .shogiBoard {margin:auto; padding:100px;}
 .shogiBoard.large {margin-left:10px;}
@@ -42,7 +55,7 @@ size of board and grid image is : 410 x 454. offset (margin) put a 0,0 cordinate
 .type3width {width: 309px;} .large .type3width {width: 410px;} .small .type3width {width: 267px;}
 .board {position: absolute; left:10px; top:9px; width:286px; height: 312px;}
 .large .board {width: 410px; height: 454px;} .small .board {width:246px; height: 273px;}
-
+.boardbase-grid {position:relative; width: 309px; min-width:309px; height:326px;}
 .boardbase {position:relative; width: 309px; min-width:309px; height:326px;margin:30px;}
 .large .boardbase { width: 440px; min-width:440px; height:470px;} .small .boardbase {width:266px;min-width:266px; height:292px;}
 

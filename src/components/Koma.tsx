@@ -49,8 +49,8 @@ export const PieceImg = (Props: { side: player, pieceInfo: string }) => { // "å…
  */
 export const OnHand = (Props: { side: player, piece: string }) => {
     const side = (Props.side === player.Sente) ? 'S' : 'G';
-    const classes = `koma c-${Props.piece[0]} ${(side === 'S' ? 'row-sente-on-hand' : 'row-gote-on-hand')}`
-    const counterClasses=classes+` on-hand-count ${(side === 'G') ? 'row-gote-on-hand-count' : ''} `
+    const classes = `koma c-${Props.piece[0]}`
+    const counterClasses=classes
     const piece = definePieceFromCode(Props.side, Props.piece[0]);
     const count = Props.piece[1];
     const pieceImage = `/assets/img/koma/${komaSelection}/${piece}.png`

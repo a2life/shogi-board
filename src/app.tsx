@@ -4,7 +4,7 @@ export function App(prop:{setup:ShogiKit}) {
     return (
         <div >
             <p>ShogiBoard with Vite + Preact!</p>
-            <div class="table">
+            <div >
                 <Board pieceSet={prop.setup}/>
             </div>
 

@@ -53,11 +53,14 @@ export const OnHand = (Props: { side: player, piece: string }) => {
     const counterClasses=classes
     const piece = definePieceFromCode(Props.side, Props.piece[0]);
     const count = Props.piece[1];
+    const dummyArray=Array(parseInt(count)).fill('!').map((p,i)=>i);
+    console.log(dummyArray)
     const pieceImage = `/assets/img/koma/${komaSelection}/${piece}.png`
     return (
         <span>
-            <img class={classes} src={pieceImage} alt={count}/>
+            {dummyArray.map((i)=>  (<img class={classes} src={pieceImage} alt={i.toString()}/>))}
             {(parseInt(count) > 1) && <span class={counterClasses} >{count}</span>}
+
         </span>
 
     )

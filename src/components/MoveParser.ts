@@ -48,6 +48,10 @@ export const moveParser = (kifString: string, pieceSet: ShogiKit) => {
             playedOnBoard = removeFromOnBoardString(kifString.slice(2, 4), playedOnBoard);
             playerOnBoard = promotePieceOnPosition(kifString.slice(2, 4), playerOnBoard)
             break;
+        case 'd':
+            playerOnBoard=addToOnBoardPosition(kifString.slice(2,5),playerOnBoard);
+            playerOnHand=onHandStringRemoveLetter(playerOnHand,kifString.slice(4,5));
+
     }
 
     if (kifString[0] === 's') {
@@ -146,6 +150,26 @@ const onHandStringAddLetter = (onHandString: string, letterToAdd: string) => {
 
     } else {
         returnString = `${onHandString},${letterToAdd}1`;
+    }
+    return returnString;
+}
+
+/**
+ * Remove letterToRemove (count-1) from onHandString.
+ * @param onHandString
+ * @param letterToRemove
+ */
+const onHandStringRemoveLetter=(onHandString:string, letterToRemove:string)=>{
+    let returnString='';
+    const letterExistsAt=onHandString.indexOf(letterToRemove);
+    if(letterExistsAt>=0){
+        //letter should exists, otherwise this routine will not be called.
+        let counter=parseInt(onHandString[letterExistsAt+1]) - 1;
+        if (counter===0)  {returnString= onHandString.split(',')
+            .filter((str:string)=>{ return str.indexOf(letterToRemove)<0}).toString()}
+        else returnString=onHandString.slice(0,letterExistsAt)+counter.toString()+onHandString.slice(letterExistsAt+2)
+    } else {
+        returnString=onHandString  //nothing to remove.  just returning the original string
     }
     return returnString;
 }

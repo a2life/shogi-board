@@ -54,7 +54,7 @@ export const OnHand = (Props: { side: player, piece: string }) => {
     const piece = definePieceFromCode(Props.side, Props.piece[0]);
     const count = Props.piece[1];
     const dummyArray=Array(parseInt(count)).fill('!').map((p,i)=>i);
-    console.log(dummyArray)
+
     const pieceImage = `/assets/img/koma/${komaSelection}/${piece}.png`
     return (
         <span>

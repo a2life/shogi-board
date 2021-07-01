@@ -71,7 +71,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
      * uses MoveCounter
      */
     const playOneMoveHandler = (e: Event) => {
-        console.log('analyzing move', movesArray[moveCounter])
+       // console.log('analyzing move', movesArray[moveCounter])
         if (movesArray[moveCounter] === 'x') (e.target as HTMLButtonElement).disabled = true;
         //decypher and manupulate onboardPieces and onHand pieces string
         // push the move to string array and save.

@@ -64,6 +64,10 @@ size of board and grid image is : 410 x 454. offset (margin) put a 0,0 cordinate
 .large .komadai {height:220px; width:140px; min-width:140px;} .small .komadai {width:90px;min-width:90px; height:133px;}
 
 .koma, .marker { position:absolute;}
+.koma {
+    transition: 0.4s;
+}
+
 .koma, .marker, .komadai img {width:30px; height:33px;}
 .large .koma, .large .marker, .large .komadai img  {width:43px; height:48px;}
 .small .koma, .small .marker, .small .komadai img {width:26px; height:29px;}

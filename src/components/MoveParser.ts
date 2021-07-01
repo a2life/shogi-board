@@ -37,14 +37,15 @@ export const moveParser = (kifString: string, pieceSet: ShogiKit) => {
     switch (kifString[1]) {
         case '-':
             playerOnBoard = adjustOnBoardPosition(kifString.slice(2), playerOnBoard);
+
+       //     playerOnHand = addToOnHand(kifString.slice(2, 4), playerOnHand, playedOnBoard)
             playedOnBoard = removeFromOnBoardString(kifString.slice(2, 4), playedOnBoard);
-            playerOnHand = addToOnHand(kifString.slice(2, 4), playerOnHand, playedOnBoard)
 
             break;
         case '+':
             playerOnBoard = adjustOnBoardPosition(kifString.slice(2), playerOnBoard);
+     //       playerOnHand = addToOnHand(kifString.slice(2, 4), playerOnHand, playedOnBoard)
             playedOnBoard = removeFromOnBoardString(kifString.slice(2, 4), playedOnBoard);
-            playerOnHand = addToOnHand(kifString.slice(2, 4), playerOnHand, playedOnBoard)
            playerOnBoard=promotePieceOnPosition(kifString.slice(2, 4), playerOnBoard)
             break;
     }
@@ -91,14 +92,16 @@ const addToOnBoardPosition = (AddString: string, stringToAdjust: string) => {
  * returns new Onhand string;
  * @param position '34' etc.,
  * @param fromString onboard string of played side.
- * @param stringToAdd .. onhand string, '',  'l2,p3' etc., shall i change to l,l,p,p,p ?  this may be needed for smoother animation
+ * @param stringToAdd .. onhand string, '',  'l2,p3' etc.,
  */
 const addToOnHand = (position: string, stringToAdd: string, fromString: string) => {
     const pieceExists = fromString.indexOf(position);
+    let returnString='';
     if (pieceExists > 0) {
         const piece = fromString.slice(pieceExists + 2, 1)
-        return stringToAdd + ',' + piece;
-    } else return stringToAdd;
+        returnString=onHandStringAddLetter(stringToAdd,piece);
+    } else {returnString= stringToAdd;}
+    return returnString;
 }
 /**
  * return string with 77p, removed
@@ -122,4 +125,26 @@ const promotePieceOnPosition = (promotePosition: string, stringToAdjust: string)
             return pos
         }
     }).toString()
+}
+
+
+/**
+ * returns string that is correct format for OnHandString, such as 'p4,l2,n1' or 'p3,l2,n1,b1'
+ * @param onHandString  example 'p3,l2,n1'
+ *
+ * @param letterToAdd   example 'p','b' etc.,
+ */
+const onHandStringAddLetter=(onHandString:string, letterToAdd:string)=>{
+    let returnString='';
+    const letterExists=onHandString.indexOf(letterToAdd);
+    if(letterExists>=0){
+           //letter already exists.  Need to increment count part
+        let counter=parseInt(onHandString[letterExists+1])+1
+        returnString=onHandString.slice(0,letterExists)+counter.toString()+onHandString.slice(letterExists+2)
+
+    }
+    else {
+        returnString=`${onHandString},${letterToAdd}1`;
+    }
+    return returnString;
 }

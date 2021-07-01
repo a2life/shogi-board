@@ -89,7 +89,7 @@ size of board and grid image is : 410 x 454. offset (margin) put a 0,0 cordinate
 
 
 .c1 {left:258px;} .c2 {left: 228px;} .c3,.c-r {left:198px;}
-.c4,c-b {left:168px;} .c5,.c-g {left: 138px;} .c6,.c-s {left:108px;}
+.c4,.c-b {left:168px;} .c5,.c-g {left: 138px;} .c6,.c-s {left:108px;}
 .c7,.c-n {left:78px;} .c8,.c-l {left: 48px;}  .c9,.c-p {left: 18px;}
 .r1 {top:17px;}   .r2 {top:50px;}    .r3 {top:83px;}
 .r4{top:116px;}   .r5{top:149px;}    .r6 {top:182px;}

@@ -38,15 +38,15 @@ export const moveParser = (kifString: string, pieceSet: ShogiKit) => {
         case '-':
             playerOnBoard = adjustOnBoardPosition(kifString.slice(2), playerOnBoard);
 
-       //     playerOnHand = addToOnHand(kifString.slice(2, 4), playerOnHand, playedOnBoard)
+            playerOnHand = addToOnHand(kifString.slice(2, 4), playerOnHand, playedOnBoard)
             playedOnBoard = removeFromOnBoardString(kifString.slice(2, 4), playedOnBoard);
 
             break;
         case '+':
             playerOnBoard = adjustOnBoardPosition(kifString.slice(2), playerOnBoard);
-     //       playerOnHand = addToOnHand(kifString.slice(2, 4), playerOnHand, playedOnBoard)
+            playerOnHand = addToOnHand(kifString.slice(2, 4), playerOnHand, playedOnBoard)
             playedOnBoard = removeFromOnBoardString(kifString.slice(2, 4), playedOnBoard);
-           playerOnBoard=promotePieceOnPosition(kifString.slice(2, 4), playerOnBoard)
+            playerOnBoard = promotePieceOnPosition(kifString.slice(2, 4), playerOnBoard)
             break;
     }
 
@@ -96,11 +96,13 @@ const addToOnBoardPosition = (AddString: string, stringToAdjust: string) => {
  */
 const addToOnHand = (position: string, stringToAdd: string, fromString: string) => {
     const pieceExists = fromString.indexOf(position);
-    let returnString='';
+    let returnString = '';
     if (pieceExists > 0) {
-        const piece = fromString.slice(pieceExists + 2, 1)
-        returnString=onHandStringAddLetter(stringToAdd,piece);
-    } else {returnString= stringToAdd;}
+        const piece = fromString.slice(pieceExists + 2, pieceExists + 3)
+        returnString = onHandStringAddLetter(stringToAdd, piece.toLowerCase());
+    } else {
+        returnString = stringToAdd;
+    }
     return returnString;
 }
 /**
@@ -109,7 +111,7 @@ const addToOnHand = (position: string, stringToAdd: string, fromString: string) 
  * @param stringToAdjust original string ie., "19l,29n,39s,49g,59k,69g,79s,89n,99l,28r,88b,17p,27p,37p,47p,57p,67p,77p,87p,97p"
  */
 const removeFromOnBoardString = (removePosition: string, stringToAdjust: string) => {
-        return stringToAdjust.split(',').filter(w => w.indexOf(removePosition) === -1).toString()
+    return stringToAdjust.split(',').filter(w => w.indexOf(removePosition) === -1).toString()
 }
 
 /**
@@ -134,17 +136,16 @@ const promotePieceOnPosition = (promotePosition: string, stringToAdjust: string)
  *
  * @param letterToAdd   example 'p','b' etc.,
  */
-const onHandStringAddLetter=(onHandString:string, letterToAdd:string)=>{
-    let returnString='';
-    const letterExists=onHandString.indexOf(letterToAdd);
-    if(letterExists>=0){
-           //letter already exists.  Need to increment count part
-        let counter=parseInt(onHandString[letterExists+1])+1
-        returnString=onHandString.slice(0,letterExists)+counter.toString()+onHandString.slice(letterExists+2)
+const onHandStringAddLetter = (onHandString: string, letterToAdd: string) => {
+    let returnString = '';
+    const letterExists = onHandString.indexOf(letterToAdd);
+    if (letterExists >= 0) {
+        //letter already exists.  Need to increment count part
+        let counter = parseInt(onHandString[letterExists + 1]) + 1
+        returnString = onHandString.slice(0, letterExists) + counter.toString() + onHandString.slice(letterExists + 2)
 
-    }
-    else {
-        returnString=`${onHandString},${letterToAdd}1`;
+    } else {
+        returnString = `${onHandString},${letterToAdd}1`;
     }
     return returnString;
 }

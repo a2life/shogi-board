@@ -1,7 +1,8 @@
 import '../shogiboard.css'
-import {PieceImg, OnHand} from "./Koma";
+
 import {useState} from "preact/hooks";
 import {moveParser} from "./MoveParser";
+import {RenderPiece,RenderBoard} from "./renderPiece";
 
 export enum player { Sente, Gote}
 
@@ -47,13 +48,31 @@ const MarkerAt = (Props: { c: string, r: string }) => {
 }
 
 export const imgRoot = '/assets/img/'
-const banImage = imgRoot + "ban/ban_kaya_a.png"
-const gridImage = imgRoot + 'masu/masu_dot_xy.png'
 const markerImg = imgRoot + 'focus/focus_trpt_g.png'
+
+
+const duplicateLetter = (a: string) => {
+    let s = []
+    for (let count = 0; count < parseInt(a[1]); count++) s.push(a[0])
+    return s.toString();
+}
 export const Board = (Props: { pieceSet: ShogiKit }) => {
     let {senteOnBoard, goteOnBoard, senteOnHand, goteOnHand, markerAt, caption, initialComment, moves, tesuu}
         = {...defaultParams, ...Props.pieceSet}
+
     const [marker, setMarker] = useState(markerAt.split(','));
+    const senteOnBoardPart = senteOnBoard.split(',').map((piece) => 's' + piece)
+    const goteOnBoardPart = goteOnBoard.split(',').map((piece) => 'g' + piece)
+
+    let senteOnHandFactored = senteOnHand.split(',').map((a) => duplicateLetter(a)).toString()
+    const senteOnHandPart = senteOnHandFactored === '' ? [] : senteOnHandFactored.split(',').map((piece) => 's' + piece + 'S' + piece)
+    let goteOnHandFactored = goteOnHand.split(',').map((a) => duplicateLetter(a)).toString()
+    const goteOnHandPart = goteOnHandFactored === '' ? [] : goteOnHandFactored.split(',').map((piece) => 'g' + piece + 'G' + piece)
+    const unifiedPieces = [...senteOnBoardPart, ...goteOnBoardPart, ...senteOnHandPart, ...goteOnHandPart].toString()
+
+    console.log(unifiedPieces)
+
+    const [piecesInfo, setPiecesInfo] = useState(unifiedPieces)
     const [senteOnboardPieces, setSenteOnboardPieces] = useState(senteOnBoard);
     const [goteOnboardPieces, setGoteOnboardPieces] = useState(goteOnBoard);
     const [senteOnHandPieces, setSenteOnHandPieces] = useState(senteOnHand);
@@ -71,7 +90,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
      * uses MoveCounter
      */
     const playOneMoveHandler = (e: Event) => {
-       // console.log('analyzing move', movesArray[moveCounter])
+        // console.log('analyzing move', movesArray[moveCounter])
         if (movesArray[moveCounter] === 'x') (e.target as HTMLButtonElement).disabled = true;
         //decypher and manupulate onboardPieces and onHand pieces string
         // push the move to string array and save.
@@ -95,20 +114,14 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
     return <div class="wrapper">
         {(caption!.length > 0) && <div class="h5 text-center">{caption}</div>}
         <div class="row-on-hand">
-            {goteOnHandPieces.split(',').map((pn: string) => (pn !== "" && <OnHand side={player.Gote} piece={pn}/>))}
         </div>
 
         <div class=" boardbase-grid">
-            <img class="board" src={banImage}
-                 alt=""/>
-            <img class="board" src={gridImage}
-                 alt=""/>
+            <RenderBoard />
             <MarkerAt c={marker[0]} r={marker[1]}/>
-            {senteOnboardPieces.split(',').map((p) => (<PieceImg side={player.Sente} pieceInfo={p}/>))}
-            {goteOnboardPieces.split(',').map((p) => (<PieceImg side={player.Gote} pieceInfo={p}/>))}
+            {piecesInfo.split(',').map((p) => (<RenderPiece piece={p}/>))}
         </div>
         <div class="row-on-hand">
-            {senteOnHandPieces.split(',').map((pn: string) => (pn !== "" && <OnHand side={player.Sente} piece={pn}/>))}
         </div>
 
         <div class="button-bar-grid ">

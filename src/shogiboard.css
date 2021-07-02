@@ -88,14 +88,15 @@ size of board and grid image is : 410 x 454. offset (margin) put a 0,0 cordinate
 .large .comment {height:120px;} .small .comment { min-height:100px;}
 
 
-.c1 {left:258px;} .c2 {left: 228px;} .c3,.c-r {left:198px;}
-.c4,.c-b {left:168px;} .c5,.c-g {left: 138px;} .c6,.c-s {left:108px;}
-.c7,.c-n {left:78px;} .c8,.c-l {left: 48px;}  .c9,.c-p {left: 18px;}
+.c1 {left:258px;} .c2 {left: 228px;} .c3,.c-r,.cr {left:198px;}
+.c4,.c-b,.c-b {left:168px;} .c5,.c-g,.cg {left: 138px;} .c6,.c-s,.cs {left:108px;}
+.c7,.c-n,.cn {left:78px;} .c8,.c-l,.cl {left: 48px;}  .c9,.c-p,.cp {left: 18px;}
 .r1 {top:17px;}   .r2 {top:50px;}    .r3 {top:83px;}
 .r4{top:116px;}   .r5{top:149px;}    .r6 {top:182px;}
 .r7{top:215px;}   .r8{top:248px;}    .r9{top:281px;}
-                                     .row-sente-on-hand{top:320px;}
-.row-gote-on-hand{top:-22px;}
+
+                                     .row-sente-on-hand, .rS{top:325px;}
+.row-gote-on-hand,.rG{top:-28px;}
 .on-hand-count {font-size:smaller; text-align:right}
 .row-gote-on-hand-count {top:-6px; }
 

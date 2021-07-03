@@ -17,8 +17,8 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
     const [piecesInfo, setPiecesInfo] = useState(unifiedPieces)
     const movesArray = moves!.split(',');
     const [moveCounter, setMoveCounter] = useState(tesuu! - 1)
-    const [mover, setMover]=useState('00')
-    const [history, setHistory] = useState([] as string[])
+    const [mover, setMover]=useState(movesArray[tesuu!-1].slice(4,6)) //for first 'move' we use 'from' coordinate
+    const [history, setHistory] = useState([] as {pieces:string,move:string}[])
 
     /**
      * Handler for moving forward one play hand.
@@ -33,7 +33,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         } else {
             const nextMove=movesArray[moveCounter]
             const pieces = moveParser(nextMove, piecesInfo)
-            setHistory([...history, piecesInfo])
+            setHistory([...history, {pieces:piecesInfo,move:mover}])
             setPiecesInfo(pieces)
               setMover(nextMove.slice(2,4))
             setMoveCounter(moveCounter + 1)
@@ -46,8 +46,8 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         e.preventDefault();
         if (moveCounter>0){
             const pieces = history.pop();
-            setPiecesInfo(pieces!);
-
+            setPiecesInfo(pieces!.pieces);
+            setMover(pieces!.move)
             setMoveCounter(moveCounter - 1)
             setHistory(history)
         }

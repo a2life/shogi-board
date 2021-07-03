@@ -1,7 +1,7 @@
 # Shogi board using Typescript with viteJS and Preact
 
 ### work in progress
-#### code to show shogiboard and pieces with provided initial arrangement and moves information
+#### code to show shogiboard and pieces with Initial arrangement and moves information written in JavaScript leterals.
 June 2021 - ?
 
 <code> npm install </code>

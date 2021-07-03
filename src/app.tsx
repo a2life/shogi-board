@@ -1,13 +1,6 @@
-import {Board, ShogiKit} from "./components/ShogiBoard";
+import {Board } from "./components/ShogiBoard";
+import {ShogiKit} from "./components/defaults";
+
 export function App(prop:{setup:ShogiKit}) {
-
-    return (
-        <div >
-            <p>ShogiBoard with Vite + Preact!</p>
-            <div >
-                <Board pieceSet={prop.setup}/>
-            </div>
-
-        </div>
-    )
+    return <Board pieceSet={prop.setup}/>
 }

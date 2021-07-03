@@ -1,6 +1,6 @@
 import { render } from 'preact'
 import { App } from './app'
-import {ShogiKit} from "./components/ShogiBoard";
+import {ShogiKit} from "./components/defaults";
 
 declare const initialSetup:ShogiKit[]
 const target=document.querySelectorAll('.app')

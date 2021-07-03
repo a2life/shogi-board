@@ -1,22 +1,23 @@
 /*
 This is CSS for shogiboard.
 all ID selectors(start with #) are for backward compatibility only. the latest code will only use
-                               class selectors
-                               Idea of this CSS is to position each piece according to classes (C-column and r-row) assigned to a image file.
-                                                                                                                    the equation is as follows (each image file size is 43 x 48. offsets are after trial and error)
+class selectors
+Idea of this CSS is to position each piece according to classes (C-column and r-row) assigned to a image file.
+
+the equation is as follows (each image file size is 43 x 48. offsets are after trial and error)
 Original images sizes used for "large" class
                                        x=43x(9-c)+11+12
 y=48x(r-1)+10+10
 size of board and grid image is : 410 x 454. offset (margin) put a 0,0 cordinate to (11,10)
 .board= size of board itself =410x454
-                                 Default size uses the following parameters.
-                                 small size uses the following calculations
-                                 This will use 60% scaling.
-                                                   * x-width=26, y-height=29
+Default size uses the following parameters.
+small size uses the following calculations
+This will use 60% scaling.
+* x-width=26, y-height=29
 * x=26x(9-c)+11+7
 * y=29x(r-1)+10+7
 *  410 x 454.
-            * board-width and height with this scaling will be 246 x 272
+* board-width and height with this scaling will be 246 x 272
 */
 
 .wrapper {
@@ -29,7 +30,9 @@ size of board and grid image is : 410 x 454. offset (margin) put a 0,0 cordinate
     position:relative;
     height:32px;
     padding:5px;
+
 }
+.row-on-hand span {position:absolute; z-index:100}
 .button-bar-grid { margin-top:10px; margin-bottom:10px;}
 .onMove { z-index : 100;}
 .shogiBoard {margin:auto; padding:100px;}
@@ -89,7 +92,7 @@ size of board and grid image is : 410 x 454. offset (margin) put a 0,0 cordinate
 
 
 .c1 {left:258px;} .c2 {left: 228px;} .c3,.c-r,.cr {left:198px;}
-.c4,.c-b,.c-b {left:168px;} .c5,.c-g,.cg {left: 138px;} .c6,.c-s,.cs {left:108px;}
+.c4,.c-b,.cb {left:168px;} .c5,.c-g,.cg {left: 138px;} .c6,.c-s,.cs {left:108px;}
 .c7,.c-n,.cn {left:78px;} .c8,.c-l,.cl {left: 48px;}  .c9,.c-p,.cp {left: 18px;}
 .r1 {top:17px;}   .r2 {top:50px;}    .r3 {top:83px;}
 .r4{top:116px;}   .r5{top:149px;}    .r6 {top:182px;}

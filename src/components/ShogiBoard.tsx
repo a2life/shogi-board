@@ -1,10 +1,10 @@
 import '../shogiboard.css'
 
 import {useState} from "preact/hooks";
-import {moveParser} from "./MoveParser";
-import {RenderPiece,RenderBoard} from "./renderPiece";
+import {moveParser} from "./MoveHandlers";
+import {RenderPiece, RenderBoard} from "./renderPiece";
+import {scoreArray,unifyPieces} from "./utils";
 
-export enum player { Sente, Gote}
 
 export interface ShogiKit {
 
@@ -51,89 +51,80 @@ export const imgRoot = '/assets/img/'
 const markerImg = imgRoot + 'focus/focus_trpt_g.png'
 
 
-const duplicateLetter = (a: string) => {
-    let s = []
-    for (let count = 0; count < parseInt(a[1]); count++) s.push(a[0])
-    return s.toString();
-}
 export const Board = (Props: { pieceSet: ShogiKit }) => {
     let {senteOnBoard, goteOnBoard, senteOnHand, goteOnHand, markerAt, caption, initialComment, moves, tesuu}
         = {...defaultParams, ...Props.pieceSet}
-
     const [marker, setMarker] = useState(markerAt.split(','));
-    const senteOnBoardPart = senteOnBoard.split(',').map((piece) => 's' + piece)
-    const goteOnBoardPart = goteOnBoard.split(',').map((piece) => 'g' + piece)
+    const unifiedPieces=unifyPieces(senteOnBoard,goteOnBoard,senteOnHand,goteOnHand)
 
-    let senteOnHandFactored = senteOnHand.split(',').map((a) => duplicateLetter(a)).toString()
-    const senteOnHandPart = senteOnHandFactored === '' ? [] : senteOnHandFactored.split(',').map((piece) => 's' + piece + 'S' + piece)
-    let goteOnHandFactored = goteOnHand.split(',').map((a) => duplicateLetter(a)).toString()
-    const goteOnHandPart = goteOnHandFactored === '' ? [] : goteOnHandFactored.split(',').map((piece) => 'g' + piece + 'G' + piece)
-    const unifiedPieces = [...senteOnBoardPart, ...goteOnBoardPart, ...senteOnHandPart, ...goteOnHandPart].toString()
-
-    console.log(unifiedPieces)
+//    console.log(unifiedPieces)
 
     const [piecesInfo, setPiecesInfo] = useState(unifiedPieces)
-    const [senteOnboardPieces, setSenteOnboardPieces] = useState(senteOnBoard);
-    const [goteOnboardPieces, setGoteOnboardPieces] = useState(goteOnBoard);
-    const [senteOnHandPieces, setSenteOnHandPieces] = useState(senteOnHand);
-    const [goteOnHandPieces, setGoteOnHandPieces] = useState(goteOnHand);
     const movesArray = moves!.split(',');
     const [moveCounter, setMoveCounter] = useState(tesuu! - 1)
-    const testClickHandler = () => {
-        setSenteOnboardPieces('53s,52B')
-        setSenteOnHandPieces('s1')
-    }
+    const [history, setHistory] = useState([] as string[])
 
     /**
      * Handler for moving forward one play hand.
      * depending on the move, modify onboard and onhand strings for both sente and gote
      * uses MoveCounter
      */
+
     const playOneMoveHandler = (e: Event) => {
         // console.log('analyzing move', movesArray[moveCounter])
-        if (movesArray[moveCounter] === 'x') (e.target as HTMLButtonElement).disabled = true;
-        //decypher and manupulate onboardPieces and onHand pieces string
-        // push the move to string array and save.
-        const {senteOnHand, goteOnHand, senteOnBoard, goteOnBoard} = moveParser(movesArray[moveCounter], {
+        if (movesArray[moveCounter] === 'x' || movesArray[moveCounter] === undefined) {
+            (e.target as HTMLButtonElement).disabled = true;
+        } else {
+            const pieces = moveParser(movesArray[moveCounter], piecesInfo)
+            setHistory([...history, piecesInfo])
+            setPiecesInfo(pieces)
+            setMoveCounter(moveCounter + 1)
 
-            senteOnBoard: senteOnboardPieces,
-            senteOnHand: senteOnHandPieces,
-            goteOnBoard: goteOnboardPieces,
-            goteOnHand: goteOnHandPieces,
-            markerAt
+        }
 
-        })
-        setGoteOnboardPieces(goteOnBoard)
-        setSenteOnboardPieces(senteOnBoard)
-        setGoteOnHandPieces(goteOnHand)
-        setSenteOnHandPieces(senteOnHand)
-        setMoveCounter(moveCounter + 1)
+    }
+
+    const moveBackHandler = (e: Event) => {
+        e.preventDefault();
+        if (moveCounter>0){
+            const pieces = history.pop();
+            setPiecesInfo(pieces!);
+            setMoveCounter(moveCounter - 1)
+            setHistory(history)
+        }
+
+
     }
 
 
     return <div class="wrapper">
         {(caption!.length > 0) && <div class="h5 text-center">{caption}</div>}
         <div class="row-on-hand">
+            {scoreArray('g', piecesInfo).map((p) => (parseInt(p[1]) > 1) && <span class={`c${p[0]}`}>{p[1]}</span>)}
         </div>
 
-        <div class=" boardbase-grid">
-            <RenderBoard />
+        <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler} >
+            <RenderBoard/>
             <MarkerAt c={marker[0]} r={marker[1]}/>
             {piecesInfo.split(',').map((p) => (<RenderPiece piece={p}/>))}
         </div>
         <div class="row-on-hand">
+            {scoreArray('s', piecesInfo).map((p) => (parseInt(p[1]) > 1) && <span class={'c' + p[0]}>{p[1]}</span>)}
         </div>
 
+        {moves!.length > 0 &&
         <div class="button-bar-grid ">
             <div class="btn-group">
-                <button class="btn btn-sm btn-outline-info" value="test" onClick={testClickHandler}><i
-                    class="bi bi-play text-dark "></i></button>
-                <button class="btn btn-sm btn-outline-info" value="test" onClick={playOneMoveHandler}><i
-                    class="bi bi-play text-dark "></i></button>
-                <button class="btn btn-sm btn-outline-info" value="test" onClick={testClickHandler}><i
-                    class="bi bi-play text-dark "></i></button>
+                <button class="btn btn-sm btn-outline-secondary" value="test" onClick={moveBackHandler}
+                        disabled={moveCounter === 0}>
+                    <i class="bi bi-caret-left text-dark "/></button>
+                <button class="btn btn-sm btn-outline-secondary" value="test" onClick={playOneMoveHandler}
+                        disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
+                    <i class="bi bi-caret-right text-dark "/></button>
+
             </div>
         </div>
+        }
     </div>
 
 }

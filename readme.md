@@ -23,6 +23,6 @@ then
 ### todos
 1. Kifu parser for kif2 format
 2. Allow branching
-3. 'Save' button for download kif
+3. 'Save' button for downloading kif
 
 

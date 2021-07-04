@@ -37,6 +37,14 @@ This will use 60% scaling.
     padding:5px;
 
 }
+.koma, .marker { position:absolute;}
+.koma {
+    transition: 0.4s;
+}
+.koma, .marker, .komadai img {width:30px; height:33px;}
+.rS{top:325px; z-index:500}
+.rG{top:-28px; z-index:500}
+.on-hand-count {font-size:smaller; text-align:right}
 .row-on-hand span {position:absolute; font-size:xx-small; bottom:0!important;padding:.35em .65em;
     font-weight:400; line-height:1; color:#fff; text-align:center; background-color: #212529; border-radius:50rem; z-index:700}
 .button-bar-grid { margin-top:10px; margin-bottom:10px;}
@@ -72,12 +80,6 @@ This will use 60% scaling.
 .komadai {width:100px; min-width:100px; height:150px; line-height: 15px; background: #f4c151;}
 .large .komadai {height:220px; width:140px; min-width:140px;} .small .komadai {width:90px;min-width:90px; height:133px;}
 
-.koma, .marker { position:absolute;}
-.koma {
-    transition: 2s;
-}
-
-.koma, .marker, .komadai img {width:30px; height:33px;}
 .large .koma, .large .marker, .large .komadai img  {width:43px; height:48px;}
 .small .koma, .small .marker, .small .komadai img {width:26px; height:29px;}
 
@@ -104,10 +106,6 @@ This will use 60% scaling.
 .r4{top:116px;}   .r5{top:149px;}    .r6 {top:182px;}
 .r7{top:215px;}   .r8{top:248px;}    .r9{top:281px;}
 
-                                     .row-sente-on-hand, .rS{top:325px; z-index:500}
-.row-gote-on-hand,.rG{top:-28px; z-index:500}
-.on-hand-count {font-size:smaller; text-align:right}
-.row-gote-on-hand-count {top:-6px; }
 
 .large .c1 {left:365px;} .large .c2 {left: 322px;} .large .c3 {left:279px;}
 .large .c4 {left:236px;} .large .c5 {left: 193px;} .large .c6 {left:150px;}
@@ -123,6 +121,3 @@ This will use 60% scaling.
 .small .r1 {top:15px;}   .small .r2 {top:44px;}    .small .r3 {top:73px;}
 .small .r4{top:102px;}   .small .r5{top:131px;}    .small .r6 {top:160px;}
 .small .r7{top:189px;}   .small .r8{top:218px;}    .small .r9{top:247px;}
-
-.small .row-gote-on-hand {top: -14px;}
-.small .row_s {top: 277px;}

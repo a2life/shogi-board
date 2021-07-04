@@ -11,17 +11,34 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         = {...defaultParams, ...Props.pieceSet}
     const [marker, setMarker] = useState(markerAt.split(','));
     const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand)
-    const kifuHasBranch = false;
+
 //    console.log(unifiedPieces)
 
     const [piecesInfo, setPiecesInfo] = useState(unifiedPieces)
+    const commentWindow = (moves && moves.indexOf('*') >= 0)
     const movesArray = moves!.split(',');
+    if (movesArray[0][0] === '*') {
+        initialComment = `${initialComment} ${movesArray[0].slice(1)}`
+        movesArray.splice(0,1)
+    }
+    const HasBranch =  (moves && (moves.match(/\dJ\d/) || []).length>0 ); //check for Branch instruction
+    const [comment, setComment] = useState(initialComment)
     const [moveCounter, setMoveCounter] = useState(tesuu! - 1)
     const [mover, setMover] = useState(movesArray[tesuu! - 1].slice(4, 6)) //for first 'move' we use 'from' coordinate
     const [history, setHistory] = useState([] as { pieces: string, move: string }[])
 
 
-    const endOfMoves = (counter: number) => (movesArray[counter] === 'x' || movesArray[counter] === undefined)
+    const endOfMoves = (counter: number) => {
+        switch (movesArray[counter][0]) {
+            case 'x':  // end of move
+            case 'C':  // start of branch
+            case undefined:
+                return true;
+
+            default:
+                return false
+        }
+    }
 
     const playOneMoveHandler = (e: Event) => {
         // console.log('analyzing move', movesArray[moveCounter])
@@ -31,6 +48,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
             setHistory([...history, {pieces: piecesInfo, move: mover}])
             setPiecesInfo(pieces)
             setMover(nextMove.slice(2, 4))
+            setComment(nextMove.indexOf('*')>=0?nextMove.slice(nextMove.indexOf('*')+1):"")
             setMoveCounter(moveCounter + 1)
 
         }
@@ -102,7 +120,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
                 <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}
                         disabled={moveCounter === 0}>
                     <I.SkipStart/></button>
-                {kifuHasBranch &&
+                {HasBranch &&
                 <button class="btn btn-sm btn-outline-secondary" value="Skip-Backward" onClick={moveBackHandler}
                         disabled={moveCounter === 0}>
                     <I.SkipBack/></button>}
@@ -112,7 +130,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
                 <button class="btn btn-sm btn-outline-secondary" value="Play" onClick={playOneMoveHandler}
                         disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
                     <I.Play/></button>
-                {kifuHasBranch &&
+                {HasBranch &&
                 <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward" onClick={playOneMoveHandler}
                         disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
                     <I.SkipForward/></button>}
@@ -123,6 +141,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
             </div>
         </div>
         }
+        {commentWindow && <div class="comment">{comment}</div>}
     </div>
 
 }

@@ -1,56 +1,83 @@
 import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser} from "./MoveHandlers";
-import {RenderPiece, RenderBoard,MarkerAt} from "./renderPiece";
-import {scoreArray,unifyPieces} from "./utils";
-import {defaultParams,ShogiKit} from "./defaults";
-
+import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
+import {scoreArray, unifyPieces} from "./utils";
+import {defaultParams, ShogiKit} from "./defaults";
+import * as I from "./Icons";
 
 export const Board = (Props: { pieceSet: ShogiKit }) => {
     let {senteOnBoard, goteOnBoard, senteOnHand, goteOnHand, markerAt, caption, initialComment, moves, tesuu}
         = {...defaultParams, ...Props.pieceSet}
     const [marker, setMarker] = useState(markerAt.split(','));
-    const unifiedPieces=unifyPieces(senteOnBoard,goteOnBoard,senteOnHand,goteOnHand)
-
+    const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand)
+    const kifuHasBranch = false;
 //    console.log(unifiedPieces)
 
     const [piecesInfo, setPiecesInfo] = useState(unifiedPieces)
     const movesArray = moves!.split(',');
     const [moveCounter, setMoveCounter] = useState(tesuu! - 1)
-    const [mover, setMover]=useState(movesArray[tesuu!-1].slice(4,6)) //for first 'move' we use 'from' coordinate
-    const [history, setHistory] = useState([] as {pieces:string,move:string}[])
+    const [mover, setMover] = useState(movesArray[tesuu! - 1].slice(4, 6)) //for first 'move' we use 'from' coordinate
+    const [history, setHistory] = useState([] as { pieces: string, move: string }[])
 
-    /**
-     * Handler for moving forward one play hand.
-     * depending on the move, modify onboard and onhand strings for both sente and gote
-     * uses MoveCounter
-     */
+
+    const endOfMoves = (counter: number) => (movesArray[counter] === 'x' || movesArray[counter] === undefined)
 
     const playOneMoveHandler = (e: Event) => {
         // console.log('analyzing move', movesArray[moveCounter])
-        if (movesArray[moveCounter] === 'x' || movesArray[moveCounter] === undefined) {
-            (e.target as HTMLButtonElement).disabled = true;
-        } else {
-            const nextMove=movesArray[moveCounter]
+        if (!endOfMoves(moveCounter)) {
+            const nextMove = movesArray[moveCounter]
             const pieces = moveParser(nextMove, piecesInfo)
-            setHistory([...history, {pieces:piecesInfo,move:mover}])
+            setHistory([...history, {pieces: piecesInfo, move: mover}])
             setPiecesInfo(pieces)
-              setMover(nextMove.slice(2,4))
+            setMover(nextMove.slice(2, 4))
             setMoveCounter(moveCounter + 1)
 
         }
 
     }
+    const skipEndHandler = (e: Event) => {
+        let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove, currentMove = mover
+
+        while (!endOfMoves(counter)) { //read past to the end
+            miniHistory.push({pieces: pieces, move: currentMove})
+            nextMove = movesArray[counter]
+            pieces = moveParser(nextMove, pieces) //get updated pieces
+            currentMove = nextMove
+            counter++
+        }
+        setHistory([...history, ...miniHistory])
+        setPiecesInfo(pieces)
+        setMover((nextMove as string).slice(2, 4))
+        setMoveCounter(counter)
+
+    }
 
     const moveBackHandler = (e: Event) => {
         e.preventDefault();
-        if (moveCounter>0){
+        if (moveCounter > 0) {
             const pieces = history.pop();
             setPiecesInfo(pieces!.pieces);
             setMover(pieces!.move)
             setMoveCounter(moveCounter - 1)
             setHistory(history)
         }
+    }
+    const reWindHandler = (e: Event) => {
+        let counter = moveCounter;
+
+        let pieces: { pieces: string, move: string } | undefined;
+
+        while (counter > tesuu! - 1) {
+            pieces = history.pop()
+            counter--
+        }
+
+        setPiecesInfo(pieces!.pieces);
+        setMover(pieces!.move)
+        setMoveCounter(tesuu! - 1)
+        setHistory(history)
+
     }
 
 
@@ -60,7 +87,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
             {scoreArray('g', piecesInfo).map((p) => (parseInt(p[1]) > 1) && <span class={`c${p[0]}`}>{p[1]}</span>)}
         </div>
 
-        <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler} >
+        <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
             <RenderBoard/>
             <MarkerAt c={marker[0]} r={marker[1]}/>
             {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={mover}/>))}
@@ -72,12 +99,26 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         {moves!.length > 0 &&
         <div class="button-bar-grid ">
             <div class="btn-group">
-                <button class="btn btn-sm btn-outline-secondary" value="test" onClick={moveBackHandler}
+                <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}
                         disabled={moveCounter === 0}>
-                    <i class="bi bi-caret-left text-dark "/></button>
-                <button class="btn btn-sm btn-outline-secondary" value="test" onClick={playOneMoveHandler}
+                    <I.SkipStart/></button>
+                {kifuHasBranch &&
+                <button class="btn btn-sm btn-outline-secondary" value="Skip-Backward" onClick={moveBackHandler}
+                        disabled={moveCounter === 0}>
+                    <I.SkipBack/></button>}
+                <button class="btn btn-sm btn-outline-secondary" value="Back" onClick={moveBackHandler}
+                        disabled={moveCounter === 0}>
+                    <I.Back/></button>
+                <button class="btn btn-sm btn-outline-secondary" value="Play" onClick={playOneMoveHandler}
                         disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
-                    <i class="bi bi-caret-right text-dark "/></button>
+                    <I.Play/></button>
+                {kifuHasBranch &&
+                <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward" onClick={playOneMoveHandler}
+                        disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
+                    <I.SkipForward/></button>}
+                <button class="btn btn-sm btn-outline-secondary" value="Skip-to-End" onClick={skipEndHandler}
+                        disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
+                    <I.SkipEnd/></button>
 
             </div>
         </div>

@@ -1,41 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/svg+xml" href="/src/favicon.svg"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Vite App</title>
-  </head>
-  <body>
-  <div class="container mt-4">
+</head>
+<body>
+<div class="container mt-4">
     <div class="display-5 p-5">Shogi board with Vite+PreAct. BootStrap optional</div>
-    <div class="app"></div>
-    <div class="d-flex flex-row bd-highlight mb-3">
-   <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis enim id mollitia pariatur rerum sequi sit, soluta! Ad adipisci autem beatae dolor est ipsa ipsum, modi mollitia nisi quasi quidem.</div>
+    <div class="wrapper">
+        <div class="app"></div>
+        <div class="ms-5">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis enim id mollitia pariatur rerum sequi
+                sit, soluta! Ad adipisci autem beatae dolor est ipsa ipsum, modi mollitia nisi quasi quidem.</p>
+
+        </div>
     </div>
-    <div class="app"></div>
-  </div>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque dolores dolorum nobis voluptate? Distinctio enim
+        laboriosam possimus reprehenderit voluptates! Error iure odio perspiciatis quaerat quo, sit ut vel velit
+        voluptatibus!</p>
+
+    <div >
+       <div class="app"></div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A animi aut, beatae consectetur, consequuntur culpa et laborum magnam minus officia optio praesentium recusandae reprehenderit repudiandae, rerum similique tempora tempore voluptatum!</p>
+
+    </div>
+
+</div>
 
 
-    <script type="module" src="/src/main.tsx"></script>
-    <script>
-      const initialSetup =[ {
+<script type="module" src="/src/main.tsx"></script>
+<script>
+    const initialSetup = [{
         senteOnBoard: "53s,16b",
         goteOnBoard: "41s,51k,61s,34p",
         senteOnHand: 's1',
         goteOnHand: 'r2,p3,l1,g1',
         moves: 's+5216,g-5261,sd62s,x',
-        caption:"Three move tsume with extra pieces for gote on-hand area"
-      },
+        caption: "Three move tsume with extra pieces for gote on-hand area"
+    },
         {
-        caption:'Hirate initial diagram'
+            caption: 'Hirate initial diagram'
         }
-      ]
+    ]
 
-    </script>
+</script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
 </html>

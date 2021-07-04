@@ -22,6 +22,11 @@ This will use 60% scaling.
 
 .wrapper {
     display:grid;
+    grid-template-columns: 1fr 2fr;
+    grid-auto-rows:auto;
+}
+.board-container {
+    display:grid;
     width:309px;
     grid-template-columns: 309px;
     grid-auto-rows: auto;

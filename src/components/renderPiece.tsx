@@ -19,10 +19,10 @@ const komaSelection = 'koma_ryoko_1'
 export const RenderPiece=(prop:{piece:string,mover:string})=>{
    //side need to be capital
     const piece=prop.piece
-    const mover=prop.mover
+    const inPlay=prop.mover
 
     const pngName = piece[0].toUpperCase()+pngNames[codeNames.indexOf(piece[3])]
-    const classes = `koma c${piece[1]} r${piece[2]} ${(mover===piece.slice(1,3))?'onMove':''}`
+    const classes = `koma c${piece[1]} r${piece[2]} ${(inPlay===piece.slice(1,3))?'onMove':''}`
     const pieceImage = `/assets/img/koma/${komaSelection}/${pngName}.png`
     return <img src={pieceImage} class={classes} alt=""/>
 }

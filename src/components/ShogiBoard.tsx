@@ -15,17 +15,20 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
 //    console.log(unifiedPieces)
 
     const [piecesInfo, setPiecesInfo] = useState(unifiedPieces)
-    const commentWindow = (moves && moves.indexOf('*') >= 0)
-    const movesArray = moves!.split(',');
+    const commentWindow = moves!.toString().length > 0
+
+    let movesArray = moves!;
     if (movesArray[0][0] === '*') {
         initialComment = `${initialComment} ${movesArray[0].slice(1)}`
-        movesArray.splice(0,1)
+        console.log('initialComment', initialComment)
+        movesArray.splice(0, 1)
     }
-    const HasBranch =  (moves && (moves.match(/\dJ\d/) || []).length>0 ); //check for Branch instruction
+    const HasBranch = (moves && (moves.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
     const [comment, setComment] = useState(initialComment)
+    const [startComment,setStartComment]=useState(initialComment)
     const [moveCounter, setMoveCounter] = useState(tesuu! - 1)
     const [mover, setMover] = useState(movesArray[tesuu! - 1].slice(4, 6)) //for first 'move' we use 'from' coordinate
-    const [history, setHistory] = useState([] as { pieces: string, move: string }[])
+    const [history, setHistory] = useState([] as { pieces: string, move: string}[])
 
 
     const endOfMoves = (counter: number) => {
@@ -48,17 +51,19 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
             setHistory([...history, {pieces: piecesInfo, move: mover}])
             setPiecesInfo(pieces)
             setMover(nextMove.slice(2, 4))
-            setComment(nextMove.indexOf('*')>=0?nextMove.slice(nextMove.indexOf('*')+1):"")
+            if (commentWindow) {
+                setComment(nextMove.indexOf('*') >= 0 ? nextMove.slice(nextMove.indexOf('*') + 1) : "")
+            }
             setMoveCounter(moveCounter + 1)
 
         }
 
     }
     const skipEndHandler = (e: Event) => {
-        let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove:string, currentMove = mover
+        let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove: string, currentMove = mover
 
         while (!endOfMoves(counter)) { //read past to the end
-            miniHistory.push({pieces: pieces, move: currentMove})
+            miniHistory.push({pieces: pieces, move: currentMove, comment:comment})
             nextMove = movesArray[counter]
             pieces = moveParser(nextMove, pieces) //get updated pieces
             currentMove = nextMove
@@ -67,7 +72,9 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
         setMover(nextMove!.slice(2, 4))
-        setComment(nextMove!.indexOf('*')>=0?nextMove!.slice(nextMove!.indexOf('*')+1):"")
+        if (commentWindow) {
+            setComment(nextMove!.indexOf('*') >= 0 ? nextMove!.slice(nextMove!.indexOf('*') + 1) : "")
+        }
         setMoveCounter(counter)
 
     }
@@ -77,20 +84,21 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         if (moveCounter > 0) {
             const pieces = history.pop();
             setPiecesInfo(pieces!.pieces);
-            const nextMove=pieces!.move
+            const nextMove = pieces!.move
             setMover(nextMove)
-            let move="";
-            if (moveCounter-2>=0)  move = movesArray[moveCounter-2]
-            setComment(move.indexOf('*')>=0?move.slice(move.indexOf('*')+1):"")
+            let move = "";
+
+            if (moveCounter - 2 >= 0) {
+                move = movesArray[moveCounter - 2]
+                setComment(move.indexOf('*') >= 0 ? move.slice(move.indexOf('*') + 1) : "")
+            } else setComment(startComment)
             setMoveCounter(moveCounter - 1)
             setHistory(history)
         }
     }
     const reWindHandler = (e: Event) => {
         let counter = moveCounter;
-
         let pieces: { pieces: string, move: string } | undefined;
-
         while (counter > tesuu! - 1) {
             pieces = history.pop()
             counter--
@@ -98,7 +106,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
 
         setPiecesInfo(pieces!.pieces);
         setMover(pieces!.move)
-        setComment(initialComment)
+        setComment(startComment)
         setMoveCounter(tesuu! - 1)
         setHistory(history)
 
@@ -120,7 +128,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
             {scoreArray('s', piecesInfo).map((p) => (parseInt(p[1]) > 1) && <span class={'c' + p[0]}>{p[1]}</span>)}
         </div>
 
-        {moves!.length > 0 &&
+        {moves!.toString().length > 0 &&
         <div class="button-bar-grid ">
             <div class="btn-group">
                 <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}

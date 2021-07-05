@@ -12,7 +12,7 @@ export interface ShogiKit {
     focusImageSelection?: string
     caption?: string
     initialComment?: string;
-    moves?: string;
+    moves?: string[];
     tesuu?: number;
 
 }
@@ -29,7 +29,7 @@ export const defaultParams: ShogiKit = {
     focusImageSelection: 'focus/focus_trpt_g.png',
     caption: '',
     initialComment: '',
-    moves: '',
+    moves: [''],
     tesuu: 1
 
 }

@@ -20,15 +20,15 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
     let movesArray = moves!;
     if (movesArray[0][0] === '*') {
         initialComment = `${initialComment} ${movesArray[0].slice(1)}`
-        console.log('initialComment', initialComment)
+        //   console.log('initialComment', initialComment)
         movesArray.splice(0, 1)
     }
     const HasBranch = (moves && (moves.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
     const [comment, setComment] = useState(initialComment)
-    const [startComment,setStartComment]=useState(initialComment)
+    const [startComment, setStartComment] = useState(initialComment)
     const [moveCounter, setMoveCounter] = useState(tesuu! - 1)
     const [mover, setMover] = useState(movesArray[tesuu! - 1].slice(4, 6)) //for first 'move' we use 'from' coordinate
-    const [history, setHistory] = useState([] as { pieces: string, move: string}[])
+    const [history, setHistory] = useState([] as { pieces: string, move: string }[])
 
 
     const endOfMoves = (counter: number) => {
@@ -46,7 +46,9 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
     const playOneMoveHandler = (e: Event) => {
         // console.log('analyzing move', movesArray[moveCounter])
         if (!endOfMoves(moveCounter)) {
-            const nextMove = movesArray[moveCounter]
+            let nextMove = movesArray[moveCounter]
+            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
+            console.log('next move is', nextMove)
             const pieces = moveParser(nextMove, piecesInfo)
             setHistory([...history, {pieces: piecesInfo, move: mover}])
             setPiecesInfo(pieces)
@@ -63,10 +65,11 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove: string, currentMove = mover
 
         while (!endOfMoves(counter)) { //read past to the end
-            miniHistory.push({pieces: pieces, move: currentMove, comment:comment})
+            miniHistory.push({pieces: pieces, move: currentMove})
             nextMove = movesArray[counter]
+            if (nextMove.slice(2, 4) === '00') nextMove.replace('00', mover)
             pieces = moveParser(nextMove, pieces) //get updated pieces
-            currentMove = nextMove
+            currentMove = nextMove.slice(2, 4)
             counter++
         }
         setHistory([...history, ...miniHistory])

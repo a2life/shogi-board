@@ -17,6 +17,7 @@ import {ShogiKit} from "./defaults";
  *
  * @param kifString, like s-5216,   side(s), move(-), to(52), from(16)
  * @param pieceSet, like "s53s,s16b,g41s,g51k,g61s,ssSs,grGr,grGr,gpGp,gpGp,gpGp,glGl,ggGg"
+ * @param previousMove: like 44, if kifString uses 00 notation for '同' then replace with this value
  */
 export const moveParser = (kifString: string, pieceSet:string) => {
 

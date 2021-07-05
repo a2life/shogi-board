@@ -33,3 +33,17 @@ const duplicateLetter = (a: string) => {
     for (let count = 0; count < parseInt(a[1]); count++) s.push(a[0])
     return s.toString();
 }
+
+export const preProcessMoves=((moves:string[]|string)=> {
+    let prevMove=''
+    let movesArray;
+    if (typeof moves==="string") {movesArray=moves.split(',')} else {movesArray=moves}
+    movesArray=movesArray.map((e,index)=>{
+      let t=e.trim()
+        if (t[2] && t[2].toLowerCase()==='x') return 'x'
+        if (t.slice(2,4)==='00') t=t.replace('00',prevMove)
+        prevMove=t.slice(2,4)
+        return t
+    })
+    return movesArray
+})

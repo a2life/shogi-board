@@ -12,7 +12,7 @@ export interface ShogiKit {
     focusImageSelection?: string
     caption?: string
     initialComment?: string;
-    moves?: string[];
+    moves?: string[]|string;
     tesuu?: number;
 
 }

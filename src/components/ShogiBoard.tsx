@@ -2,7 +2,7 @@ import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
-import {scoreArray, unifyPieces} from "./utils";
+import {scoreArray, unifyPieces, preProcessMoves} from "./utils";
 import {defaultParams, ShogiKit} from "./defaults";
 import * as I from "./Icons";
 
@@ -15,10 +15,9 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
 //    console.log(unifiedPieces)
 
     const [piecesInfo, setPiecesInfo] = useState(unifiedPieces)
-    const commentWindow = moves!.toString().length > 0
-
-    let movesArray = moves!;
-    if (movesArray[0][0] === '*') {
+    let movesArray = preProcessMoves(moves!);
+    const commentWindow = movesArray.toString().indexOf('*')>= 0
+    if (movesArray[0][0] === '*') { //if the first line is comment then,
         initialComment = `${initialComment} ${movesArray[0].slice(1)}`
         //   console.log('initialComment', initialComment)
         movesArray.splice(0, 1)
@@ -47,7 +46,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         // console.log('analyzing move', movesArray[moveCounter])
         if (!endOfMoves(moveCounter)) {
             let nextMove = movesArray[moveCounter]
-            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
+        //    if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
             console.log('next move is', nextMove)
             const pieces = moveParser(nextMove, piecesInfo)
             setHistory([...history, {pieces: piecesInfo, move: mover}])
@@ -67,7 +66,7 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         while (!endOfMoves(counter)) { //read past to the end
             miniHistory.push({pieces: pieces, move: currentMove})
             nextMove = movesArray[counter]
-            if (nextMove.slice(2, 4) === '00') nextMove.replace('00', mover)
+ //           if (nextMove.slice(2, 4) === '00') nextMove.replace('00', mover)
             pieces = moveParser(nextMove, pieces) //get updated pieces
             currentMove = nextMove.slice(2, 4)
             counter++

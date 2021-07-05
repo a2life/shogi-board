@@ -88,14 +88,19 @@ This will use 60% scaling.
 .large .buttonBar {top: 465px; left:100px; height: 23px; font-size: 1.5em;}
 .small .buttonBar {top: 290px; left: 74px; height: 20px; font-size: 0.7em;}
 
-.comment {width:inherit;  overflow: auto;
+.comment {
+    width: inherit;
+    overflow: auto;
     font-size: 0.8em;
-    padding-left:7px; height:100px;
-    border-style:dotted;
+    padding-left: 7px;
+    height: 100px;
+    border-style:solid;
+    border-color:lightgray;
     border-width: 1px;
+    border-radius: 5px;
     box-sizing: border-box;
-    -moz-box-sizing: border-box; /* Firefox */
-    -webkit-box-sizing: border-box; /* Safari */}
+}
+
 .large .comment {height:120px;} .small .comment { min-height:100px;}
 
 

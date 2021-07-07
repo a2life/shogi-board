@@ -20,6 +20,7 @@ export const scoreArray=(side:string,pieceSet:string)=>{
 }
 
 export const unifyPieces=(senteOnBoard:string,goteOnBoard:string,senteOnHand:string,goteOnHand:string)=>{
+    console.log('unified pieces called')
     const sbp = senteOnBoard.split(',').map((piece) => 's' + piece)
     const gbp = goteOnBoard.split(',').map((piece) => 'g' + piece)
     let sof = senteOnHand.split(',').map((a) => duplicateLetter(a)).toString()
@@ -35,6 +36,7 @@ const duplicateLetter = (a: string) => {
 }
 
 export const preProcessMoves=((moves:string[]|string)=> {
+    console.log('preProcess moves called')
     let prevMove=''
     let movesArray;
     if (typeof moves==="string") {movesArray=moves.split(',')} else {movesArray=moves}

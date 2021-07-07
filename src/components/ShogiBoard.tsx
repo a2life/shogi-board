@@ -2,34 +2,21 @@ import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
-import {scoreArray, unifyPieces, preProcessMoves} from "./utils";
-import {defaultParams, ShogiKit} from "./defaults";
+import {scoreArray} from "./utils";
+
 import * as I from "./Icons";
 
-export const Board = (Props: { pieceSet: ShogiKit }) => {
-    let {senteOnBoard, goteOnBoard, senteOnHand, goteOnHand, markerAt, caption, initialComment, moves, tesuu}
-        = {...defaultParams, ...Props.pieceSet}
-    const [marker, setMarker] = useState(markerAt.split(','));
-    const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand)
+export const Board = (Props: { pieces: string, moves: string[], caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean } }) => {
 
-//    console.log(unifiedPieces)
+    const {pieces, moves: movesArray, caption, tesuu, initialComment, flags} = Props
+    const {commentWindow, HasBranch} = flags
+    const [piecesInfo, setPiecesInfo] = useState(pieces)
 
-    const [piecesInfo, setPiecesInfo] = useState(unifiedPieces)
-    let movesArray = preProcessMoves(moves!);
-    const commentWindow = movesArray.toString().indexOf('*')>= 0
-    if (movesArray[0][0] === '*') { //if the first line is comment then,
-        initialComment = `${initialComment} ${movesArray[0].slice(1)}`
-        //   console.log('initialComment', initialComment)
-        movesArray.splice(0, 1)
-    }
-    const HasBranch = (moves && (moves.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
     const [comment, setComment] = useState(initialComment)
     const [startComment, setStartComment] = useState(initialComment)
     const [moveCounter, setMoveCounter] = useState(tesuu! - 1)
     const [mover, setMover] = useState(movesArray[tesuu! - 1].slice(4, 6)) //for first 'move' we use 'from' coordinate
-    const [history, setHistory] = useState([] as { pieces: string, move: string, counter:number}[])
-
-
+    const [history, setHistory] = useState([] as { pieces: string, move: string, counter: number }[])
     const endOfMoves = (counter: number) => {
         switch (movesArray[counter][0]) {
             case 'x':  // end of move
@@ -46,10 +33,10 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         // console.log('analyzing move', movesArray[moveCounter])
         if (!endOfMoves(moveCounter)) {
             let nextMove = movesArray[moveCounter]
-        //    if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
+            //    if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
             console.log('next move is', nextMove)
             const pieces = moveParser(nextMove, piecesInfo)
-            setHistory([...history, {pieces: piecesInfo, move: mover, counter:moveCounter}])
+            setHistory([...history, {pieces: piecesInfo, move: mover, counter: moveCounter}])
             setPiecesInfo(pieces)
             setMover(nextMove.slice(2, 4))
             if (commentWindow) {
@@ -64,9 +51,9 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove: string, currentMove = mover
 
         while (!endOfMoves(counter)) { //read past to the end
-            miniHistory.push({pieces: pieces, move: currentMove, counter:counter})
+            miniHistory.push({pieces: pieces, move: currentMove, counter: counter})
             nextMove = movesArray[counter]
- //           if (nextMove.slice(2, 4) === '00') nextMove.replace('00', mover)
+            //           if (nextMove.slice(2, 4) === '00') nextMove.replace('00', mover)
             pieces = moveParser(nextMove, pieces) //get updated pieces
             currentMove = nextMove.slice(2, 4)
             counter++
@@ -80,7 +67,6 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
         setMoveCounter(counter)
 
     }
-
     const moveBackHandler = (e: Event) => {
         e.preventDefault();
         if (moveCounter > 0) {
@@ -100,10 +86,10 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
     }
     const reWindHandler = (e: Event) => {
         let counter = moveCounter;
-        let pieces: { pieces: string, move: string, counter:number} | undefined;
+        let pieces: { pieces: string, move: string, counter: number } | undefined;
         while (counter > tesuu! - 1) {
             pieces = history.pop()
-            counter=pieces!.counter
+            counter = pieces!.counter
         }
 
         setPiecesInfo(pieces!.pieces);
@@ -123,14 +109,14 @@ export const Board = (Props: { pieceSet: ShogiKit }) => {
 
         <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
             <RenderBoard/>
-            <MarkerAt c={marker[0]} r={marker[1]}/>
+
             {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={mover}/>))}
         </div>
         <div class="row-on-hand">
             {scoreArray('s', piecesInfo).map((p) => (parseInt(p[1]) > 1) && <span class={'c' + p[0]}>{p[1]}</span>)}
         </div>
 
-        {moves!.toString().length > 0 &&
+        {movesArray.toString().length > 0 &&
         <div class="button-bar-grid ">
             <div class="btn-group">
                 <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}

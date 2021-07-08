@@ -6,11 +6,38 @@ import {scoreArray} from "./utils";
 
 import * as I from "./Icons";
 
-export const Board = (Props: { pieces: string, moves: string[], caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean } }) => {
+export const Board = (Props: { pieces: string, moves: string[], branches: { marker: string, index: number }[], caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean } }) => {
 
-    const {pieces, moves: movesArray, caption, tesuu, initialComment, flags} = Props
+    const {pieces, moves: movesArray, branches, caption, tesuu, initialComment, flags} = Props
     const {commentWindow, HasBranch} = flags
     const [piecesInfo, setPiecesInfo] = useState(pieces)
+    const rePattern = new RegExp('^[\\-\\+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９　歩と香成桂銀金角馬飛竜玉王投了同直左右引]*)\\*?(.*)')
+
+    const nextMoveNote = (counter: number, movesArray: string[]) => {
+        const Note = [] as any
+        let j = 0
+        let movement = movesArray[counter]
+        console.log('movement', movement)
+        let moveElements = movement.match(rePattern) as RegExpMatchArray
+        console.log('moveElements', moveElements)
+        if (moveElements.groups!.branch === 'J') {//if branch move is detected
+            Note.push({note: moveElements.groups!.Note, counter: counter}) //store first selection
+            do {
+                const branchNumber = moveElements.groups!.move //then remember jump number
+                while (branches[j].index < counter) {
+                    j=j+1;
+                }   // using branches array but move passed the current counter position
+                while (branches[j].marker !== branchNumber) j++  //move up to matching branch number
+                counter = branches[j].index + 1;
+                movement = movesArray[counter]
+                moveElements = movement.match(rePattern) as RegExpMatchArray
+                Note.push({note: moveElements.groups!.Note, counter: counter}) //store first selection
+
+            } while (moveElements.groups!.branch === 'J')
+        }
+
+        return Note;
+    }
 
     const [comment, setComment] = useState(initialComment)
     const [startComment, setStartComment] = useState(initialComment)
@@ -141,6 +168,7 @@ export const Board = (Props: { pieces: string, moves: string[], caption: string,
                     <I.SkipEnd/></button>
 
             </div>
+            {console.log(nextMoveNote(moveCounter, movesArray))}
         </div>
         }
         {commentWindow && <div class="comment">{comment}</div>}

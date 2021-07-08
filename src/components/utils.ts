@@ -31,7 +31,7 @@ const duplicateLetter = (a: string) => {
     for (let count = 0; count < parseInt(a[1]); count++) s.push(a[0])
     return s.toString();
 }
-const rePattern = new RegExp('^[\\-\\+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９歩と香成桂銀金角馬飛竜玉王投了]*)\\*?(.*)')
+const rePattern = new RegExp('^(?<pre>[sgC*xX])[\\-\\+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９　歩と香成桂銀金角馬飛竜玉王投了同直左右引]*)\\*?(.*)')
 const brPattern = new RegExp('J(\\d\\d)')
 
 
@@ -65,3 +65,35 @@ export const preProcessMoves = ((moves: string[] | string) => {
     return {plays: movesArray, branches: branchMarkers,initialComment:initialComment}
 })
 
+
+/**
+ *  return Notes {note:string, counter:number}[]  note is like ;８五歩' couner is move index.
+ * @param counter --move index
+ * @param movesArray -- array of moves
+ * @param branches -- array indicating branches
+ */
+export const nextMoveNote = (counter: number, movesArray: string[], branches:{marker:string,index:number}[]) => {
+    const Note = [] as any
+    let j = 0
+    let movement = movesArray[counter]
+    console.log('movement', movement)
+    let moveElements = movement.match(rePattern) as RegExpMatchArray
+    console.log('moveElements', moveElements)
+    if (moveElements.groups!.branch === 'J') {//if branch move is detected
+        Note.push({note: moveElements.groups!.pre+moveElements.groups!.Note, counter: counter}) //store first selection
+        do {
+            const branchNumber = moveElements.groups!.move //then remember jump number
+            while (branches[j].index < counter) {
+                j=j+1;
+            }   // using branches array but move passed the current counter position
+            while (branches[j].marker !== branchNumber) j++  //move up to matching branch number
+            counter = branches[j].index + 1;
+            movement = movesArray[counter]
+            moveElements = movement.match(rePattern) as RegExpMatchArray
+            Note.push({note: moveElements.groups!.pre+moveElements.groups!.Note, counter: counter}) //store first selection
+
+        } while (moveElements.groups!.branch === 'J')
+    }
+
+    return Note;
+}

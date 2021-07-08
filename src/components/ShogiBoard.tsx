@@ -2,7 +2,8 @@ import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
-import {scoreArray} from "./utils";
+import {scoreArray,nextMoveNote} from "./utils";
+import {ShowBranches} from "./ShowBranches";
 
 import * as I from "./Icons";
 
@@ -11,33 +12,8 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
     const {pieces, moves: movesArray, branches, caption, tesuu, initialComment, flags} = Props
     const {commentWindow, HasBranch} = flags
     const [piecesInfo, setPiecesInfo] = useState(pieces)
-    const rePattern = new RegExp('^[\\-\\+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９　歩と香成桂銀金角馬飛竜玉王投了同直左右引]*)\\*?(.*)')
+    const rePattern = new RegExp('^(?<pre>[sgC*])[\\-\\+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９　歩と香成桂銀金角馬飛竜玉王投了同直左右引]*)\\*?(.*)')
 
-    const nextMoveNote = (counter: number, movesArray: string[]) => {
-        const Note = [] as any
-        let j = 0
-        let movement = movesArray[counter]
-        console.log('movement', movement)
-        let moveElements = movement.match(rePattern) as RegExpMatchArray
-        console.log('moveElements', moveElements)
-        if (moveElements.groups!.branch === 'J') {//if branch move is detected
-            Note.push({note: moveElements.groups!.Note, counter: counter}) //store first selection
-            do {
-                const branchNumber = moveElements.groups!.move //then remember jump number
-                while (branches[j].index < counter) {
-                    j=j+1;
-                }   // using branches array but move passed the current counter position
-                while (branches[j].marker !== branchNumber) j++  //move up to matching branch number
-                counter = branches[j].index + 1;
-                movement = movesArray[counter]
-                moveElements = movement.match(rePattern) as RegExpMatchArray
-                Note.push({note: moveElements.groups!.Note, counter: counter}) //store first selection
-
-            } while (moveElements.groups!.branch === 'J')
-        }
-
-        return Note;
-    }
 
     const [comment, setComment] = useState(initialComment)
     const [startComment, setStartComment] = useState(initialComment)
@@ -55,7 +31,6 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
                 return false
         }
     }
-
     const playOneMoveHandler = (e: Event) => {
         // console.log('analyzing move', movesArray[moveCounter])
         if (!endOfMoves(moveCounter)) {
@@ -127,7 +102,6 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
 
     }
 
-
     return <div class="board-container">
         {(caption!.length > 0) && <div class="h5 text-center pt-1">{caption}</div>}
         <div class="row-on-hand">
@@ -144,7 +118,7 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
         </div>
 
         {movesArray.toString().length > 0 &&
-        <div class="button-bar-grid ">
+        <div class="button-bar-grid">
             <div class="btn-group">
                 <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}
                         disabled={moveCounter === 0}>
@@ -168,7 +142,8 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
                     <I.SkipEnd/></button>
 
             </div>
-            {console.log(nextMoveNote(moveCounter, movesArray))}
+            <ShowBranches Notes={nextMoveNote(moveCounter, movesArray,branches)}  />
+
         </div>
         }
         {commentWindow && <div class="comment">{comment}</div>}

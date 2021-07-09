@@ -2,7 +2,7 @@ import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
-import {scoreArray,nextMoveNote} from "./utils";
+import {scoreArray, nextMoveNote, movementIsNotBranch} from "./utils";
 import {ShowBranches} from "./ShowBranches";
 
 import * as I from "./Icons";
@@ -69,6 +69,8 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
         setMoveCounter(counter)
 
     }
+
+
     const moveBackHandler = (e: Event) => {
         e.preventDefault();
         if (moveCounter > 0) {
@@ -101,7 +103,33 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
         setHistory(history)
 
     }
+    const branchingHandler=(e:Event)=>{
+        e.preventDefault();
+        const newTarget=(e.target as HTMLSelectElement).value
+        console.log('selected', newTarget)
+        setMoveCounter(parseInt(newTarget))
+    }
+    const skipToNextBranchHandler=(e:Event)=>{
+        let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove: string, currentMove = mover
 
+        while (!endOfMoves(counter) ) { //read past to the end
+            miniHistory.push({pieces: pieces, move: currentMove, counter: counter})
+            nextMove = movesArray[counter]
+            //           if (nextMove.slice(2, 4) === '00') nextMove.replace('00', mover)
+            pieces = moveParser(nextMove, pieces) //get updated pieces
+            currentMove = nextMove.slice(2, 4)
+            counter++
+        }
+        setHistory([...history, ...miniHistory])
+        setPiecesInfo(pieces)
+        setMover(nextMove!.slice(2, 4))
+        if (commentWindow) {
+            setComment(nextMove!.indexOf('*') >= 0 ? nextMove!.slice(nextMove!.indexOf('*') + 1) : "")
+        }
+        setMoveCounter(counter)
+
+    }
+    const skipToPrevBranchHandler=(e:Event)=>{}
     return <div class="board-container">
         {(caption!.length > 0) && <div class="h5 text-center pt-1">{caption}</div>}
         <div class="row-on-hand">
@@ -124,7 +152,7 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
                         disabled={moveCounter === 0}>
                     <I.SkipStart/></button>
                 {HasBranch &&
-                <button class="btn btn-sm btn-outline-secondary" value="Skip-Backward" onClick={moveBackHandler}
+                <button class="btn btn-sm btn-outline-secondary" value="Skip-Backward" onClick={skipToPrevBranchHandler}
                         disabled={moveCounter === 0}>
                     <I.SkipBack/></button>}
                 <button class="btn btn-sm btn-outline-secondary" value="Back" onClick={moveBackHandler}
@@ -134,7 +162,7 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
                         disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
                     <I.Play/></button>
                 {HasBranch &&
-                <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward" onClick={playOneMoveHandler}
+                <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward" onClick={skipToNextBranchHandler}
                         disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
                     <I.SkipForward/></button>}
                 <button class="btn btn-sm btn-outline-secondary" value="Skip-to-End" onClick={skipEndHandler}
@@ -142,7 +170,7 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
                     <I.SkipEnd/></button>
 
             </div>
-            <ShowBranches Notes={nextMoveNote(moveCounter, movesArray,branches)}  />
+            <ShowBranches Notes={nextMoveNote(moveCounter, movesArray,branches)} branchingHandler={branchingHandler} />
 
         </div>
         }

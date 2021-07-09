@@ -21,72 +21,317 @@ This will use 60% scaling.
 */
 
 .wrapper {
-    display:grid;
+    display: grid;
     grid-template-columns: 1fr 2fr;
-    grid-auto-rows:auto;
+    grid-auto-rows: auto;
 }
+
 .board-container {
-    display:grid;
-    width:309px;
+    display: grid;
+    width: 309px;
     grid-template-columns: 309px;
     grid-auto-rows: auto;
 }
+
 .row-on-hand {
-    position:relative;
-    height:32px;
-    padding:5px;
+    position: relative;
+    height: 32px;
+    padding: 5px;
 
 }
-.koma, .marker { position:absolute;}
+
+.koma, .marker {
+    position: absolute;
+}
+
 .koma {
     transition: 0.4s;
 }
-.koma, .marker, .komadai img {width:30px; height:33px;}
-.rS{top:325px; z-index:500}
-.rG{top:-28px; z-index:500}
-.on-hand-count {font-size:smaller; text-align:right}
-.row-on-hand span {position:absolute; font-size:xx-small; bottom:0!important;padding:.35em .65em;
-    font-weight:400; line-height:1; color:#fff; text-align:center; background-color: #212529; border-radius:50rem; z-index:700}
-.button-bar-grid { margin-top:10px; margin-bottom:10px;}
-.onMove { z-index : 1000!important;}
-.shogiBoard {margin:auto; padding:100px;}
-.shogiBoard.large {margin-left:10px;}
-.lostworld {left:-20000px; top: -20000px;}
-.caption {text-align: center;}
-.c0 {left:-20000px}/* move elements out of the way */
-.r0 {top:-20000px}
-.shogiBoard, .buttonAnchor, .forSnapshot {position:relative;}
-.table {display:table;}
-.row {display:table-row;}
-.cell {display:table-cell; vertical-align:top;}
-.hide {display:none;}
-.bbBox {height: 25px; width:100%;} .small .bbBox {height: 23px;} .large .bbBox {height: 26px;}
-.senteMochigoma {vertical-align:bottom;}
-.statusLine {height:25px; vertical-align:middle; font-size: 0.8em;}
-.large .statusLine {font-size: 1em;}
-.player2 {top: 135px; height:15px; left:309px; width:100px;}
-.small .player2 {top: 119px; left: 261px;} .large .player2 {top: 200px; left: 430px; width: 160px; font-size: 1.2em;}
-.player1 {top: 174px; height:15px; left:309px; width:100px;}
-.small .player1 { top: 162px; left: 261px;} .large .player1 {top: 246px; left: 430px; width: 160px; font-size: 1.2em;}
-.type0width {width: 409px;} .large .type0width {width: 585px;} .small .type0width {width: 357px;}
-.type3width {width: 309px;} .large .type3width {width: 410px;} .small .type3width {width: 267px;}
-.board {position: absolute; left:10px; top:9px; width:286px; height: 312px;}
-.large .board {width: 410px; height: 454px;} .small .board {width:246px; height: 273px;}
-.boardbase-grid {position:relative; width: 309px; min-width:309px; height:326px;}
-.boardbase {position:relative; width: 309px; min-width:309px; height:326px;margin:30px;}
-.large .boardbase { width: 440px; min-width:440px; height:470px;} .small .boardbase {width:266px;min-width:266px; height:292px;}
+
+.koma, .marker, .komadai img {
+    width: 30px;
+    height: 33px;
+}
+
+.rS {
+    top: 325px;
+    z-index: 500
+}
+
+.rG {
+    top: -28px;
+    z-index: 500
+}
+
+.on-hand-count {
+    font-size: smaller;
+    text-align: right
+}
+
+.row-on-hand span {
+    position: absolute;
+    font-size: xx-small;
+    bottom: 0 !important;
+    padding: .35em .65em;
+    font-weight: 400;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    background-color: #212529;
+    border-radius: 50rem;
+    z-index: 700
+}
+
+.button-bar-grid {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.onMove {
+    z-index: 1000 !important;
+}
+
+.shogiBoard {
+    margin: auto;
+    padding: 100px;
+}
+
+.shogiBoard.large {
+    margin-left: 10px;
+}
+
+.lostworld {
+    left: -20000px;
+    top: -20000px;
+}
+
+.caption {
+    text-align: center;
+}
+
+.c0 {
+    left: -20000px
+}
+
+/* move elements out of the way */
+.r0 {
+    top: -20000px
+}
+
+.shogiBoard, .buttonAnchor, .forSnapshot {
+    position: relative;
+}
+
+.table {
+    display: table;
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.hide {
+    display: none;
+}
+
+.bbBox {
+    height: 25px;
+    width: 100%;
+}
+
+.small .bbBox {
+    height: 23px;
+}
+
+.large .bbBox {
+    height: 26px;
+}
+
+.senteMochigoma {
+    vertical-align: bottom;
+}
+
+.statusLine {
+    height: 25px;
+    vertical-align: middle;
+    font-size: 0.8em;
+}
+
+.large .statusLine {
+    font-size: 1em;
+}
+
+.player2 {
+    top: 135px;
+    height: 15px;
+    left: 309px;
+    width: 100px;
+}
+
+.small .player2 {
+    top: 119px;
+    left: 261px;
+}
+
+.large .player2 {
+    top: 200px;
+    left: 430px;
+    width: 160px;
+    font-size: 1.2em;
+}
+
+.player1 {
+    top: 174px;
+    height: 15px;
+    left: 309px;
+    width: 100px;
+}
+
+.small .player1 {
+    top: 162px;
+    left: 261px;
+}
+
+.large .player1 {
+    top: 246px;
+    left: 430px;
+    width: 160px;
+    font-size: 1.2em;
+}
+
+.type0width {
+    width: 409px;
+}
+
+.large .type0width {
+    width: 585px;
+}
+
+.small .type0width {
+    width: 357px;
+}
+
+.type3width {
+    width: 309px;
+}
+
+.large .type3width {
+    width: 410px;
+}
+
+.small .type3width {
+    width: 267px;
+}
+
+.board {
+    position: absolute;
+    left: 10px;
+    top: 9px;
+    width: 286px;
+    height: 312px;
+}
+
+.large .board {
+    width: 410px;
+    height: 454px;
+}
+
+.small .board {
+    width: 246px;
+    height: 273px;
+}
+
+.boardbase-grid {
+    position: relative;
+    width: 309px;
+    min-width: 309px;
+    height: 326px;
+}
+
+.boardbase {
+    position: relative;
+    width: 309px;
+    min-width: 309px;
+    height: 326px;
+    margin: 30px;
+}
+
+.large .boardbase {
+    width: 440px;
+    min-width: 440px;
+    height: 470px;
+}
+
+.small .boardbase {
+    width: 266px;
+    min-width: 266px;
+    height: 292px;
+}
 
 
-.komadai {width:100px; min-width:100px; height:150px; line-height: 15px; background: #f4c151;}
-.large .komadai {height:220px; width:140px; min-width:140px;} .small .komadai {width:90px;min-width:90px; height:133px;}
+.komadai {
+    width: 100px;
+    min-width: 100px;
+    height: 150px;
+    line-height: 15px;
+    background: #f4c151;
+}
 
-.large .koma, .large .marker, .large .komadai img  {width:43px; height:48px;}
-.small .koma, .small .marker, .small .komadai img {width:26px; height:29px;}
+.large .komadai {
+    height: 220px;
+    width: 140px;
+    min-width: 140px;
+}
 
-.player1,.player2 {position: absolute; font-size: 0.8em; text-align: center;}
-.buttonBar {position: absolute;  top: 326px; left: 80px; height: 20px; z-index: 10; font:menu;}
-.large .buttonBar {top: 465px; left:100px; height: 23px; font-size: 1.5em;}
-.small .buttonBar {top: 290px; left: 74px; height: 20px; font-size: 0.7em;}
+.small .komadai {
+    width: 90px;
+    min-width: 90px;
+    height: 133px;
+}
+
+.large .koma, .large .marker, .large .komadai img {
+    width: 43px;
+    height: 48px;
+}
+
+.small .koma, .small .marker, .small .komadai img {
+    width: 26px;
+    height: 29px;
+}
+
+.player1, .player2 {
+    position: absolute;
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.buttonBar {
+    position: absolute;
+    top: 326px;
+    left: 80px;
+    height: 20px;
+    z-index: 10;
+    font: menu;
+}
+
+.large .buttonBar {
+    top: 465px;
+    left: 100px;
+    height: 23px;
+    font-size: 1.5em;
+}
+
+.small .buttonBar {
+    top: 290px;
+    left: 74px;
+    height: 20px;
+    font-size: 0.7em;
+}
 
 .comment {
     width: inherit;
@@ -94,35 +339,251 @@ This will use 60% scaling.
     font-size: 0.8em;
     padding-left: 7px;
     height: 100px;
-    border-style:solid;
-    border-color:lightgray;
+    border-style: solid;
+    border-color: lightgray;
     border-width: 1px;
     border-radius: 5px;
     box-sizing: border-box;
 }
 
-.large .comment {height:120px;} .small .comment { min-height:100px;}
+.option-select {
+    padding: .375rem 2.25rem .375rem .75rem;
+    font-size: 0.75rem;
+    color: #212529;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position:right .75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #ced40a;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    appearance:none;
+}
+
+.large .comment {
+    height: 120px;
+}
+
+.small .comment {
+    min-height: 100px;
+}
 
 
-.c1 {left:258px;} .c2 {left: 228px;} .c3,.c-r,.cr {left:198px;}
-.c4,.c-b,.cb {left:168px;} .c5,.c-g,.cg {left: 138px;} .c6,.c-s,.cs {left:108px;}
-.c7,.c-n,.cn {left:78px;} .c8,.c-l,.cl {left: 48px;}  .c9,.c-p,.cp {left: 18px;}
-.r1 {top:17px;}   .r2 {top:50px;}    .r3 {top:83px;}
-.r4{top:116px;}   .r5{top:149px;}    .r6 {top:182px;}
-.r7{top:215px;}   .r8{top:248px;}    .r9{top:281px;}
+.c1 {
+    left: 258px;
+}
+
+.c2 {
+    left: 228px;
+}
+
+.c3, .c-r, .cr {
+    left: 198px;
+}
+
+.c4, .c-b, .cb {
+    left: 168px;
+}
+
+.c5, .c-g, .cg {
+    left: 138px;
+}
+
+.c6, .c-s, .cs {
+    left: 108px;
+}
+
+.c7, .c-n, .cn {
+    left: 78px;
+}
+
+.c8, .c-l, .cl {
+    left: 48px;
+}
+
+.c9, .c-p, .cp {
+    left: 18px;
+}
+
+.r1 {
+    top: 17px;
+}
+
+.r2 {
+    top: 50px;
+}
+
+.r3 {
+    top: 83px;
+}
+
+.r4 {
+    top: 116px;
+}
+
+.r5 {
+    top: 149px;
+}
+
+.r6 {
+    top: 182px;
+}
+
+.r7 {
+    top: 215px;
+}
+
+.r8 {
+    top: 248px;
+}
+
+.r9 {
+    top: 281px;
+}
 
 
-.large .c1 {left:365px;} .large .c2 {left: 322px;} .large .c3 {left:279px;}
-.large .c4 {left:236px;} .large .c5 {left: 193px;} .large .c6 {left:150px;}
-.large .c7 {left:107px;} .large .c8 {left: 64px;}  .large .c9 {left: 23px;}
-.large .r1 {top:20px;}   .large .r2 {top:68px;}    .large .r3 {top:116px;}
-.large .r4{top:164px;}   .large .r5{top:212px;}    .large .r6 {top:260px;}
-.large .r7{top:308px;}   .large .r8{top:356px;}    .large .r9{top:404px;}
+.large .c1 {
+    left: 365px;
+}
+
+.large .c2 {
+    left: 322px;
+}
+
+.large .c3 {
+    left: 279px;
+}
+
+.large .c4 {
+    left: 236px;
+}
+
+.large .c5 {
+    left: 193px;
+}
+
+.large .c6 {
+    left: 150px;
+}
+
+.large .c7 {
+    left: 107px;
+}
+
+.large .c8 {
+    left: 64px;
+}
+
+.large .c9 {
+    left: 23px;
+}
+
+.large .r1 {
+    top: 20px;
+}
+
+.large .r2 {
+    top: 68px;
+}
+
+.large .r3 {
+    top: 116px;
+}
+
+.large .r4 {
+    top: 164px;
+}
+
+.large .r5 {
+    top: 212px;
+}
+
+.large .r6 {
+    top: 260px;
+}
+
+.large .r7 {
+    top: 308px;
+}
+
+.large .r8 {
+    top: 356px;
+}
+
+.large .r9 {
+    top: 404px;
+}
 
 
-.small .c1 {left:224px;} .small .c2 {left: 198px;} .small .c3 {left:172px;}
-.small .c4 {left:146px;} .small .c5 {left: 120px;} .small .c6 {left:94px;}
-.small .c7 {left:68px;}  .small .c8 {left: 42px;}  .small .c9 {left: 16px;}
-.small .r1 {top:15px;}   .small .r2 {top:44px;}    .small .r3 {top:73px;}
-.small .r4{top:102px;}   .small .r5{top:131px;}    .small .r6 {top:160px;}
-.small .r7{top:189px;}   .small .r8{top:218px;}    .small .r9{top:247px;}
+.small .c1 {
+    left: 224px;
+}
+
+.small .c2 {
+    left: 198px;
+}
+
+.small .c3 {
+    left: 172px;
+}
+
+.small .c4 {
+    left: 146px;
+}
+
+.small .c5 {
+    left: 120px;
+}
+
+.small .c6 {
+    left: 94px;
+}
+
+.small .c7 {
+    left: 68px;
+}
+
+.small .c8 {
+    left: 42px;
+}
+
+.small .c9 {
+    left: 16px;
+}
+
+.small .r1 {
+    top: 15px;
+}
+
+.small .r2 {
+    top: 44px;
+}
+
+.small .r3 {
+    top: 73px;
+}
+
+.small .r4 {
+    top: 102px;
+}
+
+.small .r5 {
+    top: 131px;
+}
+
+.small .r6 {
+    top: 160px;
+}
+
+.small .r7 {
+    top: 189px;
+}
+
+.small .r8 {
+    top: 218px;
+}
+
+.small .r9 {
+    top: 247px;
+}

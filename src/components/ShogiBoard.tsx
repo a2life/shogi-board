@@ -112,7 +112,7 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
     const skipToNextBranchHandler=(e:Event)=>{
         let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove: string, currentMove = mover
 
-        while (!endOfMoves(counter) ) { //read past to the end
+        while (!endOfMoves(counter) && movementIsNotBranch(movesArray[counter]) ) { //read past to the end
             miniHistory.push({pieces: pieces, move: currentMove, counter: counter})
             nextMove = movesArray[counter]
             //           if (nextMove.slice(2, 4) === '00') nextMove.replace('00', mover)

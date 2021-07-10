@@ -1,3 +1,9 @@
+/** Todos
+ * refactor branch move routine - some duplicated lines
+ * move out branch options calculation outside shogiboard component to prevent recalculations
+ * automaticall play one move when option movement is selected.
+ * add a display to show move counter(marker) in shogiBoard
+ */
 import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser} from "./MoveHandlers";
@@ -12,7 +18,6 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
     const {pieces, moves: movesArray, branches, caption, tesuu, initialComment, flags} = Props
     const {commentWindow, HasBranch} = flags
     const [piecesInfo, setPiecesInfo] = useState(pieces)
-    const rePattern = new RegExp('^(?<pre>[sgC*])[\\-\\+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９　歩と香成桂銀金角馬飛竜玉王投了同直左右引]*)\\*?(.*)')
 
 
     const [comment, setComment] = useState(initialComment)
@@ -91,7 +96,7 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
     const reWindHandler = (e: Event) => {
         let counter = moveCounter;
         let pieces: { pieces: string, move: string, counter: number } | undefined;
-        while (counter > tesuu! - 1) {
+        while (history.length>0) {
             pieces = history.pop()
             counter = pieces!.counter
         }
@@ -103,16 +108,16 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
         setHistory(history)
 
     }
-    const branchingHandler=(e:Event)=>{
+    const branchingHandler = (e: Event) => {
         e.preventDefault();
-        const newTarget=(e.target as HTMLSelectElement).value
+        const newTarget = (e.target as HTMLSelectElement).value
         console.log('selected', newTarget)
         setMoveCounter(parseInt(newTarget))
     }
-    const skipToNextBranchHandler=(e:Event)=>{
+    const skipToNextBranchHandler = (e: Event) => {
         let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove: string, currentMove = mover
 
-        while (!endOfMoves(counter) && movementIsNotBranch(movesArray[counter]) ) { //read past to the end
+        do { //read past to the end
             miniHistory.push({pieces: pieces, move: currentMove, counter: counter})
             nextMove = movesArray[counter]
             //           if (nextMove.slice(2, 4) === '00') nextMove.replace('00', mover)
@@ -120,6 +125,7 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
             currentMove = nextMove.slice(2, 4)
             counter++
         }
+        while (!endOfMoves(counter) && movementIsNotBranch(movesArray[counter]))
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
         setMover(nextMove!.slice(2, 4))
@@ -129,7 +135,23 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
         setMoveCounter(counter)
 
     }
-    const skipToPrevBranchHandler=(e:Event)=>{}
+    const skipToPrevBranchHandler = (e: Event) => {
+        let counter = moveCounter;
+        let pieces: { pieces: string, move: string, counter: number } | undefined;
+        do {
+            pieces = history.pop()
+            counter = pieces!.counter
+        } while ((history.length>0) && movementIsNotBranch(movesArray[counter]))
+        setPiecesInfo(pieces!.pieces);
+        setMover(pieces!.move)
+        if (commentWindow) {
+            const nextMove=movesArray[counter]
+            setComment(nextMove!.indexOf('*') >= 0 ? nextMove!.slice(nextMove!.indexOf('*') + 1) : "")
+        }
+
+        setMoveCounter(counter)
+        setHistory(history)
+    }
     return <div class="board-container">
         {(caption!.length > 0) && <div class="h5 text-center pt-1">{caption}</div>}
         <div class="row-on-hand">
@@ -170,7 +192,7 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
                     <I.SkipEnd/></button>
 
             </div>
-            <ShowBranches Notes={nextMoveNote(moveCounter, movesArray,branches)} branchingHandler={branchingHandler} />
+            <ShowBranches Notes={nextMoveNote(moveCounter, movesArray, branches)} branchingHandler={branchingHandler}/>
 
         </div>
         }

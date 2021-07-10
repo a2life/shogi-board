@@ -79,6 +79,7 @@ export const movementIsNotBranch=(move:string)=>{
     const param=move.match(rePattern);
     return param?.groups?.branch!=='J'
 }
+const symbolizeSide=(side:string)=>(side==='s')?sente:gote;
 
 export const nextMoveNote = (counter: number, movesArray: string[], branches:{marker:string,index:number}[]) => {
     const Note = [] as any
@@ -88,7 +89,7 @@ export const nextMoveNote = (counter: number, movesArray: string[], branches:{ma
     let moveElements = movement.match(rePattern) as RegExpMatchArray
     console.log('moveElements', moveElements)
     if (moveElements?.groups?.branch === 'J') {//if branch move is detected
-        Note.push({note: moveElements.groups!.pre+moveElements.groups!.Note, counter: counter}) //store first selection
+        Note.push({note: symbolizeSide(moveElements.groups!.pre)+moveElements.groups!.Note, counter: counter}) //store first selection
         do {
             const branchNumber = moveElements.groups!.move //then remember jump number
             while (branches[j].index < counter) {
@@ -98,7 +99,8 @@ export const nextMoveNote = (counter: number, movesArray: string[], branches:{ma
             counter = branches[j].index + 1;
             movement = movesArray[counter]
             moveElements = movement.match(rePattern) as RegExpMatchArray
-            Note.push({note: moveElements.groups!.pre+moveElements.groups!.Note, counter: counter}) //store first selection
+
+            Note.push({note: symbolizeSide(moveElements.groups!.pre)+moveElements.groups!.Note, counter: counter}) //store first selection
 
         } while (moveElements.groups!.branch === 'J')
     }

@@ -39,7 +39,7 @@ const brPattern = new RegExp('J(\\d\\d)')
 
 export const preProcessMoves = ((moves: string[] | string) => {
     let prevMove = ''
-    let movesArray;
+    let movesArray: string[];
     let initialComment;
     if (typeof moves === "string") {
         movesArray = moves.split(',')
@@ -49,6 +49,15 @@ export const preProcessMoves = ((moves: string[] | string) => {
     movesArray = movesArray.map((e, index) => {
         let t = e.trim()
         if (t[2] && t[2].toLowerCase() === 'x') return 'x'
+        if (t.slice(2,4)=='00') {
+             const prevMove=movesArray[index-1];
+             if (prevMove[0]==='C'){
+                 // handling for branch head is to be implemented.
+             }
+             else {
+                 t.replace('00',prevMove.slice(2,4) )
+             }
+        }
         return t
     })
     if (movesArray[0][0] === '*') { //if the first line is comment then,
@@ -56,8 +65,7 @@ export const preProcessMoves = ((moves: string[] | string) => {
         //   console.log('initialComment', initialComment)
         movesArray.splice(0, 1)
     }
-    const branches = getBranchArray(movesArray)
-    console.log('branchMarkers', branches)
+
     return {movesArray, initialComment}
 })
 

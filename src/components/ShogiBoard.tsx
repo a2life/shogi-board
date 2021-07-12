@@ -8,14 +8,14 @@ import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
-import {scoreArray, nextMoveNote, movementIsNotBranch} from "./utils";
+import {scoreArray, movementNotBranch} from "./utils";
 import {ShowBranches} from "./ShowBranches";
 
 import * as I from "./Icons";
 
-export const Board = (Props: { pieces: string, moves: string[], branches: { marker: string, index: number }[], caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean } }) => {
+export const Board = (Props: { pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean } }) => {
 
-    const {pieces, moves: movesArray, branches, caption, tesuu, initialComment, flags} = Props
+    const {pieces, moves: movesArray, caption, tesuu, initialComment, flags} = Props
     const {commentWindow, HasBranch} = flags
     const [piecesInfo, setPiecesInfo] = useState(pieces)
 
@@ -25,23 +25,25 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
     const [moveCounter, setMoveCounter] = useState(tesuu! - 1)
     const [mover, setMover] = useState(movesArray[tesuu! - 1].slice(4, 6)) //for first 'move' we use 'from' coordinate
     const [history, setHistory] = useState([] as { pieces: string, move: string, counter: number }[])
-    const endOfMoves = (counter: number) => {
-        switch (movesArray[counter][0]) {
-            case 'x':  // end of move
-            case 'C':  // start of branch
-            case undefined:
-                return true;
+    const endOfMoves = (index: number) => {
+        if (index >= movesArray.length) return true
+        else
+            switch (movesArray[index][0]) {
+                case 'x':  // end of move
+                case 'C':  // start of branch
+                case undefined:
+                    return true;
 
-            default:
-                return false
-        }
+                default:
+                    return false
+            }
     }
-    const playOneMoveHandler = (e: Event) => {
-        // console.log('analyzing move', movesArray[moveCounter])
+    const takeOneMoveForward = (index:number) => {
+        let moveCounter=index
         if (!endOfMoves(moveCounter)) {
             let nextMove = movesArray[moveCounter]
-            //    if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
-            console.log('next move is', nextMove)
+            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
+     //       console.log('next move is', nextMove)
             const pieces = moveParser(nextMove, piecesInfo)
             setHistory([...history, {pieces: piecesInfo, move: mover, counter: moveCounter}])
             setPiecesInfo(pieces)
@@ -54,8 +56,22 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
         }
 
     }
-    const skipEndHandler = (e: Event) => {
-        let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove: string, currentMove = mover
+    const updateStates = (pieces: any, miniHistory: { pieces: string, move: string, counter: number }[], nextMove: string, index: number) => {
+        setHistory([...history, ...miniHistory])
+        setPiecesInfo(pieces)
+        setMover(nextMove!.slice(2, 4))
+        if (commentWindow) {
+            setComment(nextMove!.indexOf('*') >= 0 ? nextMove!.slice(nextMove!.indexOf('*') + 1) : "")
+        }
+        setMoveCounter(index)
+    }
+    const playOneMoveHandler = () => {
+        // console.log('analyzing move', movesArray[moveCounter])
+        takeOneMoveForward(moveCounter)
+
+    }
+    const skipEndHandler = () => {
+        let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove = "", currentMove = mover
 
         while (!endOfMoves(counter)) { //read past to the end
             miniHistory.push({pieces: pieces, move: currentMove, counter: counter})
@@ -65,13 +81,7 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
             currentMove = nextMove.slice(2, 4)
             counter++
         }
-        setHistory([...history, ...miniHistory])
-        setPiecesInfo(pieces)
-        setMover(nextMove!.slice(2, 4))
-        if (commentWindow) {
-            setComment(nextMove!.indexOf('*') >= 0 ? nextMove!.slice(nextMove!.indexOf('*') + 1) : "")
-        }
-        setMoveCounter(counter)
+        updateStates(pieces, miniHistory, nextMove, counter)
 
     }
 
@@ -93,10 +103,10 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
             setHistory(history)
         }
     }
-    const reWindHandler = (e: Event) => {
+    const reWindHandler = () => {
         let counter = moveCounter;
         let pieces: { pieces: string, move: string, counter: number } | undefined;
-        while (history.length>0) {
+        while (history.length > 0) {
             pieces = history.pop()
             counter = pieces!.counter
         }
@@ -112,40 +122,36 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
         e.preventDefault();
         const newTarget = (e.target as HTMLSelectElement).value
         console.log('selected', newTarget)
-        setMoveCounter(parseInt(newTarget))
-    }
-    const skipToNextBranchHandler = (e: Event) => {
-        let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove: string, currentMove = mover
+    //    setMoveCounter(parseInt(newTarget))
+        const moveCounter = parseInt(newTarget)
+        takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action
 
+    }
+    const skipToNextBranchHandler = () => {
+        let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove: string, currentMove = mover
+        if (endOfMoves(counter)) return
         do { //read past to the end
             miniHistory.push({pieces: pieces, move: currentMove, counter: counter})
             nextMove = movesArray[counter]
-            //           if (nextMove.slice(2, 4) === '00') nextMove.replace('00', mover)
+            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', currentMove)
             pieces = moveParser(nextMove, pieces) //get updated pieces
             currentMove = nextMove.slice(2, 4)
             counter++
         }
-        while (!endOfMoves(counter) && movementIsNotBranch(movesArray[counter]))
-        setHistory([...history, ...miniHistory])
-        setPiecesInfo(pieces)
-        setMover(nextMove!.slice(2, 4))
-        if (commentWindow) {
-            setComment(nextMove!.indexOf('*') >= 0 ? nextMove!.slice(nextMove!.indexOf('*') + 1) : "")
-        }
-        setMoveCounter(counter)
-
+        while (!endOfMoves(counter) && movementNotBranch(counter, movesArray))
+        updateStates(pieces, miniHistory, nextMove, counter)
     }
-    const skipToPrevBranchHandler = (e: Event) => {
+    const skipToPrevBranchHandler = () => {
         let counter = moveCounter;
         let pieces: { pieces: string, move: string, counter: number } | undefined;
         do {
             pieces = history.pop()
             counter = pieces!.counter
-        } while ((history.length>0) && movementIsNotBranch(movesArray[counter]))
+        } while ((history.length > 0) && movementNotBranch(counter, movesArray))
         setPiecesInfo(pieces!.pieces);
         setMover(pieces!.move)
         if (commentWindow) {
-            const nextMove=movesArray[counter]
+            const nextMove = movesArray[counter]
             setComment(nextMove!.indexOf('*') >= 0 ? nextMove!.slice(nextMove!.indexOf('*') + 1) : "")
         }
 
@@ -181,19 +187,19 @@ export const Board = (Props: { pieces: string, moves: string[], branches: { mark
                         disabled={moveCounter === 0}>
                     <I.Back/></button>
                 <button class="btn btn-sm btn-outline-secondary" value="Play" onClick={playOneMoveHandler}
-                        disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
+                        disabled={endOfMoves(moveCounter) }>
                     <I.Play/></button>
                 {HasBranch &&
                 <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward" onClick={skipToNextBranchHandler}
-                        disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
+                        disabled={endOfMoves(moveCounter)}>
                     <I.SkipForward/></button>}
                 <button class="btn btn-sm btn-outline-secondary" value="Skip-to-End" onClick={skipEndHandler}
-                        disabled={movesArray[moveCounter] === 'undefined' || movesArray[moveCounter] === 'x'}>
+                        disabled={endOfMoves(moveCounter)}>
                     <I.SkipEnd/></button>
 
             </div>
-            <ShowBranches Notes={nextMoveNote(moveCounter, movesArray, branches)} branchingHandler={branchingHandler}/>
-
+            {!!Props.branchList[moveCounter] && <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]}
+                                                              branchingHandler={branchingHandler}/>}
         </div>
         }
         {commentWindow && <div class="comment">{comment}</div>}

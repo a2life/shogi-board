@@ -1,7 +1,5 @@
 /** Todos
  * refactor branch move routine - some duplicated lines
- * move out branch options calculation outside shogiboard component to prevent recalculations
- * automaticall play one move when option movement is selected.
  * add a display to show move counter(marker) in shogiBoard
  */
 import '../shogiboard.css'
@@ -38,12 +36,12 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
                     return false
             }
     }
-    const takeOneMoveForward = (index:number) => {
-        let moveCounter=index
+    const takeOneMoveForward = (index: number) => {
+        let moveCounter = index
         if (!endOfMoves(moveCounter)) {
             let nextMove = movesArray[moveCounter]
             if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
-     //       console.log('next move is', nextMove)
+            //       console.log('next move is', nextMove)
             const pieces = moveParser(nextMove, piecesInfo)
             setHistory([...history, {pieces: piecesInfo, move: mover, counter: moveCounter}])
             setPiecesInfo(pieces)
@@ -76,7 +74,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
         while (!endOfMoves(counter)) { //read past to the end
             miniHistory.push({pieces: pieces, move: currentMove, counter: counter})
             nextMove = movesArray[counter]
-            //           if (nextMove.slice(2, 4) === '00') nextMove.replace('00', mover)
+            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', currentMove)
             pieces = moveParser(nextMove, pieces) //get updated pieces
             currentMove = nextMove.slice(2, 4)
             counter++
@@ -122,7 +120,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
         e.preventDefault();
         const newTarget = (e.target as HTMLSelectElement).value
         console.log('selected', newTarget)
-    //    setMoveCounter(parseInt(newTarget))
+        //    setMoveCounter(parseInt(newTarget))
         const moveCounter = parseInt(newTarget)
         takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action
 
@@ -187,7 +185,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
                         disabled={moveCounter === 0}>
                     <I.Back/></button>
                 <button class="btn btn-sm btn-outline-secondary" value="Play" onClick={playOneMoveHandler}
-                        disabled={endOfMoves(moveCounter) }>
+                        disabled={endOfMoves(moveCounter)}>
                     <I.Play/></button>
                 {HasBranch &&
                 <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward" onClick={skipToNextBranchHandler}

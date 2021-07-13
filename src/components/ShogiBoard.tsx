@@ -2,11 +2,14 @@
  * refactor branch move routine - some duplicated lines
  * add a display to show move counter(marker) in shogiBoard
  */
+
+type history = { pieces: string, move: string, counter: number }[]
+
 import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
-import {scoreArray, movementNotBranch} from "./utils";
+import {scoreArray, movementNotBranch, getMoveNote} from "./utils";
 import {ShowBranches} from "./ShowBranches";
 
 import * as I from "./Icons";
@@ -36,25 +39,8 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
                     return false
             }
     }
-    const takeOneMoveForward = (index: number) => {
-        let moveCounter = index
-        if (!endOfMoves(moveCounter)) {
-            let nextMove = movesArray[moveCounter]
-            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
-            //       console.log('next move is', nextMove)
-            const pieces = moveParser(nextMove, piecesInfo)
-            setHistory([...history, {pieces: piecesInfo, move: mover, counter: moveCounter}])
-            setPiecesInfo(pieces)
-            setMover(nextMove.slice(2, 4))
-            if (commentWindow) {
-                setComment(nextMove.indexOf('*') >= 0 ? nextMove.slice(nextMove.indexOf('*') + 1) : "")
-            }
-            setMoveCounter(moveCounter + 1)
 
-        }
-
-    }
-    const updateStates = (pieces: any, miniHistory: { pieces: string, move: string, counter: number }[], nextMove: string, index: number) => {
+    const updateStates = (pieces: any, miniHistory: history, nextMove: string, index: number) => {
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
         setMover(nextMove!.slice(2, 4))
@@ -62,6 +48,19 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
             setComment(nextMove!.indexOf('*') >= 0 ? nextMove!.slice(nextMove!.indexOf('*') + 1) : "")
         }
         setMoveCounter(index)
+    }
+
+    const takeOneMoveForward = (index: number) => {
+        let moveCounter = index
+        if (!endOfMoves(moveCounter)) {
+            let nextMove = movesArray[moveCounter]
+            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
+            //       console.log('next move is', nextMove)
+            const pieces = moveParser(nextMove, piecesInfo)
+            updateStates(pieces, [{pieces: piecesInfo, move: mover, counter: moveCounter}], nextMove, moveCounter + 1)
+
+        }
+
     }
     const playOneMoveHandler = () => {
         // console.log('analyzing move', movesArray[moveCounter])
@@ -82,7 +81,12 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
         updateStates(pieces, miniHistory, nextMove, counter)
 
     }
-
+    const notation=()=> {
+        if (history.length>0) {
+            (history[history.length-1].counter)
+            return getMoveNote(movesArray[history[history.length-1].counter])
+        }
+    }
 
     const moveBackHandler = (e: Event) => {
         e.preventDefault();
@@ -169,6 +173,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
         </div>
         <div class="row-on-hand">
             {scoreArray('s', piecesInfo).map((p) => (parseInt(p[1]) > 1) && <span class={'c' + p[0]}>{p[1]}</span>)}
+           <aside class="note-window">{notation() }</aside>
         </div>
 
         {movesArray.toString().length > 0 &&

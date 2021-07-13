@@ -360,6 +360,10 @@ This will use 60% scaling.
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     appearance:none;
 }
+.note-window{
+    font-size:0.75rem;
+    float:right;
+}
 
 .large .comment {
     height: 120px;

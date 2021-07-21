@@ -9,14 +9,14 @@ const gote = "△"
 /**
  *
  * @param side
- * @param pieceSet . in this peaceset, onHandpieces looks like 'sgSg', meaning Sente, column 'g', row 'S' and piece 'g'
+ * @param pieceSet . in this peaceSet, onHandPieces looks like 'sgSg', meaning Sente, column 'g', row 'S' and piece 'g'
  */
 export const scoreArray = (side: string, pieceSet: string) => {
-    const pieces = 'plnsgbr'.split('').map((piece) => {
+    return 'plnsgbr'.split('').map((piece) => {
         const search = side + piece + side.toUpperCase() + piece
         return piece + counter(search, pieceSet)
     })
-    return pieces
+
 }
 
 export const unifyPieces = (senteOnBoard: string, goteOnBoard: string, senteOnHand: string, goteOnHand: string) => {
@@ -33,12 +33,11 @@ const duplicateLetter = (a: string) => {
     for (let count = 0; count < parseInt(a[1]); count++) s.push(a[0])
     return s.toString();
 }
-const rePattern = new RegExp('^(?<pre>[sgC*xX])[\\-\\+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９　歩と香成桂銀金角馬飛竜玉王投了同直左右引打上寄]*)\\*?(.*)')
-const brPattern = new RegExp('J(\\d\\d)')
+const rePattern = new RegExp('^(?<pre>[sgC*xX])[\\-+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９　歩と香成桂銀金角馬飛竜玉王投了同直左右引打上寄]*)\\*?(.*)')
+// const brPattern = new RegExp('J(\\d\\d)')
 
 
 export const preProcessMoves = ((moves: string[] | string) => {
-    let prevMove = ''
     let movesArray: string[];
     let initialComment;
     if (typeof moves === "string") {
@@ -61,7 +60,7 @@ export const preProcessMoves = ((moves: string[] | string) => {
         return t
     })
     if (movesArray[0][0] === '*') { //if the first line is comment then,
-        initialComment = `${initialComment} ${movesArray[0].slice(1)}`
+        initialComment = movesArray[0].slice(1)
         //   console.log('initialComment', initialComment)
         movesArray.splice(0, 1)
     }
@@ -78,10 +77,9 @@ const getBranchArray = (movesArray: string[]) => movesArray.map((e, index) => ({
 
 
 /**
- *  return Notes {note:string, counter:number}[]  note is like ;８五歩' couner is move index.
- * @param counter --move index
- * @param movesArray -- array of moves
- * @param branches -- array indicating branches
+ *  return Notes {note:string, counter:number}[]  note is like ;８五歩'
+ * @param index --move index
+ * @param movementArray -- array of moves
  */
 export const movementNotBranch = (index: number, movementArray: string[]) => {
     const thisMovement = movementArray[index];

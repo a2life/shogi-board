@@ -63,6 +63,11 @@ This will use 60% scaling.
     z-index: 500
 }
 
+.tsume .rg {
+    top: -1000px;
+    z-index: 500;
+}
+
 .on-hand-count {
     font-size: smaller;
     text-align: right

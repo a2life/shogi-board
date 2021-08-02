@@ -1,5 +1,4 @@
 // kifu parser class
-import {ShogiKit} from "./defaults";
 /*
 Pattern to recognized
 開始日時：2021/07/23 1:00:00
@@ -195,11 +194,10 @@ export class KifuParser {
     }
 
     parseMoves(kifu: string) {
-
         if (kifu.search(headerPattern)) {
             const movesArray = kifu.slice(kifu.search(headerPattern), kifu.length).split('\n').slice(2).filter((e) => e !== '') //create array with moves section
            // console.log('movesArray=', movesArray)
-            const movesLine = movesArray.map((line) => {
+            this.moves = movesArray.map((line) => {
                 line=line.trim()
                 let lineXlated = line;
 
@@ -214,7 +212,7 @@ export class KifuParser {
                 const found = lineXlated.match(movesPattern)
              //   console.log('found', found)
 
-                let parsed = '';
+                let parsed;
                 if (!!found![2]) {
                     const count = found![1]
                     const side = ((parseInt(found![1]) + this.goteban) % 2 === 1) ? 's' : 'g'
@@ -238,8 +236,6 @@ export class KifuParser {
 
 
             })
-            /*            console.log(movesLine)*/
-            this.moves = movesLine
         }
 
     }

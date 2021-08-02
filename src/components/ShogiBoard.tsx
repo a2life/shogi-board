@@ -22,7 +22,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
 
 
     const [comment, setComment] = useState(initialComment)
-    const [startComment, setStartComment] = useState(initialComment)
+    const startComment = initialComment
     const [moveCounter, setMoveCounter] = useState(tesuu! - 1)
     const [mover, setMover] = useState(movesArray[tesuu! - 1].slice(4, 6)) //for first 'move' we use 'from' coordinate
     const [history, setHistory] = useState([] as { pieces: string, move: string, counter: number }[])

@@ -1,7 +1,10 @@
 # Shogi board using Typescript with viteJS and Preact
 
 ### work in progress
-#### code to show shogiboard and pieces with Initial arrangement and moves information written in JavaScript leterals.
+## The program reads data input(s) and render shogiboard(s) and mimic piece moves on web page.
+#### Displays shogiboard and pieces with Initial arrangement and moves information written in JavaScript literals.
+#### This is a rewrite of PHP/JS projects from 2012 using TypeScript - original project is https://github.com/a2life/Web_shogiboard
+
 June 2021 - ?
 
 <code> npm install </code>
@@ -25,6 +28,7 @@ then
 <ol>
 <li>'Save' button for downloading kif</li>
 <li>Tweak display to show 'Sente' and 'Gote' names</li>
+ <li>Initial Move count to start showing the board in the middle of the game</li>
 </ol>
 
 
@@ -45,10 +49,28 @@ This application is not intended to be used for actual shogi play application.
 <ol>
 <li>The program will take standard Kakinoki style Kifu format as one of Initial setup parameter and parse them into playable shogiboard display.</li>
 <li>Own instruction set in JavaScript Object format for piece movement and placement. Kifu is internally translated to this internal instructions and executed.</li>
-<li>Support branching</li>
-<li>Play forward, backword or jump to branch point</li>
+<li>Branching is supported</li>
+<li>Play forward, backword or jump to branch point with play buttons.  mouse clicking on the board will also move pieces forward or backwards</li>
 
 <li>CSS based board and piece placement.</li>
 <li>Multiple shogiboard on single web page</li>
 </ol>
+
+### Theory of board rendering.
+Plaecement of shogi piece on the board is managed by class atributes of html <img> tag.
+For example, to place Sente's king on the 55 location, the following image tag is created and inserted to containing div element 
+by the program.
+
+          <img src="[PathToKoma]//sou.png"  class="koma c5 r5" alt="" />
+          
+
+The class indicator .c5 and r5 place a piece to relevant location (column 5, row 5) according to css definition.
+to move the piece from 55 to 44, the program will manupulate the class so that the tag will be now
+
+          <img src="[PathToKoma]//sou.png"  class="koma c4 r4" alt="" />
+
+the browser will reposition the piece and it gives the illusion that the piece has "moved"
+
+buttonBar block is dynamically created if "moves" exists. 
+
 

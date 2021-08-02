@@ -14,6 +14,7 @@ export interface ShogiKit {
     initialComment?: string;
     moves?: string[]|string;
     tesuu?: number;
+    kifu?:string;
 
 }
 

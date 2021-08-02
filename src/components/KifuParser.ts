@@ -1,136 +1,186 @@
 // kifu parser class
 import {ShogiKit} from "./defaults";
-const mightyPattern = {"10":"＋\s","1":"[１一]",  "2":"[二２]","3":"[三３]","4":"[四４]",
-    "5":"[五５]","6":"[六６]","7":"[七７]","8":"[八８]","9":"[九９]","p":"歩","P":"と",
-    'L':"成香","l":"香",'N':'成桂','n':'桂','S':'成銀','s':'銀','r':'飛',"R":'[竜龍]',
-    "b":'角',"B":'馬',"k":"[玉王]","g":"金","00":"同　","d":"打","J":"\+","+":"成","x":"(投了|中断)"};
+/*
+Pattern to recognized
+開始日時：2021/07/23 1:00:00
+終了日時：2021/07/23 2:14:00
+棋戦：朝日杯将棋オープン戦
+場所：関西将棋会館
+持ち時間：40分
+消費時間：76▲40△31
+手合割：平手
+先手：浦野真彦 八段
+後手：阪口　悟 六段
+戦型：三間飛車
+手数----指手---------消費時間--
+ */
+
+const lookupList = [
+    {key: "10", pat: /＋\s/},
+    {key: "1", pat: /十/g},
+    {key: "1", pat: /[１一]/g},
+    {key: "2", pat: /[二２]/g},
+    {key: "3", pat: /[三３]/g},
+    {key: "4", pat: /[四４]/g},
+    {key: "5", pat: /[五５]/g},
+    {key: "6", pat: /[六６]/g},
+    {key: "7", pat: /[七７]/g},
+    {key: "8", pat: /[八８]/g},
+    {key: "9", pat: /[九９]/g},
+    {key: "p", pat: /歩/g},
+    {key: "P", pat: /と/g},
+    {key: 'L', pat: /成香/g},
+    {key: "l", pat: /香/g},
+    {key: 'N', pat: /成桂/g},
+    {key: 'n', pat: /桂/g},
+    {key: 'S', pat: /成銀/g},
+    {key: 's', pat: /銀/g},
+    {key: 'r', pat: /飛/g},
+    {key: "R", pat: /[竜龍]/g},
+    {key: "b", pat: /角/g},
+    {key: "B", pat: /馬/g},
+    {key: "k", pat: /[玉王]/g},
+    {key: "g", pat: /金/g},
+    {key: "00", pat: /同　/},
+    {key: "d", pat: /打/},
+    {key: "J", pat: /\+/},
+    {key: "+", pat: /成/},
+    {key: "x", pat: /(投了|中断)/},
+    {key: " ", pat:/　/g} //replace zenkaku space with hankaku space
+
+]
+const boardMarker = "９ ８ ７ ６ ５ ４ ３ ２ １";
+const senteOnHandPattern = /\n先手の持駒：([^\n]*)[\r\n$]/;
+const shimoteOnHandPattern = /\n下手の持駒：([^\n]*)[\r\n$]/;
+const goteOnHandPattern = /\n後手の持駒：([^\n]*)[\r\n$]/;
+const uwateOnHandPattern = /\n上手の持駒：([^\n]*)[\r\n$]/;
+const startDatePattern = /\n開始日時：([^\n]*)[\r\n$]/;
+const endDatePattern = /\n終了日時：([^\n]*)[\r\n$]/;
+const teaiPattern = /\n手合割：([^\n]*)[\r\n$]/;
+const senteNamePattern = /先手：([^\n]*)[\r\n$]/;
+const shimoteNamePattern = /下手：([^\n]*)[\r\n$]/;
+const goteNamePattern = /後手：([^\n]*)[\r\n$]/;
+const uwateNamePattern = /上手：([^\n]*)[\r\n$]/;
+const boardFlipPattern = /.*盤面回転/;
+const gotebanPattern = /.*後手番/;
+const locationPattern = /場所：([^\n]*)[\r\n$]/
+const timeAllowedPattern = /持ち時間：([^\n]*)[\r\n$]/
+const timeSpentPattern = /消費時間：([^\n]*)[\r\n$]/
+const eventPattern = /棋戦：([^\n]*)[\r\n$]/
+const catalogingPattern = /戦型：([^\n]*)[\r\n$]/
+const headerPattern = '\n手数----指手';
+const movesPattern = /(\d+)\s+([\d\w+]+)(?:\((\d+)\))?[ /():0-9]*(J?)|\*([^\n]*)|変化：([\w]+)|.*/ //move line here is already processed with lookups
+const moveName = /\d+\s+([\S　]*)[(\s]/ //this regex applied to original move line with Kanji.
 
 export class KifuParser {
-    kifu:string
+    kifu: string
+    moves: string[] = []
+    sOnHand: string = ''
+    gOnHand: string = '';
 
-    constructor(kifu:string) {
-        this.kifu=kifu
+    senteName = '';
+    goteName = "";
+    teai = '';
+    startDate = '';
+    endDate = '';
+    location = '';
+    event = '';
+    timeAllowed = '';
+    timeSpent = '';
+    catalog = '';
+    boardFlip = false;
+    sOnBoard = '';
+    gOnBoard = '';
+    goteban = 0;
+
+    constructor(kifu: string) {
+        this.kifu = kifu
+        this.parseData(kifu)
+        if (kifu.includes(headerPattern)) this.parseMoves(kifu)
     }
-    getMoves(){
 
-    }
-    getSenteOnHand(){
-
-    }
-    getGoteOnHand(){
-
-    }
-    getSenteOnBoard(){
-
-    }
-    getGoteOnBoard(){
-
-    }
-    parse(){
-        return 'parsed  shogiKit'+this.kifu
-    }
-}
-
-/*
-
-
-PHP parser for reference
-<?php
-/**
- * Created by JetBrains PhpStorm.
- * User: A2life
- * UpDate: 7/15/2013
- * added "goteban" handling
- * Time: 2:17 PM
- * To change this template use File | Settings | File Templates.
- * Class kifu
- * __constructor() =  get kifu
- * will define...
- * getMoves()
- * getsOnHand()
- * getgOnHand
- * getsOnboard()
- * getgOnboard()
- * getFlip()
-
- @var $modx modX
-
-class kifu
-{
-    private $moves, $sOnHand, $gOnHand,$senteName,$goteName,$teai,$startDate,$endDate,$boardFlip,
-    $sOnBoard,
-    $gOnBoard,
-    $goteban,
-    $mightyPattern = array("10"=>"＋\s","1"=>"[１一]",  "2"=>"[二２]","3"=>"[三３]","4"=>"[四４]",
-    "5"=>"[五５]","6"=>"[六６]","7"=>"[七７]","8"=>"[八８]","9"=>"[九９]","p"=>"歩","P"=>"と",
-    'L'=>"成香","l"=>"香",'N'=>'成桂','n'=>'桂','S'=>'成銀','s'=>'銀','r'=>'飛',"R"=>'[竜龍]',
-    "b"=>'角',"B"=>'馬',"k"=>"[玉王]","g"=>"金","00"=>"同　","d"=>"打","J"=>"\+","+"=>"成","x"=>"(投了|中断)");
-
-    private function
-    findline($mbstring,$array){
-        $c=count($array);
-        $f=false;
-        for ($i=0;!$f && $i<$c;$i++){
-            mb_ereg_search_init($array[$i],$mbstring);
-            $f=mb_ereg_search();
+    parseData(kifu: string) {
+        const findMatch = (pattern: RegExp) => {
+            return (!!kifu.match(pattern)) ? kifu.match(pattern)![1].trim() : ""
         }
-        if ($i<$c)  return --$i;
-        else return $f;
-    }
-    private
-    function parseRepeat($onHand){
-    $regs=array();
-    $hands="";
-    $pattern="([plnsgrb])(\d*)";
-    mb_ereg_search_init($onHand,$pattern);
-    while (mb_ereg_search()){
-        $regs=mb_ereg_search_getregs();
-        $hands.=($regs[2]?str_repeat($regs[1],$regs[2]):$regs[1]);//if more than one, pieces are multiplied here.
-    }
-    $regs=str_split($hands);
-    $onHand=implode(",",$regs);
-    return $onHand;
-}
-    private function parsedata($init_data){
+        if (kifu.match(senteOnHandPattern) !== null) this.sOnHand = kifu.match(senteOnHandPattern)![1].trim()
+        else if (kifu.match(shimoteOnHandPattern) !== null) this.sOnHand = kifu.match(shimoteOnHandPattern)![1].trim()
+        if (kifu.match(goteOnHandPattern) !== null) this.gOnHand = kifu.match(goteOnHandPattern)![1].trim()
+        else if (kifu.match(uwateOnHandPattern) !== null) this.gOnHand = kifu.match(uwateOnHandPattern)![1].trim()
+        this.startDate = findMatch(startDatePattern)
+        this.endDate = findMatch(endDatePattern)
+        this.teai = findMatch(teaiPattern)
+        this.event = findMatch(eventPattern)
+        this.location = findMatch(locationPattern)
+        this.catalog = findMatch(catalogingPattern)
+        this.timeAllowed = findMatch(timeAllowedPattern)
+        this.timeSpent = findMatch(timeSpentPattern)
 
-    $xarrays=$this->mightyPattern;
-    $boardMarker="９ ８ ７ ６ ５ ４ ３ ２ １";
-    $senteOnHandPattern="\n先手の持駒：([^\n]*)[\r\n$]";
-    $shimoteOnHandPattern="\n下手の持駒：([^\n]*)[\r\n$]";
-    $goteOnHandPattern= "\n後手の持駒：([^\n]*)[\r\n$]";
-    $uwateOnHandPattern= "\n上手の持駒：([^\n]*)[\r\n$]";
-    $startDatePattern="\n開始日時：([^\n]*)[\r\n$]";
-    $endDatePattern="\n終了日時：([^\n]*)[\r\n$]";
-    $teaiPattern="\n手合割：([^\n]*)[\r\n$]";
-    $senteNamePattern="先手：([^\n]*)[\r\n$]";
-    $shimoteNamePattern="下手：([^\n]*)[\r\n$]";
-    $goteNamePattern="後手：([^\n]*)[\r\n$]";
-    $uwateNamePattern="上手：([^\n]*)[\r\n$]";
-    $boardFlipPattern=".*盤面回転";
-    $gotebanPattern =".*後手番";
-    $senteOnHand=null;
-    $goteOnHand=null;
-    $onHands=array();
-    if(mb_ereg($senteOnHandPattern,$init_data,$onHands)!=false)$senteOnHand=trim($onHands[1]);
-    elseif(mb_ereg($shimoteOnHandPattern,$init_data,$onHands)!=false)$senteOnHand=trim($onHands[1]);
-    if(mb_ereg($goteOnHandPattern,$init_data,$onHands)!=false)$goteOnHand=trim($onHands[1]);
-    elseif(mb_ereg($uwateOnHandPattern,$init_data,$onHands)!=false)$goteOnHand=trim($onHands[1]);
-    if(mb_ereg($startDatePattern,$init_data,$onHands)!=false) $startDate=$onHands[1];
-    if(mb_ereg($endDatePattern,$init_data,$onHands)!=false) $endDate=$onHands[1];
-    if(mb_ereg($teaiPattern,$init_data,$onHands)!=false)$teai=$onHands[1];
-    if(mb_ereg($senteNamePattern,$init_data,$onHands)!=false)$senteName=$onHands[1];
-    elseif(mb_ereg($shimoteNamePattern,$init_data,$onHands)!=false)$senteName=$onHands[1];
-    if(mb_ereg($goteNamePattern,$init_data,$onHands)!=false )$goteName=$onHands[1];
-    elseif(mb_ereg($uwateNamePattern,$init_data,$onHands)!=false )$goteName=$onHands[1];
-    $boardFlipped = mb_ereg_match($boardFlipPattern,$init_data);
-    $this->goteban =mb_ereg_match($gotebanPattern,$init_data)?1:0;
-    $init_array=explode("\n",$init_data);
-    $i= $this->findline($boardMarker,$init_array);
-    if ($i!==false){ //the string contains board chart
+        if (kifu.match(senteNamePattern) !== null) this.senteName = kifu.match(senteNamePattern)![1]
+        else if (kifu.match(shimoteNamePattern) !== null) this.senteName = kifu.match(shimoteNamePattern)![1]
+        if (kifu.match(goteNamePattern) !== null) this.goteName = kifu.match(goteNamePattern)![1]
+        else if (kifu.match(uwateNamePattern) !== null) this.goteName = kifu.match(uwateNamePattern)![1]
 
-        $i=$i+2;  //starting row of 局面　info
-        $j=$i+9;  //ending row of 局面　info
-      // the following code printed out the board layout for debugging purpose
+
+        this.boardFlip = (kifu.search(boardFlipPattern) >= 0)
+        this.goteban = (kifu.search(gotebanPattern) >= 0) ? 1 : 0
+        const KifuArray = kifu.split('\n');
+        const i = this.findLine(boardMarker, KifuArray)
+       // console.log('i=', i)
+
+                if (i >= 0) { //the string contains board chart // below routine not validated yet.
+                    let startRow = i + 2;//starting row of 局面　info
+                    let endRow = i + 9 //ending row of 局面　info
+                    for (let row = startRow; row < endRow; row++) {
+                        for (let k = 2; k < 19; k = k + 2) {
+                            let masu = KifuArray[row].substr(k, 1)
+                            if (masu !== "・") {
+                                let colRow = (10 - k / 2).toString() + (row - startRow + 1).toString();
+                                let side = KifuArray[row].substr(k - 1, 1);
+                                switch (side) {
+                                    case " "://This is Sente's piece
+                                        this.sOnBoard += colRow;
+                                        this.sOnBoard += masu;
+                                        this.sOnBoard += " ";
+                                        break;
+                                    case "v"://this is Gote's piece
+                                        this.gOnBoard += colRow;
+                                        this.gOnBoard += masu;
+                                        this.gOnBoard += " "
+                                        ;
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+        this.sOnBoard = this.sOnBoard.trim();
+        this.gOnBoard = this.gOnBoard.trim();
+
+
+        for (const elem in lookupList) {
+            const pat = lookupList[elem].pat
+            const key = lookupList[elem].key
+            this.sOnBoard = this.sOnBoard.replace(pat, key);
+            this.gOnBoard = this.gOnBoard.replace(pat, key);
+            this.sOnHand = this.sOnHand.replace(pat, key);
+            this.gOnHand = this.gOnHand.replace(pat, key);
+        }
+
+
+        //spell out pieces and not numbers. ie., s3 -> s,s,s
+
+        /*   this.sOnHand = this.parseRepeat(this.sOnHand);
+           this.gOnHand = this.parseRepeat(this.gOnHand);*/
+        this.sOnBoard = this.sOnBoard.split(' ').join(',');
+        this.gOnBoard = this.gOnBoard.split(' ').join(',');
+        this.sOnHand=this.sOnHand.split(' ').join(',')
+        this.gOnHand=this.gOnHand.split(' ').join(',')
+
+        /*
+          // the following code printed out the board layout for debugging purpose
         for ($n=$i;$n<$j;$n++){
             $m= mb_strlen($init_array[$n]);
             for($k=0;$k<$m;$k++){
@@ -138,126 +188,114 @@ class kifu
             }
             echo "\n";
         }
-//
-        $senteOnBoard=""; $goteOnBoard="";
-        for ($row=$i;$row<$j;$row++){
-            //$columnLength=mb_strlen($init_array[$row]);
-            for ($k=2;$k<19;$k=$k+2){
-                $masu=mb_substr($init_array[$row],$k,1);
-                if ($masu!="・"){
-                    $colRow=(10-$k/2).($row-$i+1);
-                    $side=mb_substr($init_array[$row],$k-1,1);
 
-                    switch($side){
-                        case " "://This is Sente's piece
-                            $senteOnBoard.=$colRow;
-                            $senteOnBoard.=$masu;
-                            $senteOnBoard.=" ";
-                            break;
-                        case "v"://this is Gote's piece
-                            $goteOnBoard.=$colRow;
-                            $goteOnBoard.=$masu;
-                            $goteOnBoard.=" "
-                            ;break;
-                    }
+}
+
+         */
+    }
+
+    parseMoves(kifu: string) {
+
+        if (kifu.search(headerPattern)) {
+            const movesArray = kifu.slice(kifu.search(headerPattern), kifu.length).split('\n').slice(2).filter((e) => e !== '') //create array with moves section
+           // console.log('movesArray=', movesArray)
+            const movesLine = movesArray.map((line) => {
+                line=line.trim()
+                let lineXlated = line;
+
+                for (const elem in lookupList) {
+                    const pat = lookupList[elem].pat
+
+                    const key = lookupList[elem].key
+                    lineXlated = lineXlated.replace(pat, key);
+
                 }
-            }
-        }
 
-        $senteOnBoard=trim($senteOnBoard);
-        $goteOnBoard=trim($goteOnBoard);
-        foreach ($xarrays as $key=>$pat){
-            $senteOnBoard=mb_ereg_replace($pat,$key,$senteOnBoard);
-            $goteOnBoard=mb_ereg_replace($pat,$key,$goteOnBoard);
-            $senteOnHand=mb_ereg_replace($pat,$key,$senteOnHand);
-            $goteOnHand =mb_ereg_replace($pat,$key,$goteOnHand);
-        }
+                const found = lineXlated.match(movesPattern)
+             //   console.log('found', found)
 
-//spell out pieces and not numbers. ie., s3 -> s,s,s
-        $senteOnHand = $this->parseRepeat($senteOnHand);
-        $goteOnHand = $this->parseRepeat($goteOnHand);
-        //format onboard string
-        $senteOnBoard=mb_ereg_replace(" ",",",$senteOnBoard);
-        $goteOnBoard=mb_ereg_replace(" ",",",$goteOnBoard);
-
-    }
-    if (isset($senteOnBoard)) $this->sOnBoard = $senteOnBoard;
-    if (isset($goteOnBoard)) $this->gOnBoard = $goteOnBoard;
-    if (isset($senteName)) $this->senteName = $senteName;
-    if (isset($goteName)) $this->goteName = $goteName;
-    if (isset($startDate)) $this->startDate = $startDate;
-    if (isset($endDate)) $this->endDate = $endDate;
-    if (isset($teai)) $this->teai = $teai;
-
-    $this->boardFlip = $boardFlipped;
-    $this->sOnHand = $senteOnHand;
-    $this->gOnHand = $goteOnHand;
-
-}
-    public function
-    __construct($src){
-        mb_regex_encoding ("UTF-8"); //prep to handle mb strings
-        mb_internal_encoding("UTF-8");//ditto
-        $this->parsedata($src);
-        $xlationArray=$this->mightyPattern;
-
-        $match=array();
-//$pattern="(?:(\d+)\s+([\w\s]+)(?:\((\d+)\))?[ /():0-9]*(\+?))";
-        $header="手数----指手";
-        $pattern='(?:(\d+)\s+([\w\s]+)(?:\((\d+)\))?[ /():0-9]*(\+?))|(?:\n(?:\*)([^\n]*))|(?:変化：([\w]+))';
-        $parsed="";//
-        $movesLines="";
-        mb_ereg_search_init($src,$header); // does move exists? if yes, next lines will parse moves
-        if (mb_ereg_search()) { //forward to the start of move list
-            mb_ereg_search_regs($pattern); //load regs with move parsing $pattern for the first time
-            do{
-                $match=mb_ereg_search_getregs();
-                if ($match[2]){ //
-                    $parsed="\n";
-                    $parsed.=((($match[1] + $this->goteban) & 1)?"s-":"g-");
-                    $parsed.=(trim($match[2]).$match[3].$match[4]."=".$match[1]);
-
-                    foreach($xlationArray as $key=>$pat){
-                        $parsed=mb_ereg_replace($pat,$key,$parsed);
-                    }
-                    $parsed.=(":".trim($match[2]));
-                } else if ($match[5]) $parsed="*".trim($match[5])."<br/>";//regex is matching *comment line, the second alternate
-            else if ($match[6]) $parsed="\nC:".$match[6];
-                else $parsed="\n".$match[0];//regex is matching the last catch all alternate so spit out as is
-
-                $movesLines.=$parsed;
-            }
-            while(mb_ereg_search_regs());// until next result returns false. note that mb_ereg is caching $string and $pattern
+                let parsed = '';
+                if (!!found![2]) {
+                    const count = found![1]
+                    const side = ((parseInt(found![1]) + this.goteban) % 2 === 1) ? 's' : 'g'
+                    const to = found![2].trim();
+                    const from = (found![3] !== undefined) ? found![3] : ""
+                    const note = (!!found![4]) ? found![4] : "=" // note is "J" or "="
+                    const name = line.match(moveName)![1]
+                    parsed = side + '-' + to + from + note + count + ':' + name
+                    parsed = parsed.replace(/-(...)\+/, '+$1') // s-nn+ => s+nn
+                    parsed = parsed.replace(/-(...)d/, 'd$1') // s-68sd => sd68s
+                    parsed = parsed.replace(/([+-]\d\d)[pPlLnNsSgkrRbB]/, '$1')// remove piece information
+                } else if (!!found![5]) {
+                    parsed = '*' + found![5].trim()
+                } else if (!!found![6]) {
+                    parsed = 'c:' + found![6]
+                } else
+                    parsed = '*' + found![0]
 
 
-            $movesLines=mb_ereg_replace("J=","J",$movesLines); // replace = with J for jump point
-            $movesLines=mb_ereg_replace('(?<=\d\d)[pPlLnNsSgkrRbB](?=.?\d\d)',"",$movesLines); //remove piece info as they are not needed for drawboard
-            $movesLines=mb_ereg_replace('-(..)\+','+\1',$movesLines); // s-nn+ => s+nn
-            $movesLines=mb_ereg_replace('-(...)d','d\1',$movesLines); // s-68sd => sd68s
-            $movesLines=mb_ereg_replace("<br/>\*","<br/>",$movesLines);// process multiple comment lines.
-            $movesLines=mb_ereg_replace("<br/>\n","\n",$movesLines);// remove <br> from the end of comment lines.
-            $movesLines=trim($movesLines);
-            $movesLines.="\nx"; // terminate the end with x to indicate the EOF.
-            $moves = explode("\n",$movesLines); // this sequence will
-            $movesLines="\"".implode("\",\n\"",$moves)."\""; // surround each line with quotes and ,
-            $this->moves = $movesLines;
+                return parsed
+
+
+            })
+            /*            console.log(movesLine)*/
+            this.moves = movesLine
         }
 
     }
 
-    public function getMoves()      { return (isset($this->moves)?$this->moves:false); }
-    public function getsOnHand()    { return (isset($this->sOnHand)?$this->sOnHand:false);}
-    public function getgOnHand()    { return (isset($this->gOnHand)?$this->gOnHand:false);}
-    public function getsOnBoard()   { return (isset($this->sOnBoard)?$this->sOnBoard:false);}
-    public function getgOnBoard()   { return (isset($this->gOnBoard)?$this->gOnBoard:false);}
-    public function getStartDate()  { return (isset($this->startDate)?$this->startDate:false);}
-    public function getEndDate()    { return (isset($this->endDate)?$this->endDate:false);}
-    public function getSenteName()  { return (isset($this->senteName)?$this->senteName:false);}
-    public function getGoteName()   { return (isset($this->goteName)?$this->goteName:false);}
-    public function getTeai()       { return (isset($this->teai)?$this->teai:false);}
-    public function getFlip()       { return $this->boardFlip;}
+    findLine(target: string, scrArray: string[]) {
+        return scrArray.findIndex((e) => e.includes(target));
+    }
+
+    /**
+     *  return expanted string array such as 'b,l,p,p,p'
+     * @param onHand; onHand data such as "b,l,p3"
+     */
+    parseRepeat(onHand: string) {
+
+        let hands = ""
+        if (onHand.length === 0) return hands
+        let regs: string[] = []
+        const pattern = /(([plnsgrb])(\d*))/g
+        const found = onHand.match(pattern) // return ["l2','p','b'] etc.,"
+        found!.forEach((e) => {
+            if (e.length === 1) regs.push(e)
+            else for (let x = 0; x < parseInt(e[1]); x++) regs.push(e[0]);
+        })
+        return regs.join(',');
+
+    }
 
 
+    public parse() {
+        /*export interface ShogiKit {
+         markerAt: string
+            pieceSetSelection?: string
+            gridStyleSelection?: string
+            boardStyleSelection?: string
+            focusImageSelection?: string
+            caption?: string
+            initialComment?: string;
+            tesuu?: number;
+
+        }*/
+
+        return {
+            senteOnBoard: this.sOnBoard,
+            goteOnBoard: this.gOnBoard,
+            senteOnHand: this.sOnHand,
+            goteOnHand: this.gOnHand,
+            senteName: this.senteName,
+            goteName: this.goteName,
+            moves: this.moves,
+            teai: this.teai,
+            startDate: this.startDate,
+            endData: this.endDate,
+            eventName: this.event,
+            catalog: this.catalog,
+            kifu: this.kifu
+        }
+    }
 }
 
-* */

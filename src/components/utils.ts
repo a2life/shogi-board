@@ -30,7 +30,8 @@ export const unifyPieces = (senteOnBoard: string, goteOnBoard: string, senteOnHa
 }
 const duplicateLetter = (a: string) => {
     let s = []
-    for (let count = 0; count < parseInt(a[1]); count++) s.push(a[0])
+    const qty=(!!a[1])?parseInt(a.slice(1)):1
+    for (let count = 0; count < qty; count++) s.push(a[0])
     return s.toString();
 }
 const rePattern = new RegExp('^(?<pre>[sgC*xX])[\\-+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９　歩と香成桂銀金角馬飛竜玉王投了同直左右引打上寄]*)\\*?(.*)')
@@ -39,7 +40,7 @@ const rePattern = new RegExp('^(?<pre>[sgC*xX])[\\-+0-9a-z]+((?<branch>[J=])(?<m
 
 export const preProcessMoves = ((moves: string[] | string) => {
     let movesArray: string[];
-    let initialComment;
+    let initialComment='';
     if (typeof moves === "string") {
         movesArray = moves.split(',')
     } else {

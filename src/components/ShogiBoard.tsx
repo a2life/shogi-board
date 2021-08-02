@@ -163,7 +163,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
     return <div class="board-container">
         {(caption!.length > 0) && <div class="h5 text-center pt-1">{caption}</div>}
         <div class="row-on-hand">
-            {scoreArray('g', piecesInfo).map((p) => (parseInt(p[1]) > 1) && <span class={`c${p[0]}`}>{p[1]}</span>)}
+            {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) && <span class={`c${p[0]}`}>{p.slice(1)}</span>)}
         </div>
 
         <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
@@ -172,7 +172,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
             {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={mover}/>))}
         </div>
         <div class="row-on-hand">
-            {scoreArray('s', piecesInfo).map((p) => (parseInt(p[1]) > 1) && <span class={'c' + p[0]}>{p[1]}</span>)}
+            {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) && <span class={'c' + p[0]}>{p.slice(1)}</span>)}
            <aside class="note-window">{notation() }</aside>
         </div>
 

@@ -18,6 +18,7 @@ then
  - Those initial setups are in JavaScript section of index.html,  contained in 'initialSetup' array.
  - more description to come once code development progresses.
  - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago, but still missing features from old project. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
+ - The previous project relied on modx CMS as a framework. There will be no restriction on hosting service as long as it supports modern JavaScript.
 
 
 <code>npm run build </code> to build project

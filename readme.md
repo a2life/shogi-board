@@ -3,7 +3,7 @@
 ### work in progress
 ## The program reads data input(s) and render shogiboard(s) and mimic piece moves on web page.
 #### Displays shogiboard and pieces with Initial arrangement and moves information written in JavaScript literals.
-#### This is a rewrite of PHP/JS projects from 2012 using TypeScript - original project is https://github.com/a2life/Web_shogiboard
+#### This is a rewrite of modx/PHP/JS projects from 2012 using TypeScript - original project is https://github.com/a2life/Web_shogiboard
 
 June 2021 - ?
 

@@ -3,7 +3,7 @@ import {defaultParams, ShogiKit} from "./components/defaults";
 import {unifyPieces, preProcessMoves,prepBranchPoints} from "./components/utils";
 import {KifuParser} from "./components/KifuParser";
 
-export function App(prop: { setup: ShogiKit }) {
+export function BoardRenderer(prop: { setup: ShogiKit }) {
     let dataPack={}// stuff datapack in case kifu is available
 
     if (!!prop.setup.kifu) {

@@ -3,7 +3,7 @@
 ### work in progress
 ## The program reads data input(s) and render shogiboard(s) and mimic piece moves on web page.
 #### Displays shogiboard and pieces with Initial arrangement and moves information written in JavaScript literals.
-#### This is a rewrite of modx/PHP/JS projects from 2012 using TypeScript - original project is https://github.com/a2life/Web_shogiboard
+#### This is a rewrite of modx/PHP/JS projects from 2012 using TypeScript (ie., 100% client side solution.) - original project is https://github.com/a2life/Web_shogiboard
 
 June 2021 - ?
 
@@ -46,11 +46,11 @@ then
 This is a TypeScript / Preact  project with vitejs as a bundler to display shogiboard on webpages. 
 Intended usage is to display shogiboard for explaining shogi piece movement and stragety.
 
-This application is not intended to be used for actual shogi play application.
+This application is not intended to be used to play shogi. The purpose of this application is to display recorded Shogi movements.
 <ol>
 <li>Shows static board to demonstrate piece placement on the board </li>
 <li>demonstrate  tactical movement of pieces, such as creating castle or prepare for attack</li>
-<li>replay games from kifu record</li>
+<li>replay games from kifu record that is available from Shogi kifu database.</li>
 </ol>
 
 ### Highlight of the project
@@ -233,7 +233,16 @@ Branch is supported in the following way. (Use array of string rather than strin
 
 In the above example, when move reaches the third move (J3), list box will be created and the user is presented with a choice with labelA1 and Label A2. If he choses label A1, then make a move, the user will then presented with the list box with choise of LabelB1 and Label B2.
 
-This manual method will quickly become tedious.  Therefore, a most likely scenario is to create kifu file using application such as Kifu for windows and create Kifu file parser to convert the kif file, then assign the output to kifu=`` variable.  Likely scenario is to store this kifu file and then have server side script to create a initialSetup object and server from the server.
+This manual method will quickly become old. 
+Therefore, a most likely scenario is to create kifu file using application 
+such as Kifu for windows and create Kifu file, then assign the output to
+kifu=`` variable. 
+
+Storing of  this kifu file can be statically embedded in javascript file
+like this demo but of course those Kifu files can be stored in the 
+web server and then have server side script 
+(PHP based, NodeJs based, etc.,) to create a initialSetup object and
+serve from the server.
 
 
 

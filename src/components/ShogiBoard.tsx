@@ -39,13 +39,17 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
                     return false
             }
     }
-
+    const extractComments=(moveLine:string)=>{
+        const index = (moveLine.indexOf('*'));
+        const comment= (index>=0)?moveLine.slice(index+1):''
+        return comment.replaceAll('*','<br>')
+    }
     const updateStates = (pieces: any, miniHistory: history, nextMove: string, index: number) => {
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
-        setMover(nextMove!.slice(2, 4))
+        setMover(nextMove.slice(2, 4))
         if (commentWindow) {
-            setComment(nextMove!.indexOf('*') >= 0 ? nextMove!.slice(nextMove!.indexOf('*') + 1) : "")
+            setComment(extractComments(nextMove))
         }
         setMoveCounter(index)
     }
@@ -99,7 +103,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
 
             if (moveCounter - 2 >= 0) {
                 move = movesArray[moveCounter - 2]
-                setComment(move.indexOf('*') >= 0 ? move.slice(move.indexOf('*') + 1) : "")
+                setComment(extractComments(move))
             } else setComment(startComment)
             setMoveCounter(pieces!.counter)
             setHistory(history)
@@ -154,7 +158,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
         setMover(pieces!.move)
         if (commentWindow) {
             const nextMove = movesArray[counter]
-            setComment(nextMove!.indexOf('*') >= 0 ? nextMove!.slice(nextMove!.indexOf('*') + 1) : "")
+            setComment(extractComments(nextMove))
         }
 
         setMoveCounter(counter)

@@ -68,7 +68,7 @@ const timeSpentPattern = /消費時間：([^\n]*)[\r\n$]/
 const eventPattern = /棋戦：([^\n]*)[\r\n$]/
 const catalogingPattern = /戦型：([^\n]*)[\r\n$]/
 const headerPattern = '\n手数----指手';
-const movesPattern = /(\d+)\s+([\d\w+]+)(?:\((\d+)\))?[ /():0-9]*(J?)|\*([^\n]*)|変化：([\w]+)|.*/ //move line here is already processed with lookups
+const movesPattern = /(\d+)\s+([\d\w+]+)(?:\((\d+)\))?[ /():0-9]*(J?)(\*?[^\n]*)|変化：([\w]+)|.*/ //move line here is already processed with lookups
 const moveName = /\d+\s+([\S　]*)[(\s]/ //this regex applied to original move line with Kanji.
 
 export class KifuParser {
@@ -195,7 +195,9 @@ export class KifuParser {
 
     parseMoves(kifu: string) {
         if (kifu.search(headerPattern)) {
-            const movesArray = kifu.slice(kifu.search(headerPattern), kifu.length).split('\n').slice(2).filter((e) => e !== '') //create array with moves section
+            const movesArray = kifu.slice(kifu.search(headerPattern), kifu.length)
+                .replace(/\n\*/g,'*')
+              .split('\n').slice(2).filter((e) => e !== '') //create array with moves section
            // console.log('movesArray=', movesArray)
             this.moves = movesArray.map((line) => {
                 line=line.trim()
@@ -217,16 +219,16 @@ export class KifuParser {
                     const count = found![1]
                     const side = ((parseInt(found![1]) + this.goteban) % 2 === 1) ? 's' : 'g'
                     const to = found![2].trim();
-                    const from = (found![3] !== undefined) ? found![3] : ""
+                    const from = (!!found![3]) ? found![3] : ""
                     const note = (!!found![4]) ? found![4] : "=" // note is "J" or "="
+                    const comment =(!!found![5])? found![5].trim() :''
                     const name = line.match(moveName)![1]
-                    parsed = side + '-' + to + from + note + count + ':' + name
+                    parsed = side + '-' + to + from + note + count + ':' + name +  comment
                     parsed = parsed.replace(/-(...)\+/, '+$1') // s-nn+ => s+nn
                     parsed = parsed.replace(/-(...)d/, 'd$1') // s-68sd => sd68s
                     parsed = parsed.replace(/([+-]\d\d)[pPlLnNsSgkrRbB]/, '$1')// remove piece information
-                } else if (!!found![5]) {
-                    parsed = '*' + found![5].trim()
-                } else if (!!found![6]) {
+                }
+                else if (!!found![6]) {
                     parsed = 'c:' + found![6]
                 } else
                     parsed = '*' + found![0]

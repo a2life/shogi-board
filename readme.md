@@ -35,6 +35,8 @@ then
 <li>'Save' button for downloading kif</li>
 <li>Tweak display to show 'Sente' and 'Gote' names</li>
  <li>Initial Move count to start showing the board in the middle of the game</li>
+<li>Handycap setup</li>
+<li>Find area to display players' names</li>
 </ol>
 
 

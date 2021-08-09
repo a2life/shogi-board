@@ -154,31 +154,37 @@ export class KifuParser {
                             }
                         }
                     }
+
+                    this.sOnBoard = this.sOnBoard.trim();
+                    this.gOnBoard = this.gOnBoard.trim();
+
+
+                    for (const elem in lookupList) {
+                        const pat = lookupList[elem].pat
+                        const key = lookupList[elem].key
+                        this.sOnBoard = this.sOnBoard.replace(pat, key);
+                        this.gOnBoard = this.gOnBoard.replace(pat, key);
+                        this.sOnHand = this.sOnHand.replace(pat, key);
+                        this.gOnHand = this.gOnHand.replace(pat, key);
+                    }
+                    //spell out pieces and not numbers. ie., s3 -> s,s,s
+
+                    /*   this.sOnHand = this.parseRepeat(this.sOnHand);
+                       this.gOnHand = this.parseRepeat(this.gOnHand);*/
+                    this.sOnBoard = this.sOnBoard.split(' ').join(',');
+                    this.gOnBoard = this.gOnBoard.split(' ').join(',');
+                    this.sOnHand=this.sOnHand.split(' ').join(',')
+                    this.gOnHand=this.gOnHand.split(' ').join(',')
+
+
+
+
                 }
 
 
-        this.sOnBoard = this.sOnBoard.trim();
-        this.gOnBoard = this.gOnBoard.trim();
 
 
-        for (const elem in lookupList) {
-            const pat = lookupList[elem].pat
-            const key = lookupList[elem].key
-            this.sOnBoard = this.sOnBoard.replace(pat, key);
-            this.gOnBoard = this.gOnBoard.replace(pat, key);
-            this.sOnHand = this.sOnHand.replace(pat, key);
-            this.gOnHand = this.gOnHand.replace(pat, key);
-        }
 
-
-        //spell out pieces and not numbers. ie., s3 -> s,s,s
-
-        /*   this.sOnHand = this.parseRepeat(this.sOnHand);
-           this.gOnHand = this.parseRepeat(this.gOnHand);*/
-        this.sOnBoard = this.sOnBoard.split(' ').join(',');
-        this.gOnBoard = this.gOnBoard.split(' ').join(',');
-        this.sOnHand=this.sOnHand.split(' ').join(',')
-        this.gOnHand=this.gOnHand.split(' ').join(',')
 
         /*
           // the following code printed out the board layout for debugging purpose

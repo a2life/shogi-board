@@ -5,11 +5,14 @@
 #### Displays shogiboard and pieces with Initial arrangement and moves information written in JavaScript literals.
 #### This is a rewrite of modx/PHP/JS projects from 2012 using TypeScript (ie., 100% client side solution.) - original project is https://github.com/a2life/Web_shogiboard
 
-June 2021 - ?
+Initial development period: June 2021 - August 2021
 
-State of the coding is 'Alpha release'
+State of the coding is 'Beta release'.  Initial functionality has been confirmed. However, there maybe 'edge' case that the code may still have issues.
 
-to get started, clone repository and then do
+I have not exercised enough use case to fully validate the code. 
+
+
+To get started, clone repository and then do
 
 
 <code> npm install </code>
@@ -17,13 +20,13 @@ to get started, clone repository and then do
 then
 
 <code>npm run dev</code>  to run dev server
- - this will run the project. It is currently configured to show three shogi-boards. First one is a simple three move tsume with forward and back button. click on the board will also advance the move. Right click to move back.
+ - this will run the project. It is currently configured to show four shogi-boards. First one is a simple three move tsume with forward and back button. click on the board will also advance the move. Right click to move back.
  - Second board shows simple hisshi program. source is in kifu format  and embedded in 'initialSetup' object array.
  - Third board shows piece moves with some branching.
- - Those initial setups are in JavaScript section of index.html,  contained in 'initialSetup' array.
- - more description to come once code development progresses.
+ - Fourth board is created from Kakinoki-style kifu list.
+ - Data to render those boards are in JavaScript section of index.html,  contained in 'initialSetup' array.
  - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago, but still missing features from old project. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
- - The previous project relied on modx CMS as a framework. There will be no restriction on hosting service as long as it supports modern JavaScript.
+ - The previous project relied on modx CMS as a framework. This new setup do not rely on specific CMS. Only thing required will be for the hosting side to provide data in Javascript array.
 
 
 <code>npm run build </code> to build project
@@ -55,13 +58,14 @@ This application is not intended to be used to play shogi. The purpose of this a
 
 ### Highlight of the project
 <ol>
-<li>The program will take standard Kakinoki style Kifu format as one of Initial setup parameter and parse them into playable shogiboard display.</li>
+<li>The program can take standard Kakinoki style Kifu format as one of Initial setup parameter and parse them into playable shogiboard display.</li>
 <li>Own instruction set in JavaScript Object format for piece movement and placement. Kifu is internally translated to this internal instructions and executed.</li>
 <li>Branching is supported</li>
 <li>Play forward, backword or jump to branch point with play buttons.  mouse clicking on the board will also move pieces forward or backwards</li>
 
-<li>CSS based board and piece placement.</li>
-<li>Multiple shogiboard on single web page</li>
+<li>CSS based board and piece placement. Change CSS to modify board and piece appearance.</li>
+<li>Multiple shogiboard on single web page.  put place holder as div element with class name of 'board-app'. If you place two such divs on the page, then the app will render two shogiboards.  You need to provide rendering data array in Javascript. 
+</li>
 </ol>
 
 ### Theory of board rendering.

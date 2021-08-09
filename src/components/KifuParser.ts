@@ -88,8 +88,8 @@ export class KifuParser {
     timeSpent = '';
     catalog = '';
     boardFlip = false;
-    sOnBoard = '';
-    gOnBoard = '';
+    sOnBoard = "19l,29n,39s,49g,59k,69g,79s,89n,99l,28r,88b,17p,27p,37p,47p,57p,67p,77p,87p,97p"; //default for 平手
+    gOnBoard = "11l,21n,31s,41g,51k,61g,71s,81n,91l,22b,82r,13p,23p,33p,43p,53p,63p,73p,83p,93p";
     goteban = 0;
 
     constructor(kifu: string) {
@@ -127,7 +127,9 @@ export class KifuParser {
         const i = this.findLine(boardMarker, KifuArray)
        // console.log('i=', i)
 
-                if (i >= 0) { //the string contains board chart // below routine not validated yet.
+                if (i >= 0) { //the string contains board chart
+                    this.sOnBoard=''; //reset default onBoard information
+                    this.gOnBoard='';
                     let startRow = i + 2;//starting row of 局面　info
                     let endRow = i + 9 //ending row of 局面　info
                     for (let row = startRow; row < endRow; row++) {
@@ -229,7 +231,7 @@ export class KifuParser {
                     parsed = parsed.replace(/([+-]\d\d)[pPlLnNsSgkrRbB]/, '$1')// remove piece information
                 }
                 else if (!!found![6]) {
-                    parsed = 'c:' + found![6]
+                    parsed = 'C:' + found![6]
                 } else
                     parsed = '*' + found![0]
 

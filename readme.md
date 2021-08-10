@@ -11,6 +11,7 @@ State of the coding is 'Beta release'.  Initial functionality has been confirmed
 
 I have not exercised enough use case to fully validate the code. 
 
+Page demo running can be seen  <a href='https://shogishack.net/annex/js-shogi-board.html'>in this link </a>.
 
 To get started, clone repository and then do
 

@@ -36,7 +36,7 @@ then
 
 ### todos
 <ol>
-<li>'Save' button for downloading kif</li>
+<li><strike>'Save' button for downloading kif</strike></li>
 <li>Tweak display to show 'Sente' and 'Gote' names</li>
  <li>Initial Move count to start showing the board in the middle of the game</li>
 <li>Handycap setup</li>
@@ -60,13 +60,14 @@ This application is not intended to be used to play shogi. The purpose of this a
 ### Highlight of the project
 <ol>
 <li>The program can take standard Kakinoki style Kifu format as one of Initial setup parameter and parse them into playable shogiboard display.</li>
-<li>Own instruction set in JavaScript Object format for piece movement and placement. Kifu is internally translated to this internal instructions and executed.</li>
+<li>Own instruction set in JavaScript Object format for piece movement and placement. Kifu is first translated to this internal instructions and executed.</li>
 <li>Branching is supported</li>
 <li>Play forward, backword or jump to branch point with play buttons.  mouse clicking on the board will also move pieces forward or backwards</li>
 
 <li>CSS based board and piece placement. Change CSS to modify board and piece appearance.</li>
 <li>Multiple shogiboard on single web page.  put place holder as div element with class name of 'board-app'. If you place two such divs on the page, then the app will render two shogiboards.  You need to provide rendering data array in Javascript. 
 </li>
+<li>If Kifu is applied, then download icon is available. Clicking on it will download the kifu file as 'download.kif'</li>
 </ol>
 
 ### Theory of board rendering.

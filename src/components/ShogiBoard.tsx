@@ -11,10 +11,10 @@ import {moveParser} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
 import {scoreArray, movementNotBranch, getMoveNote} from "./utils";
 import {ShowBranches} from "./ShowBranches";
-
+import {saveAs} from "file-saver";
 import * as I from "./Icons";
 
-export const Board = (Props: { pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean } }) => {
+export const Board = (Props: { pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean }, kifu: string | undefined }) => {
 
     const {pieces, moves: movesArray, caption, tesuu, initialComment, flags} = Props
     const {commentWindow, HasBranch} = flags
@@ -39,10 +39,10 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
                     return false
             }
     }
-    const extractComments=(moveLine:string)=>{
+    const extractComments = (moveLine: string) => {
         const index = (moveLine.indexOf('*'));
-        const comment= (index>=0)?moveLine.slice(index+1):''
-        return comment.replaceAll('*','<br>')
+        const comment = (index >= 0) ? moveLine.slice(index + 1) : ''
+        return comment.replaceAll('*', '<br>')
     }
     const updateStates = (pieces: any, miniHistory: history, nextMove: string, index: number) => {
         setHistory([...history, ...miniHistory])
@@ -85,10 +85,10 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
         updateStates(pieces, miniHistory, nextMove, counter)
 
     }
-    const notation=()=> {
-        if (history.length>0) {
-            (history[history.length-1].counter)
-            return getMoveNote(movesArray[history[history.length-1].counter])
+    const notation = () => {
+        if (history.length > 0) {
+            (history[history.length - 1].counter)
+            return getMoveNote(movesArray[history[history.length - 1].counter])
         }
     }
 
@@ -164,10 +164,17 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
         setMoveCounter(counter)
         setHistory(history)
     }
+
+    const saveKifu = () => { //this button will only display when kifu is available, so no check on Props.kifu is performed here
+        const blob = new Blob([Props.kifu!], {type: 'text/plain;charset=utf-8'})
+        saveAs(blob, "download.kif")
+    }
     return <div class="board-container">
         {(caption!.length > 0) && <div class="h5 text-center pt-1">{caption}</div>}
         <div class="row-on-hand">
-            {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) && <span class={`c${p[0]}`}>{p.slice(1)}</span>)}
+            {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
+                <span class={`c${p[0]}`}>{p.slice(1)}</span>)}
+            {!!Props.kifu && <div class='float-end' title='download Kifu' onClick={saveKifu}><I.SaveFile/></div>}
         </div>
 
         <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
@@ -176,8 +183,9 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
             {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={mover}/>))}
         </div>
         <div class="row-on-hand">
-            {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) && <span class={'c' + p[0]}>{p.slice(1)}</span>)}
-           <aside class="note-window">{notation() }</aside>
+            {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
+                <span class={'c' + p[0]}>{p.slice(1)}</span>)}
+            <aside class="note-window">{notation()}</aside>
         </div>
 
         {movesArray.toString().length > 0 &&

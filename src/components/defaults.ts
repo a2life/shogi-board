@@ -15,6 +15,8 @@ export interface ShogiKit {
     moves?: string[]|string;
     tesuu?: number;
     kifu?:string;
+    senteName?:string;
+    goteName?:string;
 
 }
 
@@ -31,7 +33,8 @@ export const defaultParams: ShogiKit = {
     caption: '',
     initialComment: '',
     moves: [''],
-    tesuu: 1
+    tesuu: 1,
+
 
 }
 

@@ -9,14 +9,15 @@ import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
-import {scoreArray, movementNotBranch, getMoveNote} from "./utils";
+import {scoreArray, movementNotBranch, getMoveNote,displayWithSideSymbol} from "./utils";
 import {ShowBranches} from "./ShowBranches";
 import {saveAs} from "file-saver";
 import * as I from "./Icons";
 
-export const Board = (Props: { pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean }, kifu: string | undefined }) => {
+export const Board = (Props: { pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean }, kifu: string | undefined
+    ,senteName:string|undefined, goteName:string|undefined}) => {
 
-    const {pieces, moves: movesArray, caption, tesuu, initialComment, flags} = Props
+    const {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName,kifu} = Props
     const {commentWindow, HasBranch} = flags
     const [piecesInfo, setPiecesInfo] = useState(pieces)
 
@@ -166,7 +167,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
     }
 
     const saveKifu = () => { //this button will only display when kifu is available, so no check on Props.kifu is performed here
-        const blob = new Blob([Props.kifu!], {type: 'text/plain;charset=utf-8'})
+        const blob = new Blob([kifu!], {type: 'text/plain;charset=utf-8'})
         saveAs(blob, "download.kif")
     }
     return <div class="board-container">
@@ -174,7 +175,8 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
         <div class="row-on-hand">
             {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
                 <span class={`c${p[0]}`}>{p.slice(1)}</span>)}
-            {!!Props.kifu && <div class='float-end' title='download Kifu' onClick={saveKifu}><I.SaveFile/></div>}
+            {!!kifu && <div class='float-end' title='download Kifu' onClick={saveKifu}><I.SaveFile/></div>}
+            {!!goteName && <div class='goteName float-end'>{displayWithSideSymbol('g',goteName)}</div>}
         </div>
 
         <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
@@ -185,6 +187,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
         <div class="row-on-hand">
             {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
                 <span class={'c' + p[0]}>{p.slice(1)}</span>)}
+            {!!senteName && <div class='senteName float-end'>{displayWithSideSymbol('s',senteName)}</div>}
             <aside class="note-window">{notation()}</aside>
         </div>
 

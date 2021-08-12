@@ -63,6 +63,20 @@ This will use 60% scaling.
     z-index: 500
 }
 
+.goteName {
+    position:absolute;
+    top: 28px;
+    left: 230px;
+    font-size: xx-small;
+}
+
+.senteName {
+    position:absolute;
+    top: -5px;
+    left:230px;
+    font-size: xx-small;
+}
+
 .tsume .rg {
     top: -1000px;
     z-index: 500;

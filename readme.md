@@ -37,7 +37,7 @@ then
 ### todos
 <ol>
 <li><strike>'Save' button for downloading kif</strike></li>
-<li>Tweak display to show 'Sente' and 'Gote' names</li>
+<li><strike>Tweak display to show 'Sente' and 'Gote' names</strike></li>
  <li>Initial Move count to start showing the board in the middle of the game</li>
 <li>Handycap setup</li>
 <li>Find area to display players' names</li>

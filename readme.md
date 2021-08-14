@@ -36,10 +36,10 @@ then
 
 ### todos
 <ol>
-<li><strike>'Save' button for downloading kif</strike></li>
-<li><strike>Tweak display to show 'Sente' and 'Gote' names</strike></li>
- <li>Initial Move count to start showing the board in the middle of the game</li>
-<li>Handycap setup</li>
+<li style="text-decoration: line-through;">'Save' button for downloading kif</li>
+<li style="text-decoration: line-through;">Tweak display to show 'Sente' and 'Gote' names</li>
+ <li style="text-decoration: line-through;">Initial Move count to start showing the board in the middle of the game</li>
+<li>Handy-cap setup</li>
 <li>Find area to display players' names</li>
 </ol>
 
@@ -162,7 +162,7 @@ parameters--
 - moves : data representing piece moves. ex. "s-2627","g-8687","s-2526","g-8586" (this represents ２六歩、８四歩、２五歩、８五歩).
 - kifu: The program can read kakinoki style kifu notation. If this string is provided, it will take precedence over other individual parameters (such as move)
 - Currently the parser does not support handicap games.
-- startAt or tesuu:  (Currently Not implemented) those two are the same. the board will advance its move to asigned move number. Allows board to start from middle of the game.
+- startup and tesuu: Those two are the same. the board will advance its move to asigned move number. Allows board to start from middle of the game. if both are defined, then 'startAt' takes precedence.
 
 Moves, along with *onHand and *onBoard parameter can be used to do quick construction of shogiboard without the use of kifu source 
 

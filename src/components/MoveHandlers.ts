@@ -14,7 +14,7 @@ import {ShogiKit} from "./defaults";
 
 
 /**
- *
+ * take pieceset, analyze move and then reflect on piecese and return new pieceset
  * @param kifString, like s-5216,   side(s), move(-), to(52), from(16)
  * @param pieceSet, like "s53s,s16b,g41s,g51k,g61s,ssSs,grGr,grGr,gpGp,gpGp,gpGp,glGl,ggGg"
  * @param previousMove: like 44, if kifString uses 00 notation for '同' then replace with this value
@@ -67,6 +67,25 @@ export const moveParser = (kifString: string, pieceSet:string) => {
     }
     // console.log('returning', modifiedPieceSet)
     return modifiedPieceSet;
+
+}
+
+/**
+ *  take piecesSet, CurrentMove and NextMove, create a history to push to history array new piece set and return
+ * @param pieces
+ * @param currentMove
+ * @param nextMove
+ * @param counter
+ */
+export const moveAndRemember=(pieces:string,currentMove:string, nextMove:string,counter:number)=>{
+
+    const miniHistory={pieces: pieces, move: currentMove, counter: counter}
+    //let  nextMove = movesArray[counter]
+    if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', currentMove)
+    pieces = moveParser(nextMove, pieces) //get updated pieces
+    currentMove = nextMove.slice(2, 4)
+    counter++
+    return {miniHistory,pieces,nextMove,currentMove,counter}
 
 }
 

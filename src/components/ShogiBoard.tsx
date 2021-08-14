@@ -1,32 +1,55 @@
-/** Todos
- * refactor branch move routine - some duplicated lines
- * add a display to show move counter(marker) in shogiBoard
- */
 
 type history = { pieces: string, move: string, counter: number }[]
 
 import '../shogiboard.css'
 import {useState} from "preact/hooks";
-import {moveParser} from "./MoveHandlers";
+import {moveParser, moveAndRemember} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
-import {scoreArray, movementNotBranch, getMoveNote,displayWithSideSymbol} from "./utils";
+import {scoreArray, movementNotBranch, getMoveNote, displayWithSideSymbol, extractComments} from "./utils";
 import {ShowBranches} from "./ShowBranches";
 import {saveAs} from "file-saver";
 import * as I from "./Icons";
 
-export const Board = (Props: { pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean }, kifu: string | undefined
-    ,senteName:string|undefined, goteName:string|undefined}) => {
+export const Board = (Props: {
+    pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean }, kifu: string | undefined, senteName: string | undefined, goteName: string | undefined
+}) => {
 
-    const {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName,kifu} = Props
+    let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu} = Props
+    let initialHistory = [] as history
+    let initialMoveFrom=movesArray[0].slice(4, 6)
     const {commentWindow, HasBranch} = flags
+    const skipToCounter = (tesuu: number, pieces: string) => {
+
+        let miniHistory = [] as history, counter = 0, nextMove = '', currentMove = '00'
+
+        while (counter < tesuu) { //read past to the end
+            nextMove = movesArray[counter]
+            const response = moveAndRemember(pieces, currentMove, nextMove, counter)
+            miniHistory.push(response.miniHistory);
+            pieces = response.pieces;
+            counter = response.counter;
+            currentMove = response.currentMove
+            nextMove = response.nextMove
+
+        }
+        return {pieces, miniHistory, nextMove, counter}
+
+    }
+    if (tesuu > 1) {
+        const modifiedProps = skipToCounter(tesuu, pieces)
+        pieces = modifiedProps.pieces
+        initialHistory = modifiedProps.miniHistory
+        initialMoveFrom=modifiedProps.nextMove.slice(2,4)
+    }
+
     const [piecesInfo, setPiecesInfo] = useState(pieces)
 
 
     const [comment, setComment] = useState(initialComment)
     const startComment = initialComment
-    const [moveCounter, setMoveCounter] = useState(tesuu! - 1)
-    const [mover, setMover] = useState(movesArray[tesuu! - 1].slice(4, 6)) //for first 'move' we use 'from' coordinate
-    const [history, setHistory] = useState([] as { pieces: string, move: string, counter: number }[])
+    const [moveCounter, setMoveCounter] = useState(tesuu)
+    const [movingFrom, setMovingFrom] = useState(initialMoveFrom) //for first 'move' we use 'from' coordinate
+    const [history, setHistory] = useState(initialHistory)
     const endOfMoves = (index: number) => {
         if (index >= movesArray.length) return true
         else
@@ -40,48 +63,55 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
                     return false
             }
     }
-    const extractComments = (moveLine: string) => {
-        const index = (moveLine.indexOf('*'));
-        const comment = (index >= 0) ? moveLine.slice(index + 1) : ''
-        return comment.replaceAll('*', '<br>')
-    }
+
     const updateStates = (pieces: any, miniHistory: history, nextMove: string, index: number) => {
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
-        setMover(nextMove.slice(2, 4))
+        setMovingFrom(nextMove.slice(2, 4))
         if (commentWindow) {
             setComment(extractComments(nextMove))
         }
         setMoveCounter(index)
     }
-
     const takeOneMoveForward = (index: number) => {
         let moveCounter = index
         if (!endOfMoves(moveCounter)) {
+
             let nextMove = movesArray[moveCounter]
-            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', mover)
+            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', movingFrom)
             //       console.log('next move is', nextMove)
             const pieces = moveParser(nextMove, piecesInfo)
-            updateStates(pieces, [{pieces: piecesInfo, move: mover, counter: moveCounter}], nextMove, moveCounter + 1)
+            updateStates(pieces, [{
+                pieces: piecesInfo,
+                move: movingFrom,
+                counter: moveCounter
+            }], nextMove, moveCounter + 1)
 
         }
 
     }
+
     const playOneMoveHandler = () => {
         // console.log('analyzing move', movesArray[moveCounter])
         takeOneMoveForward(moveCounter)
 
     }
+
+
     const skipEndHandler = () => {
-        let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove = "", currentMove = mover
+        let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove = '',
+            currentMove = movingFrom
 
         while (!endOfMoves(counter)) { //read past to the end
-            miniHistory.push({pieces: pieces, move: currentMove, counter: counter})
             nextMove = movesArray[counter]
-            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', currentMove)
-            pieces = moveParser(nextMove, pieces) //get updated pieces
-            currentMove = nextMove.slice(2, 4)
-            counter++
+            const response = moveAndRemember(pieces, currentMove, nextMove, counter)
+            miniHistory.push(response.miniHistory);
+
+            pieces = response.pieces;
+            counter = response.counter;
+            currentMove = response.currentMove
+            nextMove = response.nextMove
+
         }
         updateStates(pieces, miniHistory, nextMove, counter)
 
@@ -99,7 +129,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
             const pieces = history.pop();
             setPiecesInfo(pieces!.pieces);
             const nextMove = pieces!.move
-            setMover(nextMove)
+            setMovingFrom(nextMove)
             let move = "";
 
             if (moveCounter - 2 >= 0) {
@@ -119,7 +149,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
         }
 
         setPiecesInfo(pieces!.pieces);
-        setMover(pieces!.move)
+        setMovingFrom(pieces!.move)
         setComment(startComment)
         setMoveCounter(tesuu! - 1)
         setHistory(history)
@@ -135,15 +165,19 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
 
     }
     const skipToNextBranchHandler = () => {
-        let miniHistory = [], pieces = piecesInfo, counter = moveCounter, nextMove: string, currentMove = mover
+        let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove: string,
+            currentMove = movingFrom
+
         if (endOfMoves(counter)) return
+
         do { //read past to the end
-            miniHistory.push({pieces: pieces, move: currentMove, counter: counter})
             nextMove = movesArray[counter]
-            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', currentMove)
-            pieces = moveParser(nextMove, pieces) //get updated pieces
-            currentMove = nextMove.slice(2, 4)
-            counter++
+            const response = moveAndRemember(pieces, currentMove, nextMove, counter)
+            miniHistory.push(response.miniHistory);
+            pieces = response.pieces;
+            counter = response.counter;
+            currentMove = response.currentMove
+            nextMove = response.nextMove
         }
         while (!endOfMoves(counter) && movementNotBranch(counter, movesArray))
         updateStates(pieces, miniHistory, nextMove, counter)
@@ -156,7 +190,7 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
             counter = pieces!.counter
         } while ((history.length > 0) && movementNotBranch(counter, movesArray))
         setPiecesInfo(pieces!.pieces);
-        setMover(pieces!.move)
+        setMovingFrom(pieces!.move)
         if (commentWindow) {
             const nextMove = movesArray[counter]
             setComment(extractComments(nextMove))
@@ -176,18 +210,18 @@ export const Board = (Props: { pieces: string, moves: string[], branchList: any,
             {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
                 <span class={`c${p[0]}`}>{p.slice(1)}</span>)}
             {!!kifu && <div class='float-end' title='download Kifu' onClick={saveKifu}><I.SaveFile/></div>}
-            {!!goteName && <div class='goteName float-end'>{displayWithSideSymbol('g',goteName)}</div>}
+            {!!goteName && <div class='goteName float-end'>{displayWithSideSymbol('g', goteName)}</div>}
         </div>
 
         <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
             <RenderBoard/>
 
-            {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={mover}/>))}
+            {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={movingFrom}/>))}
         </div>
         <div class="row-on-hand">
             {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
                 <span class={'c' + p[0]}>{p.slice(1)}</span>)}
-            {!!senteName && <div class='senteName float-end'>{displayWithSideSymbol('s',senteName)}</div>}
+            {!!senteName && <div class='senteName '>{displayWithSideSymbol('s', senteName)}</div>}
             <aside class="note-window">{notation()}</aside>
         </div>
 

@@ -67,14 +67,14 @@ This will use 60% scaling.
     position:absolute;
     top: 28px;
     left: 230px;
-    font-size: xx-small;
+    font-size: x-small;
 }
 
 .senteName {
     position:absolute;
     top: -5px;
     left:230px;
-    font-size: xx-small;
+    font-size: x-small;
 }
 
 .tsume .rg {
@@ -381,7 +381,9 @@ This will use 60% scaling.
 }
 .note-window{
     font-size:0.75rem;
-    float:right;
+    position:absolute;
+    top:12px;
+    left:230px;
 }
 
 .large .comment {

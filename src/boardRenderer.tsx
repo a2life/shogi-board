@@ -6,6 +6,9 @@ import {KifuParser} from "./components/KifuParser";
 export function BoardRenderer(prop: { setup: ShogiKit }) {
     let dataPack={}// stuff datapack in case kifu is available
 
+    if (!!prop.setup.startAt){
+        prop.setup.tesuu=prop.setup.startAt;
+    }
     if (!!prop.setup.kifu) {
         const data = new KifuParser(prop.setup.kifu)
         dataPack=data.parse();

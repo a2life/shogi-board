@@ -146,3 +146,9 @@ export const getMoveNote=(movement:string)=>{
 }
 
 export const displayWithSideSymbol=(side:'s'|'g',name:string)=> symbolizeSide(side)+name
+
+export const extractComments = (moveLine: string) => {
+    const index = (moveLine.indexOf('*'));
+    const comment = (index >= 0) ? moveLine.slice(index + 1) : ''
+    return comment.replaceAll('*', '<br>')
+}

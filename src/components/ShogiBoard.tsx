@@ -1,5 +1,5 @@
 
-type history = { pieces: string, move: string, counter: number }[]
+type history = { pieces: string, origin: string, counter: number }[]
 
 import '../shogiboard.css'
 import {useState} from "preact/hooks";
@@ -83,7 +83,7 @@ export const Board = (Props: {
             const pieces = moveParser(nextMove, piecesInfo)
             updateStates(pieces, [{
                 pieces: piecesInfo,
-                move: movingFrom,
+                origin: movingFrom,
                 counter: moveCounter
             }], nextMove, moveCounter + 1)
 
@@ -128,7 +128,7 @@ export const Board = (Props: {
         if (moveCounter > 0) {
             const pieces = history.pop();
             setPiecesInfo(pieces!.pieces);
-            const nextMove = pieces!.move
+            const nextMove = pieces!.origin
             setMovingFrom(nextMove)
             let move = "";
 
@@ -142,14 +142,14 @@ export const Board = (Props: {
     }
     const reWindHandler = () => {
         let counter = moveCounter;
-        let pieces: { pieces: string, move: string, counter: number } | undefined;
+        let pieces: { pieces: string, origin: string, counter: number } | undefined;
         while (history.length > 0) {
             pieces = history.pop()
             counter = pieces!.counter
         }
 
         setPiecesInfo(pieces!.pieces);
-        setMovingFrom(pieces!.move)
+        setMovingFrom(pieces!.origin)
         setComment(startComment)
         setMoveCounter(tesuu! - 1)
         setHistory(history)
@@ -184,13 +184,13 @@ export const Board = (Props: {
     }
     const skipToPrevBranchHandler = () => {
         let counter = moveCounter;
-        let pieces: { pieces: string, move: string, counter: number } | undefined;
+        let pieces: { pieces: string, origin: string, counter: number } | undefined;
         do {
             pieces = history.pop()
             counter = pieces!.counter
         } while ((history.length > 0) && movementNotBranch(counter, movesArray))
         setPiecesInfo(pieces!.pieces);
-        setMovingFrom(pieces!.move)
+        setMovingFrom(pieces!.origin)
         if (commentWindow) {
             const nextMove = movesArray[counter]
             setComment(extractComments(nextMove))

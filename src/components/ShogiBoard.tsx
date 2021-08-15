@@ -28,8 +28,8 @@ export const Board = (Props: {
             miniHistory.push(response.miniHistory);
             pieces = response.pieces;
             counter = response.counter;
-            currentMove = response.currentMove
-            nextMove = response.nextMove
+            currentMove = response.movedFrom
+            nextMove = response.move
 
         }
         return {pieces, miniHistory, nextMove, counter}
@@ -109,8 +109,8 @@ export const Board = (Props: {
 
             pieces = response.pieces;
             counter = response.counter;
-            currentMove = response.currentMove
-            nextMove = response.nextMove
+            currentMove = response.movedFrom
+            nextMove = response.move
 
         }
         updateStates(pieces, miniHistory, nextMove, counter)
@@ -176,8 +176,8 @@ export const Board = (Props: {
             miniHistory.push(response.miniHistory);
             pieces = response.pieces;
             counter = response.counter;
-            currentMove = response.currentMove
-            nextMove = response.nextMove
+            currentMove = response.movedFrom
+            nextMove = response.move
         }
         while (!endOfMoves(counter) && movementNotBranch(counter, movesArray))
         updateStates(pieces, miniHistory, nextMove, counter)

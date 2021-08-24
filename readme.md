@@ -21,13 +21,14 @@ To get started, clone repository and then do
 then
 
 <code>npm run dev</code>  to run dev server
- - this will run the project. It is currently configured to show four shogi-boards. First one is a simple three move tsume with forward and back button. click on the board will also advance the move. Right click to move back.
+ - This will run the project with demo page. It is currently configured to show four shogi-boards. 
+ - First one is a simple three move tsume. It shows the last move with the marker highlighting the last move. Note forward and back buttons for replay.  click on the board will also advance the move. Right click to move back.
  - Second board shows simple hisshi program. source is in kifu format  and embedded in 'initialSetup' object array.
- - Third board shows piece moves with some branching.
- - Fourth board is created from Kakinoki-style kifu list.
+ - Third board shows piece moves with some branching. Parameters used here are pre-compiled by PHP based web server and placed as javascript object.
+ - Fourth board is created from Kakinoki-style kifu list, that is embeded as a JavaScript variable.
  - Data to render those boards are in JavaScript section of index.html,  contained in 'initialSetup' array.
  - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago, but still missing features from old project. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
- - The previous project relied on modx CMS as a framework. This new setup do not rely on specific CMS. Only thing required will be for the hosting side to provide data in Javascript array.
+ - The previous project relied on modx CMS as a framework. This new setup do not rely on specific CMS. Only thing required will be for the hosting side to provide shogi data in Javascript array.
 
 
 <code>npm run build </code> to build project
@@ -40,7 +41,7 @@ then
 <li style="text-decoration: line-through;">Tweak display to show 'Sente' and 'Gote' names</li>
  <li style="text-decoration: line-through;">Initial Move count to start showing the board in the middle of the game</li>
 <li>Handy-cap setup</li>
-<li>Find area to display players' names</li>
+<li style="text-decoration: line-through;">Find area to display players' names</li>
 </ol>
 
 
@@ -110,7 +111,7 @@ You may add multiple object literal in the initialSetup array. Just add matching
 Below example shows the two object literals with data to display on the board
 
 
-    {
+    [{
     senteOnBoard: "53s,16b",
     goteOnBoard: "41s,51k,61s",
     senteOnHand: 's1',
@@ -149,7 +150,9 @@ Below example shows the two object literals with data to display on the board
     5 ２一銀(22)   ( 0:03/00:00:11)
     6 投了         ( 0:07/00:00:16)
     まで5手で先手の勝ち`
-    }
+    }]
+    
+Inside the program, the second object, which main part is a kifu file literal, will be 'pre-processed" to create object literals comparable to the first object. In the project 8 years ago, this 'pre-processing' was done in the PHP server side script.  In this implementation, 'pre-processing' is done on the client side JavaScript (in your browser)
 
 
 parameters--

@@ -14,7 +14,7 @@ export function BoardRenderer(prop: { setup: ShogiKit }) {
         dataPack=data.parse();
 
     }  //otherwise fall back to individual parameters that are available
-    let {senteOnBoard, goteOnBoard, senteOnHand, goteOnHand, markerAt, caption, initialComment, moves, tesuu, kifu, senteName, goteName}
+    let {senteOnBoard, goteOnBoard, senteOnHand, goteOnHand, markerAt, caption, initialComment, moves, tesuu, kifu, senteName, goteName,showMarker}
         = {...defaultParams, ...prop.setup, ...dataPack}
     //marker function currently not implemented
    // const [marker, setMarker] = useState(markerAt.split(','));
@@ -27,6 +27,6 @@ export function BoardRenderer(prop: { setup: ShogiKit }) {
     const commentWindow = movesArray.toString().indexOf('*')>= 0
     const HasBranch = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
     return <Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
-                  initialComment={initialComment} tesuu={tesuu || 0} flags={{commentWindow,HasBranch}} kifu={kifu}
-            senteName={senteName} goteName={goteName}/>
+                  initialComment={initialComment} tesuu={tesuu || 0} flags={{commentWindow,HasBranch,showMarker}} kifu={kifu}
+            senteName={senteName} goteName={goteName} markerAt={markerAt}/>
 }

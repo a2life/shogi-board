@@ -18,6 +18,8 @@ export interface ShogiKit {
     kifu?:string;
     senteName?:string;
     goteName?:string;
+    showMarker:boolean;
+
 
 }
 
@@ -27,6 +29,7 @@ export const defaultParams: ShogiKit = {
     senteOnHand: '',
     goteOnHand: '',
     markerAt: '0,0',
+
     pieceSetSelection: '',
     gridStyleSelection: 'masu/masu_dot_xy.png',
     boardStyleSelection: 'ban/ban_kaya_a.png',
@@ -34,7 +37,8 @@ export const defaultParams: ShogiKit = {
     caption: '',
     initialComment: '',
     moves: [''],
-    tesuu: 1
+    tesuu: 1,
+    showMarker:false
 
 
 

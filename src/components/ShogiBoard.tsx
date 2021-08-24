@@ -11,41 +11,45 @@ import {saveAs} from "file-saver";
 import * as I from "./Icons";
 
 export const Board = (Props: {
-    pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string, flags: { commentWindow: boolean, HasBranch: boolean }, kifu: string | undefined, senteName: string | undefined, goteName: string | undefined
+    pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string,
+    flags: { commentWindow: boolean, HasBranch: boolean, showMarker:boolean }, kifu: string | undefined,
+    senteName: string | undefined, goteName: string | undefined, markerAt:string
 }) => {
 
-    let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu} = Props
+    let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu,markerAt} = Props
     let initialHistory = [] as history
     let initialAct=movesArray[0].slice(4, 6)
     let initialCounter=0;
-    const {commentWindow, HasBranch} = flags
+    const {commentWindow, HasBranch, showMarker} = flags
     const skipToCounter = (tesuu: number, pieces: string) => {
 
-        let miniHistory = [] as history, counter = 0, move = '', currentMove = initialAct
+        let miniHistory = [] as history, counter = 0, move = "", previousMove = initialAct
 
         while (counter < tesuu) { //read past to the end
-            move = movesArray[counter]
-            const response = moveAndRemember(pieces, currentMove, move, counter)
+
+            const response = moveAndRemember(pieces, previousMove, movesArray[counter], counter)
             miniHistory.push(response.miniHistory);
             pieces = response.pieces;
             counter = response.counter;
-            currentMove = response.movedFrom
+            previousMove = response.movedFrom
             move = response.move
 
 
         }
-        return {pieces, miniHistory, nextMove: move, counter}
+        return {pieces, miniHistory, move, counter}
 
     }
     if (tesuu > 1) {
         const modifiedProps = skipToCounter(tesuu, pieces)
         pieces = modifiedProps.pieces
         initialHistory = modifiedProps.miniHistory
-        initialAct=modifiedProps.nextMove.slice(2,4)
+        initialAct=modifiedProps.move.slice(2,4)
+        markerAt=initialAct;
         initialCounter = modifiedProps.counter
     }
 
     const [piecesInfo, setPiecesInfo] = useState(pieces)
+    const [markerPosition, setMarkerPosition]=useState(markerAt)
 
 
     const [comment, setComment] = useState(initialComment)
@@ -71,24 +75,26 @@ export const Board = (Props: {
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
         setPreviousAct(nextMove.slice(2, 4))
+        setMarkerPosition(nextMove.slice(2,4))
         if (commentWindow) {
             setComment(extractComments(nextMove))
         }
+
         setMoveCounter(index)
     }
     const takeOneMoveForward = (index: number) => {
         let moveCounter = index
         if (!endOfMoves(moveCounter)) {
 
-            let nextMove = movesArray[moveCounter]
-            if (nextMove.slice(2, 4) === '00') nextMove = nextMove.replace('00', previousAct)
+            let move = movesArray[moveCounter]
+            if (move.slice(2, 4) === '00') move = move.replace('00', previousAct)
             //       console.log('next move is', nextMove)
-            const pieces = moveParser(nextMove, piecesInfo)
+            const pieces = moveParser(move, piecesInfo)
             updateStates(pieces, [{
                 pieces: piecesInfo,
                 playedOn: previousAct,
                 counter: moveCounter
-            }], nextMove, moveCounter + 1)
+            }], move, moveCounter + 1)
 
         }
 
@@ -102,21 +108,21 @@ export const Board = (Props: {
 
 
     const skipEndHandler = () => {
-        let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove = '',
+        let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, move = '',
             currentMove = previousAct
 
         while (!endOfMoves(counter)) { //read past to the end
-            nextMove = movesArray[counter]
-            const response = moveAndRemember(pieces, currentMove, nextMove, counter)
+            move = movesArray[counter]
+            const response = moveAndRemember(pieces, currentMove, move, counter)
             miniHistory.push(response.miniHistory);
 
             pieces = response.pieces;
             counter = response.counter;
             currentMove = response.movedFrom
-            nextMove = response.move
+            move = response.move
 
         }
-        updateStates(pieces, miniHistory, nextMove, counter)
+        updateStates(pieces, miniHistory, move, counter)
 
     }
     const notation = () => {
@@ -131,8 +137,9 @@ export const Board = (Props: {
         if (moveCounter > 0) {
             const pieces = history.pop();
             setPiecesInfo(pieces!.pieces);
-            const nextMove = pieces!.playedOn
-            setPreviousAct(nextMove)
+            const previousMove = pieces!.playedOn
+            setPreviousAct(previousMove)
+            setMarkerPosition(previousMove)
             let move = "";
 
             if (moveCounter - 2 >= 0) {
@@ -153,6 +160,7 @@ export const Board = (Props: {
 
         setPiecesInfo(pieces!.pieces);
         setPreviousAct(pieces!.playedOn)
+        setMarkerPosition(pieces!.playedOn)
         setComment(startComment)
         setMoveCounter(0)
         setHistory(history)
@@ -194,6 +202,7 @@ export const Board = (Props: {
         } while ((history.length > 0) && movementNotBranch(counter, movesArray))
         setPiecesInfo(pieces!.pieces);
         setPreviousAct(pieces!.playedOn)
+        setMarkerPosition(pieces!.playedOn)
         if (commentWindow) {
             const nextMove = movesArray[counter]
             setComment(extractComments(nextMove))
@@ -218,6 +227,7 @@ export const Board = (Props: {
 
         <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
             <RenderBoard/>
+            { showMarker && <MarkerAt c={markerPosition[0]} r={markerPosition[1]} />}
 
             {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={previousAct}/>))}
         </div>

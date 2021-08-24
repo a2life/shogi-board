@@ -153,12 +153,13 @@ Below example shows the two object literals with data to display on the board
 
 
 parameters--
--  mysteryMoves : (Currently Not implemented) When branch moves exists, then a dropdown list will be displayed at the branch point. It usually shows the default move.  if this parameter is set to 1, then the first selection shows "Select" and not actual move.
+- mysteryMoves : (Currently Not implemented) When branch moves exists, then a dropdown list will be displayed at the branch point. It usually shows the default move.  if this parameter is set to 1, then the first selection shows "Select" and not actual move.
 - sOnHand : string indicating on hand pieces for sente. default is none. ex. "l,l,p" (see below)
 - gOnHand : string indicating on hand pieces for gote. default is none ex. "l,l,p" (see below)
 - sOnBoard: string indicating on board pieces for sente. default is initial setup for sente for no handicap game. ex. "11l,21n,31s,41g,51k,13p,22b"
 - gOnBoard: string indicating on board pieces for sente. default is initial setup for gote for no handicap game. ex. "99l,28r"
- -markerAt: (currently not implemented) string Indicating the grid that is highlighted. default is "out of the way", ex., "24" for position ２四
+- showMarker:boolean. When set to true, it turns on marker indicator to show the last move.
+- markerAt: string Indicating the initial grid position that will be highlighted. default is "out of the way", ex., "24" for position ２四 for the initial display. Afterwards, showMarker behavior takes over. ShowMarker flag need to be set to true.
 - moves : data representing piece moves. ex. "s-2627","g-8687","s-2526","g-8586" (this represents ２六歩、８四歩、２五歩、８五歩).
 - kifu: The program can read kakinoki style kifu notation. If this string is provided, it will take precedence over other individual parameters (such as move)
 - Currently the parser does not support handicap games.

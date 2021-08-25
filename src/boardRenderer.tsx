@@ -16,8 +16,7 @@ export function BoardRenderer(prop: { setup: ShogiKit }) {
     }  //otherwise fall back to individual parameters that are available
     let {senteOnBoard, goteOnBoard, senteOnHand, goteOnHand, markerAt, caption, initialComment, moves, tesuu, kifu, senteName, goteName,showMarker}
         = {...defaultParams, ...prop.setup, ...dataPack}
-    //marker function currently not implemented
-   // const [marker, setMarker] = useState(markerAt.split(','));
+
     const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand)
     let {movesArray,initialComment:comment  }= preProcessMoves(moves!);
 

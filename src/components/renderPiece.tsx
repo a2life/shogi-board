@@ -38,6 +38,6 @@ export const RenderBoard=()=>(
 )
 
 export const MarkerAt = (Props: { c: string, r: string }) => {
-    const classes = `marker koma c${Props.c} r${Props.r}`
+    const classes = `marker c${Props.c} r${Props.r}`
     return (<img class={classes} src={markerImg} alt=""/>)
 }

@@ -1,6 +1,6 @@
 // kifu parser class
 /*
-Pattern to recognized
+Pattern to be recognized
 開始日時：2021/07/23 1:00:00
 終了日時：2021/07/23 2:14:00
 棋戦：朝日杯将棋オープン戦

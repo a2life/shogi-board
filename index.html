@@ -12,6 +12,7 @@
 <div class="container mt-4">
     <div class="display-5 p-5">Shogi board with Vite+PreAct. BootStrap optional</div>
     <div style="position:relative">
+        <div class="board-app"></div>
         <div class="board-app float-start m-4"></div>
         <div class="ms-5">
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis enim id mollitia pariatur rerum sequi
@@ -52,7 +53,9 @@
 
 <script type="module" src="/src/main.tsx"></script>
 <script>
-    const initialSetup = [{
+    const initialSetup = [
+        {},
+        {
         senteOnBoard: "53s,16b",
         goteOnBoard: "41s,51k,61s",
         senteOnHand: 's1',
@@ -990,7 +993,8 @@
   12 同　銀(31)   ( 0:00/00:00:00)
   13 ２八飛(24)   ( 0:00/00:00:00)
   14 ３二金(41)   ( 0:00/00:00:00)
-*Bishop will be lost. Look at the number of pawns possesed by white. Clearly this exchange did not make sanse.`}
+*Bishop will be lost. Look at the number of pawns possesed by white. Clearly this exchange did not make sense.`},
+
     ]
 
 </script>

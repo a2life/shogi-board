@@ -7,7 +7,7 @@ const target=document.querySelectorAll('.board-app')
 
 
 target.forEach((element,index)=>{
-    render(<BoardRenderer setup={initialSetup[index]} />,element)
+    render(<BoardRenderer setup={initialSetup[index]} index={index}/>,element)
 })
 
 

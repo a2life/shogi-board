@@ -204,7 +204,7 @@ export class KifuParser {
     parseMoves(kifu: string) {
         if (kifu.search(headerPattern)) {
             const movesArray = kifu.slice(kifu.search(headerPattern), kifu.length)
-                .replace(/\n\*/g,'*')
+                .replace(/([)+])\n\*/g,'$1*') //tack comment only line(s) except for the 1st line comment to previous move for later processing
               .split('\n').slice(2).filter((e) => e !== '') //create array with moves section
            // console.log('movesArray=', movesArray)
             this.moves = movesArray.map((line) => {
@@ -239,7 +239,7 @@ export class KifuParser {
                 else if (!!found![6]) {
                     parsed = 'C:' + found![6]
                 } else
-                    parsed = '*' + found![0]
+                    parsed =  found![0]
 
 
                 return parsed
@@ -286,7 +286,7 @@ export class KifuParser {
             tesuu?: number;
 
         }*/
-
+console.log('moves:',this.moves);
         return {
             senteOnBoard: this.sOnBoard,
             goteOnBoard: this.gOnBoard,

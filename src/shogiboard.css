@@ -64,16 +64,20 @@ This will use 60% scaling.
 }
 
 .goteName {
-    position:absolute;
+    position: absolute;
     top: 28px;
-    left: 230px;
+    left: 180px;
+    width: 120px;
+    text-align: right;
     font-size: x-small;
 }
 
 .senteName {
-    position:absolute;
+    position: absolute;
     top: -5px;
-    left:230px;
+    left: 180px;
+    width: 120px;
+    text-align: right;
     font-size: x-small;
 }
 
@@ -370,20 +374,23 @@ This will use 60% scaling.
     font-size: 0.75rem;
     color: #212529;
     background-color: #fff;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>");
     background-repeat: no-repeat;
-    background-position:right .75rem center;
+    background-position: right .75rem center;
     background-size: 16px 12px;
     border: 1px solid #ced40a;
     border-radius: .25rem;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    appearance:none;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+     appearance: none;
 }
-.note-window{
-    font-size:0.75rem;
-    position:absolute;
-    top:12px;
-    left:230px;
+
+.note-window {
+    font-size: 0.75rem;
+    position: absolute;
+    top: 12px;
+    left: 200px;
+    width: 100px;
+    text-align: right;
 }
 
 .large .comment {

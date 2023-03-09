@@ -169,7 +169,7 @@ export const Board = (Props: {
     const branchingHandler = (e: Event) => {
         e.preventDefault();
         const newTarget = (e.target as HTMLSelectElement).value
-        console.log('selected', newTarget)
+       // console.log('selected', newTarget)
         //    setMoveCounter(parseInt(newTarget))
         const moveCounter = parseInt(newTarget)
         takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action

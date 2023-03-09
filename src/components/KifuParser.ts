@@ -286,7 +286,7 @@ export class KifuParser {
             tesuu?: number;
 
         }*/
-console.log('moves:',this.moves);
+// console.log('moves:',this.moves);
         return {
             senteOnBoard: this.sOnBoard,
             goteOnBoard: this.gOnBoard,

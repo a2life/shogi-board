@@ -6,6 +6,7 @@
 #### This is a rewrite of modx/PHP/JS projects from 2012 using TypeScript (ie., 100% client side solution.) - original project is https://github.com/a2life/Web_shogiboard
 
 Initial development period: June 2021 - August 2021
+Finishing up -   March 2023
 
 State of the coding is 'Beta release'.  Initial functionality has been confirmed. However, there maybe 'edge' case that the code may still have issues.
 
@@ -99,14 +100,21 @@ to create a board, place div element with board-app class, like so
 
     <div class='board-app'></div>
 
-Then attach the Javascript snippet with the array object with name 'initialSetup'
+Then attach the Javascript snippet with the array object with name 'initialSetup__ts81'.
 
-    <script> const initialSetup=[
+This variable name 'initialSetup_ts81'is hard coded in index.js as declared global variable. this array need to be stuffed with Shogi data
+
+ 
+<code>
+&lt;script&gt;
+const initialSetup__ts81=[
     { ...object literal...}
       ]
-    </script>
+&lt/script&gt;
+    
+</code>
 
-You may add multiple object literal in the initialSetup array. Just add matching number of divs with board-app class name.
+You may add multiple object literal in the initialSetup__ts81 array. Just add matching number of divs with board-app class name.
 
 Below example shows the two object literals with data to display on the board
 

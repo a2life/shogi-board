@@ -81,7 +81,7 @@ This will use 60% scaling.
     font-size: x-small;
 }
 
-.tsume .rg {
+.tsume .rG {
     top: -1000px;
     z-index: 500;
 }
@@ -116,7 +116,7 @@ This will use 60% scaling.
 
 .shogiBoard {
     margin: auto;
-    padding: 100px;
+   /* padding: 100px;*/
 }
 
 .shogiBoard.large {
@@ -145,11 +145,11 @@ This will use 60% scaling.
     position: relative;
 }
 
-.table {
+.table_s {
     display: table;
 }
 
-.row {
+.row_s {
     display: table-row;
 }
 

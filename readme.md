@@ -262,6 +262,9 @@ web server and then have server side script
 (PHP based, NodeJs based, etc.,) to create a initialSetup object and
 serve from the server.
 
+(note) When supplying the kifu from the server, kifu will be surrounded by back tick (`) as a string literals .Care should be taken to escape back slash as string literal will not process it as a combination of next character.
+
+
 
 
 

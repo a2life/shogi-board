@@ -3,9 +3,10 @@ const counter = (search: string, source: string) => {
     return (source.match(re) || []).length;
 }
 
-const sente = "▲"
-const gote = "△"
-
+//const sente = "▲"
+//const gote = "△"
+const sente='☗';
+const gote='☖'
 /**
  *
  * @param side

@@ -212,8 +212,12 @@ export const Board = (Props: {
     }
 
     const saveKifu = () => { //this button will only display when kifu is available, so no check on Props.kifu is performed here
-        const blob = new Blob([kifu!], {type: 'text/plain;charset=utf-8'})
-        saveAs(blob, "download.kif")
+        const response = window.confirm('Save kif as "download.kif?')
+        if (response){
+            const blob = new Blob([kifu!], {type: 'text/plain;charset=utf-8'})
+            saveAs(blob, "download.kif")
+        }
+
     }
 
     const [flipped, setFlipped] = useState(false);

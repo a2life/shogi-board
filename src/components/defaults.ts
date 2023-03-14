@@ -19,6 +19,7 @@ export interface ShogiKit {
     senteName?:string;
     goteName?:string;
     showMarker:boolean;
+    animate:boolean;
 
 
 }
@@ -38,7 +39,8 @@ export const defaultParams: ShogiKit = {
     initialComment: '',
     moves: [''],
     tesuu: 1,
-    showMarker:false
+    showMarker:false,
+    animate:true
 
 
 

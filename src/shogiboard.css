@@ -38,15 +38,14 @@ This will use 60% scaling.
     height: 32px;
     padding: 5px;
 
+
 }
 
 .koma, .marker {
     position: absolute;
 }
 
-.koma {
-    transition: 0.4s;
-}
+
 
 .koma, .marker, .komadai img {
     width: 30px;
@@ -54,33 +53,55 @@ This will use 60% scaling.
 }
 
 .rS {
-    top: 325px;
+    top: 328px;
     z-index: 500
 }
 
 .rG {
-    top: -28px;
+    top: -32px;
     z-index: 500
 }
+.flip180 {
+    transform:rotate(180deg);
 
-.goteName {
+}
+.animate-move {
+    transition:0.4s;
+}
+.playerName {
     position: absolute;
+    left: 180px;
+    width: 120px;
+    font-size: x-small;
+}
+.playerName-gote {
     top: 28px;
-    left: 180px;
-    width: 120px;
-    text-align: right;
-    font-size: x-small;
 }
-
-.senteName {
-    position: absolute;
+.playerName-sente{
     top: -5px;
-    left: 180px;
-    width: 120px;
-    text-align: right;
-    font-size: x-small;
+}
+.text-align-normal{
+    text-align:right;
+}
+.text-align-flipped{
+    text-align:left;
 }
 
+.save-flip-box {
+    position:absolute;
+    top:0;
+    left:-5px;
+}
+.save-button-position{
+    position:absolute;
+    top:15px;
+    cursor:nwse-resize;
+}
+.flip-button-position{
+    position:absolute;
+    top:0;
+    cursor:pointer;
+}
 .tsume .rG {
     top: -1000px;
     z-index: 500;
@@ -112,6 +133,7 @@ This will use 60% scaling.
 
 .onMove {
     z-index: 1000 !important;
+
 }
 
 .shogiBoard {

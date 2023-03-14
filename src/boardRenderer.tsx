@@ -14,7 +14,7 @@ export function BoardRenderer(prop: { setup: ShogiKit,index:number }) {
         dataPack=data.parse();
 
     }  //otherwise fall back to individual parameters that are available
-    let {senteOnBoard, goteOnBoard, senteOnHand, goteOnHand, markerAt, caption, initialComment, moves, tesuu, kifu, senteName, goteName,showMarker}
+    let {senteOnBoard, goteOnBoard, senteOnHand, goteOnHand, markerAt, caption, initialComment, moves, tesuu, kifu, senteName, goteName,showMarker,animate}
         = {...defaultParams, ...prop.setup, ...dataPack} //each array set will override if set exists.
 
     const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand);
@@ -36,6 +36,6 @@ export function BoardRenderer(prop: { setup: ShogiKit,index:number }) {
    // console.log("commentWindows:",commentWindow, "index",prop.index);
     const HasBranch:boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
     return <Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
-                  initialComment={initialComment} tesuu={tesuu || 0} flags={{commentWindow,HasBranch,showMarker}} kifu={kifu}
+                  initialComment={initialComment} tesuu={tesuu || 0} flags={{commentWindow,HasBranch,showMarker,animate}} kifu={kifu}
             senteName={senteName} goteName={goteName} markerAt={markerAt}/>
 }

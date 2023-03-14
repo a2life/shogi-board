@@ -5,8 +5,8 @@ const counter = (search: string, source: string) => {
 
 //const sente = "▲"
 //const gote = "△"
-const sente='☗';
-const gote='☖'
+const sente='☗'; //&#x2617;
+const gote='☖' //&#x2616;
 /**
  *
  * @param side

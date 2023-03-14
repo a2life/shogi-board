@@ -16,13 +16,16 @@ const komaSelection = 'koma_ryoko_1'
  * 'gpGp' for Gote, column position pawn, row position Gote(onHand area), and piece is pwn
  * @constructor
  */
-export const RenderPiece=(prop:{piece:string,mover:string})=>{
+export const RenderPiece=(prop:{piece:string,mover:string,animate:boolean})=>{
    //side need to be capital
     const piece=prop.piece
     const inPlay=prop.mover
+    const animate=prop.animate
 
     const pngName = piece[0].toUpperCase()+pngNames[codeNames.indexOf(piece[3])]
-    const classes = `koma c${piece[1]} r${piece[2]} ${(inPlay===piece.slice(1,3))?'onMove':''}`
+    const animateClass=(animate)?' animate-move':'';
+    const moveClass=(inPlay===piece.slice(1,3))?' onMove':'';
+    const classes = `koma c${piece[1]} r${piece[2]}${moveClass}${animateClass}`
     const pieceImage = `/assets/img/koma/${komaSelection}/${pngName}.png`
     return <img src={pieceImage} class={classes} alt=""/>
 }

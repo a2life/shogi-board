@@ -1,4 +1,3 @@
-
 type history = { pieces: string, playedOn: string, counter: number }[]
 
 import '../shogiboard.css'
@@ -12,14 +11,14 @@ import * as I from "./Icons";
 
 export const Board = (Props: {
     pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string,
-    flags: { commentWindow: boolean, HasBranch: boolean, showMarker:boolean }, kifu: string | undefined,
-    senteName: string | undefined, goteName: string | undefined, markerAt:string
+    flags: { commentWindow: boolean, HasBranch: boolean, showMarker: boolean }, kifu: string | undefined,
+    senteName: string | undefined, goteName: string | undefined, markerAt: string
 }) => {
 
-    let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu,markerAt} = Props
+    let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu, markerAt} = Props
     let initialHistory = [] as history
-    let initialAct=movesArray[0].slice(4, 6)
-    let initialCounter=0;
+    let initialAct = movesArray[0].slice(4, 6)
+    let initialCounter = 0;
     const {commentWindow, HasBranch, showMarker} = flags
     const skipToCounter = (tesuu: number, pieces: string) => {
 
@@ -43,13 +42,13 @@ export const Board = (Props: {
         const modifiedProps = skipToCounter(tesuu, pieces)
         pieces = modifiedProps.pieces
         initialHistory = modifiedProps.miniHistory
-        initialAct=modifiedProps.move.slice(2,4)
-        markerAt=initialAct;
+        initialAct = modifiedProps.move.slice(2, 4)
+        markerAt = initialAct;
         initialCounter = modifiedProps.counter
     }
 
     const [piecesInfo, setPiecesInfo] = useState(pieces)
-    const [markerPosition, setMarkerPosition]=useState(markerAt)
+    const [markerPosition, setMarkerPosition] = useState(markerAt)
 
 
     const [comment, setComment] = useState(initialComment)
@@ -75,7 +74,7 @@ export const Board = (Props: {
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
         setPreviousAct(nextMove.slice(2, 4))
-        setMarkerPosition(nextMove.slice(2,4))
+        setMarkerPosition(nextMove.slice(2, 4))
         if (commentWindow) {
             setComment(extractComments(nextMove))
         }
@@ -169,7 +168,7 @@ export const Board = (Props: {
     const branchingHandler = (e: Event) => {
         e.preventDefault();
         const newTarget = (e.target as HTMLSelectElement).value
-       // console.log('selected', newTarget)
+        // console.log('selected', newTarget)
         //    setMoveCounter(parseInt(newTarget))
         const moveCounter = parseInt(newTarget)
         takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action
@@ -216,56 +215,72 @@ export const Board = (Props: {
         const blob = new Blob([kifu!], {type: 'text/plain;charset=utf-8'})
         saveAs(blob, "download.kif")
     }
+
+    const [flipped, setFlipped]=useState(false);
+    const flipHandler =()=> setFlipped(!flipped) ; //flip screen action
     return <div class="board-container">
-        {(caption!.length > 0) && <div class="h5 text-center pt-1">{caption}</div>}
-        <div class="row-on-hand">
-            {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
-                <span class={`c${p[0]}`}>{p.slice(1)}</span>)}
-            {!!kifu && <div class='float-end' title='download Kifu' onClick={saveKifu}><I.SaveFile/></div>}
-            {!!goteName && <div class='goteName float-end'>{displayWithSideSymbol('g', goteName)}</div>}
+        <div>
+            {(caption!.length > 0) && <div class="h5 text-center pt-1">{caption}</div>}
+            <div class="float=end" title='Flip board' onClick={flipHandler}>&#x21c5;</div>
+            {!!kifu && <div class='float-end' title='download Kifu' onClick={saveKifu}>&#x21f2;</div>}
         </div>
+        <div style={flipped?"transform:rotate(180deg)":""}>
+            <div class="row-on-hand">
+                {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
+                    <span class={`c${p[0]}`}>{p.slice(1)}</span>)}
 
-        <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
-            <RenderBoard/>
-            { showMarker && <MarkerAt c={markerPosition[0]} r={markerPosition[1]} />}
+                {!!goteName && <div class='goteName float-end' style={flipped?"transform:rotate(180deg)":""}>{displayWithSideSymbol('g', goteName)}</div>}
 
-            {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={previousAct}/>))}
-        </div>
-        <div class="row-on-hand">
-            {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
-                <span class={'c' + p[0]}>{p.slice(1)}</span>)}
-            {!!senteName && <div class='senteName '>{displayWithSideSymbol('s', senteName)}</div>}
-            <aside class="note-window">{notation()}</aside>
-        </div>
-
-        {movesArray.toString().length > 0 &&
-        <div class="button-bar-grid">
-            <div class="btn-group">
-                <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}
-                        disabled={moveCounter === 0}>
-                    <I.SkipStart/></button>
-                {HasBranch &&
-                <button class="btn btn-sm btn-outline-secondary" value="Skip-Backward" onClick={skipToPrevBranchHandler}
-                        disabled={moveCounter === 0}>
-                    <I.SkipBack/></button>}
-                <button class="btn btn-sm btn-outline-secondary" value="Back" onClick={moveBackHandler}
-                        disabled={moveCounter === 0}>
-                    <I.Back/></button>
-                <button class="btn btn-sm btn-outline-secondary" value="Play" onClick={playOneMoveHandler}
-                        disabled={endOfMoves(moveCounter)}>
-                    <I.Play/></button>
-                {HasBranch &&
-                <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward" onClick={skipToNextBranchHandler}
-                        disabled={endOfMoves(moveCounter)}>
-                    <I.SkipForward/></button>}
-                <button class="btn btn-sm btn-outline-secondary" value="Skip-to-End" onClick={skipEndHandler}
-                        disabled={endOfMoves(moveCounter)}>
-                    <I.SkipEnd/></button>
 
             </div>
-            {!!Props.branchList[moveCounter] && <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]}
-                                                              branchingHandler={branchingHandler}/>}
+
+            <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
+                <RenderBoard/>
+                {showMarker && <MarkerAt c={markerPosition[0]} r={markerPosition[1]}/>}
+
+                {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={previousAct}/>))}
+            </div>
+            <div class="row-on-hand">
+                {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
+                    <span class={'c' + p[0]}>{p.slice(1)}</span>)}
+                {!!senteName && <div class='senteName' style={flipped?"transform:rotate(180deg)":""}>{displayWithSideSymbol('s', senteName)}</div>}
+                <aside class="note-window" style={flipped?"transform:rotate(180deg)":""}>{notation()}</aside>
+            </div>
+            <div>
+
+            </div>
         </div>
+        {movesArray.toString().length > 0 &&
+            <div class="button-bar-grid">
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}
+                            disabled={moveCounter === 0}>
+                        <I.SkipStart/></button>
+                    {HasBranch &&
+                        <button class="btn btn-sm btn-outline-secondary" value="Skip-Backward"
+                                onClick={skipToPrevBranchHandler}
+                                disabled={moveCounter === 0}>
+                            <I.SkipBack/></button>}
+                    <button class="btn btn-sm btn-outline-secondary" value="Back" onClick={moveBackHandler}
+                            disabled={moveCounter === 0}>
+                        <I.Back/></button>
+                    <button class="btn btn-sm btn-outline-secondary" value="Play" onClick={playOneMoveHandler}
+                            disabled={endOfMoves(moveCounter)}>
+                        <I.Play/></button>
+                    {HasBranch &&
+                        <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward"
+                                onClick={skipToNextBranchHandler}
+                                disabled={endOfMoves(moveCounter)}>
+                            <I.SkipForward/></button>}
+                    <button class="btn btn-sm btn-outline-secondary" value="Skip-to-End" onClick={skipEndHandler}
+                            disabled={endOfMoves(moveCounter)}>
+                        <I.SkipEnd/></button>
+
+                </div>
+                {!!Props.branchList[moveCounter] &&
+                    <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]}
+                                  branchingHandler={branchingHandler}/>}
+            </div>
         }
         {commentWindow && <div class="comment">{comment}</div>}
     </div>

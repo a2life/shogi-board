@@ -5,9 +5,12 @@ import {KifuParser} from "./components/KifuParser";
 
 export function BoardRenderer(prop: { setup: ShogiKit,index:number }) {
     let dataPack={}// stuff datapack in case kifu is available
-
-    if (!!prop.setup.startAt){
-        prop.setup.tesuu=prop.setup.startAt;
+    let propTranslate:{tesuu?:number,animate?:boolean} ={} //prop conversion
+    if (typeof prop.setup.startAt!='undefined'){   // take startAt as tesuu
+        propTranslate.tesuu =prop.setup.startAt;
+    }
+    if (typeof prop.setup.smooth!='undefined'){ //take
+        propTranslate.animate=prop.setup.smooth;
     }
     if (!!prop.setup.kifu) {
         const data = new KifuParser(prop.setup.kifu)
@@ -15,7 +18,7 @@ export function BoardRenderer(prop: { setup: ShogiKit,index:number }) {
 
     }  //otherwise fall back to individual parameters that are available
     let {senteOnBoard, goteOnBoard, senteOnHand, goteOnHand, markerAt, caption, initialComment, moves, tesuu, kifu, senteName, goteName,showMarker,animate}
-        = {...defaultParams, ...prop.setup, ...dataPack} //each array set will override if set exists.
+        = {...defaultParams, ...prop.setup, ...propTranslate,...dataPack} //each array set will override if set exists.
 
     const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand);
     moves=moves||``;

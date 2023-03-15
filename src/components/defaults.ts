@@ -20,6 +20,7 @@ export interface ShogiKit {
     goteName?:string;
     showMarker:boolean;
     animate:boolean;
+    smooth?:boolean;
 
 
 }
@@ -40,7 +41,8 @@ export const defaultParams: ShogiKit = {
     moves: [''],
     tesuu: 1,
     showMarker:false,
-    animate:true
+    animate:true,
+
 
 
 

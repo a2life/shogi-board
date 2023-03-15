@@ -94,12 +94,13 @@ This will use 60% scaling.
 }
 .save-button-position{
     position:absolute;
-    top:15px;
-    cursor:nwse-resize;
+    top:5px;
+   left:300px;
+    cursor:pointer;
 }
 .flip-button-position{
     position:absolute;
-    top:0;
+    top:5px;
     cursor:pointer;
 }
 .tsume .rG {

@@ -5,8 +5,8 @@ const counter = (search: string, source: string) => {
 
 //const sente = "▲"
 //const gote = "△"
-const sente='☗'; //&#x2617;
-const gote='☖' //&#x2616;
+const sente = '☗'; //&#x2617;
+const gote = '☖' //&#x2616;
 /**
  *
  * @param side
@@ -31,7 +31,7 @@ export const unifyPieces = (senteOnBoard: string, goteOnBoard: string, senteOnHa
 }
 const duplicateLetter = (a: string) => {
     let s = []
-    const qty=(!!a[1])?parseInt(a.slice(1)):1
+    const qty = (!!a[1]) ? parseInt(a.slice(1)) : 1
     for (let count = 0; count < qty; count++) s.push(a[0])
     return s.toString();
 }
@@ -41,7 +41,7 @@ const rePattern = new RegExp('^(?<pre>[sgC*xX])[\\-+0-9a-z]+((?<branch>[J=])(?<m
 
 export const preProcessMoves = ((moves: string[] | string) => {
     let movesArray: string[];
-    let initialComment='';
+    let initialComment = '';
     if (typeof moves === "string") {
         movesArray = moves.split(',')
     } else {
@@ -50,14 +50,13 @@ export const preProcessMoves = ((moves: string[] | string) => {
     movesArray = movesArray.map((e, index) => {
         let t = e.trim()
         if (t[2] && t[2].toLowerCase() === 'x') return 'x'
-        if (t.slice(2,4)=='00') {
-             const prevMove=movesArray[index-1];
-             if (prevMove[0]==='C'){
-                 // handling for branch head is to be implemented.
-             }
-             else {
-                 t.replace('00',prevMove.slice(2,4) )
-             }
+        if (t.slice(2, 4) == '00') {
+            const prevMove = movesArray[index - 1];
+            if (prevMove[0] === 'C') {
+                // handling for branch head is to be implemented.
+            } else {
+                t.replace('00', prevMove.slice(2, 4))
+            }
         }
         return t
     })
@@ -95,78 +94,82 @@ const symbolizeSide = (side: string) => (side === 's') ? sente : gote;
 
 export const prepBranchPoints = (movesArray: string[]) => {
     // go through movesArray
-    const branches=getBranchArray(movesArray)
-    console.log('branches:',branches)
+    const branches = getBranchArray(movesArray)
+    //  console.log('branches:',branches)
     // if j is found and index-1 does not start with 'branchHead'(ie., 'C'),
-    const resultArray = movesArray.map((e,i)=>{return {move:e,index:i}}).filter((e,index) => {
+    const resultArray = movesArray.map((e, i) => {
+        return {move: e, index: i}
+    }).filter((e, index) => {
 
         let moveComponents = e.move.match(rePattern) as RegExpMatchArray
         return ((moveComponents?.groups?.branch === 'J') && (movesArray[index - 1][0] !== 'C'))
     })
-       // call nexMoveNote, store the returned value with index.
-    const NotesArray=resultArray.map(e=>{
-        const Note=[] as any
+    // call nexMoveNote, store the returned value with index.
+    const NotesArray = resultArray.map(e => {
+        const Note = [] as any
         let j = 0
-        let pointer=e.index
-        let movement=e.move
+        let pointer = e.index
+        let movement = e.move
         let moveElements = movement.match(rePattern) as RegExpMatchArray
-            Note.push({note: symbolizeSide(moveElements.groups!.pre) + moveElements.groups!.Note, index:pointer}) //store first selection
-            do {
-                const branchNumber = moveElements.groups!.move //then remember jump number
-                while (branches[j].index < pointer) {
-                    j = j + 1;
-                }   // using branches array but move passed the current counter position
-                while (branches[j].marker !== branchNumber) j++  //move up to matching branch number
-                pointer = branches[j].index + 1;
-                movement = movesArray[pointer]
-                moveElements = movement.match(rePattern) as RegExpMatchArray
+        Note.push({note: symbolizeSide(moveElements.groups!.pre) + moveElements.groups!.Note, index: pointer}) //store first selection
+        do {
+            const branchNumber = moveElements.groups!.move //then remember jump number
+            while (branches[j].index < pointer) {
+                j = j + 1;
+            }   // using branches array but move passed the current counter position
+            while (branches[j].marker !== branchNumber) j++  //move up to matching branch number
+            pointer = branches[j].index + 1;
+            movement = movesArray[pointer]
+            moveElements = movement.match(rePattern) as RegExpMatchArray
 
-                Note.push({note: symbolizeSide(moveElements.groups!.pre) + moveElements.groups!.Note, index: pointer}) //store first selection
+            Note.push({note: symbolizeSide(moveElements.groups!.pre) + moveElements.groups!.Note, index: pointer}) //store first selection
 
-            } while (moveElements.groups!.branch === 'J')
-       return Note
+        } while (moveElements.groups!.branch === 'J')
+        return Note
     })
     //  set up branch node with index, so if counter is at index, looking up this array will returns branch options.
     //  like { index: [{index:index, movement:movement}, , ,]}
-    let branchIndicators ={} as any
-    NotesArray.forEach((branch:{note:string,index:number}[])=>{
-       branch.forEach((leave)=>{
-           const pointer=leave.index.toString()
-           branchIndicators[pointer]=branch;
-       })
+    let branchIndicators = {} as any
+    NotesArray.forEach((branch: { note: string, index: number }[]) => {
+        branch.forEach((leave) => {
+            const pointer = leave.index.toString()
+            branchIndicators[pointer] = branch;
+        })
     })
 
     // return this array
-return branchIndicators
+    return branchIndicators
 
 }
 
-export const getMoveNote=(movement:string)=>{
-    let moveElements=movement.match(rePattern) as RegExpMatchArray
-    if (moveElements.groups!.move===undefined){ return} //if readable notation is not included in move string then return nothing
-    else return moveElements.groups!.move+'手'+symbolizeSide(moveElements.groups!.pre)+ moveElements.groups!.Note
+export const getMoveNote = (movement: string) => {
+    let moveElements = movement.match(rePattern) as RegExpMatchArray
+    if (moveElements.groups!.move === undefined) {
+        return
+    } //if readable notation is not included in move string then return nothing
+    else return moveElements.groups!.move + '手' + symbolizeSide(moveElements.groups!.pre) + moveElements.groups!.Note
 }
 
-export const displayWithSideSymbol=(side:'s'|'g',name:string)=> symbolizeSide(side)+name
+export const displayWithSideSymbol = (side: 's' | 'g', name: string) => symbolizeSide(side) + name
 
 export const extractComments = (moveLine: string) => {
-    const commentArray=moveLine.match(/\*\*\*(.*)\*\*\*/);
+    const commentArray = moveLine.match(/\*\*\*(.*)\*\*\*/);
     if (commentArray) {
-        const trimmedCommentArray=commentArray.map(i=>i.slice(3,-3))
-        return trimmedCommentArray[0].replace(/\*\*\*\*\*\*/g,'\n')
+        const trimmedCommentArray = commentArray.map(i => i.slice(3, -3))
+        return trimmedCommentArray[0].replace(/\*\*\*\*\*\*/g, '\n')
     }
 
     return '';
-   /* const index = (moveLine.indexOf('***'));
-    const comment = (index >= 0) ? moveLine.slice(index + 1) : ''
-    return comment.replaceAll('*', '<br>')*/
+    /* const index = (moveLine.indexOf('***'));
+     const comment = (index >= 0) ? moveLine.slice(index + 1) : ''
+     return comment.replaceAll('*', '<br>')*/
 }
 
-export const extractBookMark = (moveLine:string)=>{
-    const commentArray=moveLine.match(/&&&(.*)&&&/);
+export const extractBookMark = (moveLine: string) => {
+    const commentArray = moveLine.match(/&&&(.*)&&&/);
     if (commentArray) {
-        const trimmedCommentArray=commentArray.map(i=>i.slice(3,-3))
-        return trimmedCommentArray[0]+'\n'
+        const trimmedCommentArray = commentArray.map(i => i.slice(3, -3))
+        return trimmedCommentArray[0] + '\n'
     }
 
     return '';

@@ -51,7 +51,7 @@ const lookupList = [
     {key: "J", pat: /\+/},
     {key: "+", pat: /成/},
     {key: "x", pat: /(投了|中断)/},
-    {key: " ", pat:/　/g} //replace zenkaku space with hankaku space
+    {key: " ", pat: /　/g} //replace zenkaku space with hankaku space
 
 ]
 const boardMarker = "９ ８ ７ ６ ５ ４ ３ ２ １";
@@ -131,65 +131,59 @@ export class KifuParser {
         this.goteban = (kifu.search(gotebanPattern) >= 0) ? 1 : 0
         const KifuArray = kifu.split('\n');
         const i = this.findLine(boardMarker, KifuArray)
-       // console.log('i=', i)
+        // console.log('i=', i)
 
-                if (i >= 0) { //the string contains board chart
-                    this.sOnBoard=''; //reset default onBoard information
-                    this.gOnBoard='';
-                    let startRow = i + 2;//starting row of 局面　info
-                    let endRow = i + 9 //ending row of 局面　info
-                    for (let row = startRow; row < endRow; row++) {
-                        for (let k = 2; k < 19; k = k + 2) {
-                            let masu = KifuArray[row].substr(k, 1)
-                            if (masu !== "・") {
-                                let colRow = (10 - k / 2).toString() + (row - startRow + 1).toString();
-                                let side = KifuArray[row].substr(k - 1, 1);
-                                switch (side) {
-                                    case " "://This is Sente's piece
-                                        this.sOnBoard += colRow;
-                                        this.sOnBoard += masu;
-                                        this.sOnBoard += " ";
-                                        break;
-                                    case "v"://this is Gote's piece
-                                        this.gOnBoard += colRow;
-                                        this.gOnBoard += masu;
-                                        this.gOnBoard += " "
-                                        ;
-                                        break;
-                                }
-                            }
+        if (i >= 0) { //the string contains board chart
+            this.sOnBoard = ''; //reset default onBoard information
+            this.gOnBoard = '';
+            let startRow = i + 2;//starting row of 局面　info
+            let endRow = startRow + 9 //ending row of 局面　info
+            for (let row = startRow; row < endRow; row++) {
+                for (let k = 2; k < 19; k = k + 2) {
+                    let masu = KifuArray[row].substr(k, 1)
+                    if (masu !== "・") {
+                        let colRow = (10 - k / 2).toString() + (row - startRow + 1).toString();
+                        let side = KifuArray[row].substr(k - 1, 1);
+                        switch (side) {
+                            case " "://This is Sente's piece
+                                this.sOnBoard += colRow;
+                                this.sOnBoard += masu;
+                                this.sOnBoard += " ";
+                                break;
+                            case "v"://this is Gote's piece
+                                this.gOnBoard += colRow;
+                                this.gOnBoard += masu;
+                                this.gOnBoard += " "
+                                ;
+                                break;
                         }
                     }
-
-                    this.sOnBoard = this.sOnBoard.trim();
-                    this.gOnBoard = this.gOnBoard.trim();
-
-
-                    for (const elem in lookupList) {
-                        const pat = lookupList[elem].pat
-                        const key = lookupList[elem].key
-                        this.sOnBoard = this.sOnBoard.replace(pat, key);
-                        this.gOnBoard = this.gOnBoard.replace(pat, key);
-                        this.sOnHand = this.sOnHand.replace(pat, key);
-                        this.gOnHand = this.gOnHand.replace(pat, key);
-                    }
-                    //spell out pieces and not numbers. ie., s3 -> s,s,s
-
-                    /*   this.sOnHand = this.parseRepeat(this.sOnHand);
-                       this.gOnHand = this.parseRepeat(this.gOnHand);*/
-                    this.sOnBoard = this.sOnBoard.split(' ').join(',');
-                    this.gOnBoard = this.gOnBoard.split(' ').join(',');
-                    this.sOnHand=this.sOnHand.split(' ').join(',')
-                    this.gOnHand=this.gOnHand.split(' ').join(',')
-
-
-
-
                 }
+            }
+
+            this.sOnBoard = this.sOnBoard.trim();
+            this.gOnBoard = this.gOnBoard.trim();
 
 
+            for (const elem in lookupList) {
+                const pat = lookupList[elem].pat
+                const key = lookupList[elem].key
+                this.sOnBoard = this.sOnBoard.replace(pat, key);
+                this.gOnBoard = this.gOnBoard.replace(pat, key);
+                this.sOnHand = this.sOnHand.replace(pat, key);
+                this.gOnHand = this.gOnHand.replace(pat, key);
+            }
+            //spell out pieces and not numbers. ie., s3 -> s,s,s
+
+            /*   this.sOnHand = this.parseRepeat(this.sOnHand);
+               this.gOnHand = this.parseRepeat(this.gOnHand);*/
+            this.sOnBoard = this.sOnBoard.split(' ').join(',');
+            this.gOnBoard = this.gOnBoard.split(' ').join(',');
+            this.sOnHand = this.sOnHand.split(' ').join(',')
+            this.gOnHand = this.gOnHand.split(' ').join(',')
 
 
+        }
 
 
         /*
@@ -210,13 +204,13 @@ export class KifuParser {
     parseMoves(kifu: string) {
         if (kifu.search(headerPattern)) {
             const movesArray = kifu.slice(kifu.search(headerPattern), kifu.length)
-                .replace(/\n\*(.*)/g,'***$1***') //tack comment only line(s) except for the 1st line comment to previous move for later processing
-                .replace(/\n&(.*)/g,'&&&$1&&&') //tack bookmark line(s) to previous move for later processing
-              .split('\n').slice(2).filter((e) => e !== '') //create array with moves section
-           // console.log('movesArray=', movesArray)
+                .replace(/\n\*(.*)/g, '***$1***') //tack comment only line(s) except for the 1st line comment to previous move for later processing
+                .replace(/\n&(.*)/g, '&&&$1&&&') //tack bookmark line(s) to previous move for later processing
+                .split('\n').slice(2).filter((e) => e !== '') //create array with moves section
+            // console.log('movesArray=', movesArray)
             this.moves = movesArray.map((line) => {
-                line=line.trim()
-                let lines=line.split('***'); //separate comment section and preserve it for later display
+                line = line.trim()
+                let lines = line.split('***'); //separate comment section and preserve it for later display
                 let lineXlated = lines[0]; //and only translate first section
 
                 for (const elem in lookupList) {
@@ -226,10 +220,10 @@ export class KifuParser {
                     lineXlated = lineXlated.replace(pat, key);
 
                 }
-                lines[0]=lineXlated;
+                lines[0] = lineXlated;
                 ;
                 const found = (lines.join("***")).match(movesPattern)
-             //   console.log('found', found)
+                //   console.log('found', found)
 
                 let parsed;
                 if (!!found![2]) {
@@ -238,17 +232,16 @@ export class KifuParser {
                     const to = found![2].trim();
                     const from = (!!found![3]) ? found![3] : ""
                     const note = (!!found![4]) ? found![4] : "=" // note is "J" or "="
-                    const comment =(!!found![5])? found![5].trim() :''
+                    const comment = (!!found![5]) ? found![5].trim() : ''
                     const name = line.match(moveName)![1]
-                    parsed = side + '-' + to + from + note + count + ':' + name +  comment
+                    parsed = side + '-' + to + from + note + count + ':' + name + comment
                     parsed = parsed.replace(/-(...)\+/, '+$1') // s-nn+ => s+nn
                     parsed = parsed.replace(/-(...)d/, 'd$1') // s-68sd => sd68s
                     parsed = parsed.replace(/([+-]\d\d)[pPlLnNsSgkrRbB]/, '$1')// remove piece information
-                }
-                else if (!!found![6]) {
+                } else if (!!found![6]) {
                     parsed = 'C:' + found![6]
                 } else
-                    parsed =  found![0]
+                    parsed = found![0]
 
 
                 return parsed

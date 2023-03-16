@@ -75,7 +75,7 @@ const getBranchArray = (movesArray: string[]) => movesArray.map((e, index) => ({
     marker: e,
     index: index
 })).filter((e) => (e.marker.indexOf('C:') !== -1))
-    .map((e) => ({marker: e.marker.slice(2, 4), index: e.index}))
+    .map((e) => ({marker: e.marker.slice(2), index: e.index}))
 
 
 /**
@@ -96,6 +96,7 @@ const symbolizeSide = (side: string) => (side === 's') ? sente : gote;
 export const prepBranchPoints = (movesArray: string[]) => {
     // go through movesArray
     const branches=getBranchArray(movesArray)
+    console.log('branches:',branches)
     // if j is found and index-1 does not start with 'branchHead'(ie., 'C'),
     const resultArray = movesArray.map((e,i)=>{return {move:e,index:i}}).filter((e,index) => {
 

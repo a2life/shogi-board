@@ -46,7 +46,6 @@ This will use 60% scaling.
 }
 
 
-
 .koma, .marker, .komadai img {
     width: 30px;
     height: 33px;
@@ -61,48 +60,58 @@ This will use 60% scaling.
     top: -32px;
     z-index: 500
 }
+
 .flip180 {
-    transform:rotate(180deg);
+    transform: rotate(180deg);
 
 }
+
 .animate-move {
-    transition:0.4s;
+    transition: 0.4s;
 }
+
 .playerName {
     position: absolute;
     left: 180px;
     width: 120px;
     font-size: x-small;
 }
+
 .playerName-gote {
     top: 28px;
 }
-.playerName-sente{
+
+.playerName-sente {
     top: -5px;
 }
-.text-align-normal{
-    text-align:right;
+
+.text-align-normal {
+    text-align: right;
 }
-.text-align-flipped{
-    text-align:left;
+
+.text-align-flipped {
+    text-align: left;
 }
 
 .save-flip-box {
-    position:absolute;
-    top:0;
-    left:-5px;
+    position: absolute;
+    top: 0;
+    left: -5px;
 }
-.save-button-position{
-    position:absolute;
-    top:5px;
-   left:300px;
-    cursor:pointer;
+
+.save-button-position {
+    position: absolute;
+    top: 5px;
+    left: 300px;
+    cursor: pointer;
 }
-.flip-button-position{
-    position:absolute;
-    top:5px;
-    cursor:pointer;
+
+.flip-button-position {
+    position: absolute;
+    top: 5px;
+    cursor: pointer;
 }
+
 .tsume .rG {
     top: -1000px;
     z-index: 500;
@@ -139,7 +148,7 @@ This will use 60% scaling.
 
 .shogiBoard {
     margin: auto;
-   /* padding: 100px;*/
+    /* padding: 100px;*/
 }
 
 .shogiBoard.large {
@@ -381,6 +390,7 @@ This will use 60% scaling.
 
 .comment {
     width: inherit;
+    white-space: pre-wrap;
     overflow: auto;
     font-size: 0.8em;
     padding-left: 7px;
@@ -396,16 +406,17 @@ This will use 60% scaling.
     padding: .375rem 2.25rem .375rem .75rem;
     font-size: 0.75rem;
     color: #212529;
-      background-color: #fff;
-      background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>");
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>");
     background-repeat: no-repeat;
-      background-position: right .75rem center;
-      background-size: 16px 12px;
-      border: 1px solid #ced40a;
+    background-position: right .75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #ced40a;
     border-radius: .25rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-   appearance: none;
+    appearance: none;
 }
+
 .note-window {
     font-size: 0.75rem;
     position: absolute;

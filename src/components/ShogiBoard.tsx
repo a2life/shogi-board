@@ -4,7 +4,7 @@ import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser, moveAndRemember} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
-import {scoreArray, movementNotBranch, getMoveNote, displayWithSideSymbol, extractComments} from "./utils";
+import {scoreArray, movementNotBranch, getMoveNote, displayWithSideSymbol, extractComments,extractBookMark} from "./utils";
 import {ShowBranches} from "./ShowBranches";
 import {saveAs} from "file-saver";
 import * as I from "./Icons";
@@ -213,7 +213,7 @@ export const Board = (Props: {
 
     const saveKifu = () => { //this button will only display when kifu is available, so no check on Props.kifu is performed here
         const response = window.confirm('Save kif as "download.kif?')
-        if (response){
+        if (response) {
             const blob = new Blob([kifu!], {type: 'text/plain;charset=utf-8'})
             saveAs(blob, "download.kif")
         }
@@ -252,7 +252,7 @@ export const Board = (Props: {
                         class={flipped
                             ? "flip180 playerName playerName-sente text-align-flipped"
                             : "playerName playerName-sente text-align-normal"
-                    }>{displayWithSideSymbol('s', senteName)}</div>}
+                        }>{displayWithSideSymbol('s', senteName)}</div>}
                     <aside class={flipped ? "flip180 note-window" : "note-window"}>{notation()}</aside>
                 </div>
                 <div>
@@ -303,4 +303,4 @@ export const Board = (Props: {
         </div>
     </div>
 
-}
+};

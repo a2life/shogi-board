@@ -13,6 +13,12 @@ Pattern to be recognized
 戦型：三間飛車
 手数----指手---------消費時間--
  */
+/*
+How do I implement bookmark?
+Bookmark starts at the very beginign of line, so it will be \n followed by & catch that,
+then tack it to the end of previous line with unique tag.  my choice.  how about &&&bookmarkname&&&
+So in the meantime, I will change comment format to ***comment***
+*/
 
 const lookupList = [
     {key: "10", pat: /＋\s/},
@@ -204,12 +210,14 @@ export class KifuParser {
     parseMoves(kifu: string) {
         if (kifu.search(headerPattern)) {
             const movesArray = kifu.slice(kifu.search(headerPattern), kifu.length)
-                .replace(/([)+])\n\*/g,'$1*') //tack comment only line(s) except for the 1st line comment to previous move for later processing
+                .replace(/\n\*(.*)/g,'***$1***') //tack comment only line(s) except for the 1st line comment to previous move for later processing
+                .replace(/\n&(.*)/g,'&&&$1&&&') //tack bookmark line(s) to previous move for later processing
               .split('\n').slice(2).filter((e) => e !== '') //create array with moves section
            // console.log('movesArray=', movesArray)
             this.moves = movesArray.map((line) => {
                 line=line.trim()
-                let lineXlated = line;
+                let lines=line.split('***'); //separate comment section and preserve it for later display
+                let lineXlated = lines[0]; //and only translate first section
 
                 for (const elem in lookupList) {
                     const pat = lookupList[elem].pat
@@ -218,8 +226,9 @@ export class KifuParser {
                     lineXlated = lineXlated.replace(pat, key);
 
                 }
-
-                const found = lineXlated.match(movesPattern)
+                lines[0]=lineXlated;
+                ;
+                const found = (lines.join("***")).match(movesPattern)
              //   console.log('found', found)
 
                 let parsed;

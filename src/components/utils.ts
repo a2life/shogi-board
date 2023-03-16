@@ -149,7 +149,24 @@ export const getMoveNote=(movement:string)=>{
 export const displayWithSideSymbol=(side:'s'|'g',name:string)=> symbolizeSide(side)+name
 
 export const extractComments = (moveLine: string) => {
-    const index = (moveLine.indexOf('*'));
+    const commentArray=moveLine.match(/\*\*\*(.*)\*\*\*/);
+    if (commentArray) {
+        const trimmedCommentArray=commentArray.map(i=>i.slice(3,-3))
+        return trimmedCommentArray[0].replace(/\*\*\*\*\*\*/g,'\n')
+    }
+
+    return '';
+   /* const index = (moveLine.indexOf('***'));
     const comment = (index >= 0) ? moveLine.slice(index + 1) : ''
-    return comment.replaceAll('*', '<br>')
+    return comment.replaceAll('*', '<br>')*/
+}
+
+export const extractBookMark = (moveLine:string)=>{
+    const commentArray=moveLine.match(/&&&(.*)&&&/);
+    if (commentArray) {
+        const trimmedCommentArray=commentArray.map(i=>i.slice(3,-3))
+        return trimmedCommentArray[0]+'\n'
+    }
+
+    return '';
 }

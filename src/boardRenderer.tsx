@@ -1,15 +1,15 @@
 import {Board} from "./components/ShogiBoard";
 import {defaultParams, ShogiKit} from "./components/defaults";
-import {unifyPieces, preProcessMoves,prepBranchPoints} from "./components/utils";
+import {unifyPieces, preProcessMoves, prepBranchPoints, extractComments, lineBreakComments} from "./components/utils";
 import {KifuParser} from "./components/KifuParser";
 
 export function BoardRenderer(prop: { setup: ShogiKit,index:number }) {
     let dataPack={}// stuff datapack in case kifu is available
     let propTranslate:{tesuu?:number,animate?:boolean} ={} //prop conversion
-    if (typeof prop.setup.startAt!='undefined'){   // take startAt as tesuu
+    if ('startAt' in prop.setup){   // take startAt as tesuu
         propTranslate.tesuu =prop.setup.startAt;
     }
-    if (typeof prop.setup.smooth!='undefined'){ //take
+    if ('smooth' in prop.setup ){ //take
         propTranslate.animate=prop.setup.smooth;
     }
     if (!!prop.setup.kifu) {
@@ -24,15 +24,15 @@ export function BoardRenderer(prop: { setup: ShogiKit,index:number }) {
     moves=moves||``;
     initialComment=initialComment || '';
 
-    let  {movesArray, initialComment: comment} = preProcessMoves(moves);
-
+    let  {movesArray, initialComment:lineZeroComment} = preProcessMoves(moves);
+ //   console.log(movesArray);
     const commentWindow:boolean = (movesArray.toString().indexOf('*'))>0 || initialComment.length>0; //
 
-    initialComment=(initialComment.length>0)?`${initialComment} ${comment}`:comment;
+    initialComment=(initialComment.length>0)?`${initialComment} ${extractComments(lineZeroComment)}`:extractComments(lineZeroComment);
 
 
     const branchList=prepBranchPoints(movesArray)
-   // console.log('branchList',branchList)
+ //   console.log('branchList',branchList)
 
 
     // check for existence of comments.

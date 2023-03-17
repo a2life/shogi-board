@@ -61,7 +61,7 @@ export const preProcessMoves = ((moves: string[] | string) => {
         return t
     })
     if (movesArray[0][0] === '*') { //if the first line is comment then,
-        initialComment = movesArray[0].slice(1)
+        initialComment = movesArray[0]
         //   console.log('initialComment', initialComment)
         movesArray.splice(0, 1)
     }
@@ -84,7 +84,7 @@ const getBranchArray = (movesArray: string[]) => movesArray.map((e, index) => ({
  */
 export const movementNotBranch = (index: number, movementArray: string[]) => {
     const thisMovement = movementArray[index];
-    const isNotBranchHead = (movementArray[index - 1][0] !== 'C')
+    const isNotBranchHead =(index==0)?true:(movementArray[index - 1][0] !== 'C')
     const param = thisMovement.match(rePattern)
 
     return (param?.groups?.branch !== 'J') && isNotBranchHead
@@ -102,7 +102,7 @@ export const prepBranchPoints = (movesArray: string[]) => {
     }).filter((e, index) => {
 
         let moveComponents = e.move.match(rePattern) as RegExpMatchArray
-        return ((moveComponents?.groups?.branch === 'J') && (movesArray[index - 1][0] !== 'C'))
+        return ((moveComponents?.groups?.branch === 'J') && (( index===0) || (movesArray[index - 1][0] !== 'C')))
     })
     // call nexMoveNote, store the returned value with index.
     const NotesArray = resultArray.map(e => {
@@ -155,14 +155,17 @@ export const displayWithSideSymbol = (side: 's' | 'g', name: string) => symboliz
 export const extractComments = (moveLine: string) => {
     const commentArray = moveLine.match(/\*\*\*(.*)\*\*\*/);
     if (commentArray) {
-        const trimmedCommentArray = commentArray.map(i => i.slice(3, -3))
-        return trimmedCommentArray[0].replace(/\*\*\*\*\*\*/g, '\n')
+       const trimmedCommentArray = commentArray.map(i => i.slice(3, -3))
+        return lineBreakComments(trimmedCommentArray[0])
     }
 
     return '';
     /* const index = (moveLine.indexOf('***'));
      const comment = (index >= 0) ? moveLine.slice(index + 1) : ''
      return comment.replaceAll('*', '<br>')*/
+}
+export const lineBreakComments=(comment:string)=>{
+    return comment.replace(/\*\*\*\*\*\*/g, '\n')
 }
 
 export const extractBookMark = (moveLine: string) => {

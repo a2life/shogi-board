@@ -201,13 +201,20 @@ export class KifuParser {
          */
     }
 
-    parseMoves(kifu: string) {
+    parseMoves(kifu: string) {  //parse moves and extract line 0 comment, if it exists.
         if (kifu.search(headerPattern)) {
-            const movesArray = kifu.slice(kifu.search(headerPattern), kifu.length)
+            const movesArray2 = kifu.slice(kifu.search(headerPattern), kifu.length)
                 .replace(/\n\*(.*)/g, '***$1***') //tack comment only line(s) except for the 1st line comment to previous move for later processing
                 .replace(/\n&(.*)/g, '&&&$1&&&') //tack bookmark line(s) to previous move for later processing
-                .split('\n').slice(2).filter((e) => e !== '') //create array with moves section
-            // console.log('movesArray=', movesArray)
+                .replace(/\n(まで.*)/g,"===$1===")
+                .split('\n');//tack away end of move wording
+                console.log('movesArray2',movesArray2)
+                const commentLine = movesArray2.slice(1,2).toString()
+                const commentSearch=commentLine.slice(commentLine.search(/\*\*\*/)) ; // if no comment, then '-' will be returned ie., slice(-1)
+                const comment=(commentSearch.length>1)?commentSearch:'';
+                console.log('comment:',comment)
+                const movesArray =movesArray2.slice(2).filter((e) => e !== '') //create array with moves section
+             console.log('movesArray=', movesArray)
             this.moves = movesArray.map((line) => {
                 line = line.trim()
                 let lines = line.split('***'); //separate comment section and preserve it for later display
@@ -221,7 +228,7 @@ export class KifuParser {
 
                 }
                 lines[0] = lineXlated;
-                ;
+
                 const found = (lines.join("***")).match(movesPattern)
                 //   console.log('found', found)
 
@@ -248,6 +255,7 @@ export class KifuParser {
 
 
             })
+            if (comment.length>0) this.moves=[comment,...this.moves]
         }
 
     }

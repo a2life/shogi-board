@@ -74,7 +74,7 @@ const getBranchArray = (movesArray: string[]) => movesArray.map((e, index) => ({
     marker: e,
     index: index
 })).filter((e) => (e.marker.indexOf('C:') !== -1))
-    .map((e) => ({marker: e.marker.slice(2), index: e.index}))
+    .map((e) => ({marker: e.marker.replace(/C:(\d+).*/,'$1'), index: e.index}))
 
 
 /**

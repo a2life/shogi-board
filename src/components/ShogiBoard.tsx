@@ -228,7 +228,7 @@ export const Board = (Props: {
             <div class={flipped ? "flip180 animate-move" : "animate-move"}>
                 <div class="row-on-hand">
                     {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
-                        <span class={`c${p[0]}`}>{p.slice(1)}</span>)}
+                        <span class={flipped?`c${p[0]} flip180`:`c${p[0]}` }>{p.slice(1)}</span>)}
 
                     {!!goteName && <div class={flipped
                         ? "flip180 playerName playerName-gote text-align-flipped"
@@ -247,7 +247,7 @@ export const Board = (Props: {
                 </div>
                 <div class="row-on-hand">
                     {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
-                        <span class={'c' + p[0]}>{p.slice(1)}</span>)}
+                        <span class={flipped?`c${p[0]} flip180`:`c${p[0]}` }>{p.slice(1)}</span>)}
                     {!!senteName && <div
                         class={flipped
                             ? "flip180 playerName playerName-sente text-align-flipped"

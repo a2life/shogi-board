@@ -19,10 +19,10 @@ export const scoreArray = (side: string, pieceSet: string) => {
     })
 
 }
-
+// unify pieces. first, check for empty string, then prepare and return string
 export const unifyPieces = (senteOnBoard: string, goteOnBoard: string, senteOnHand: string, goteOnHand: string) => {
-    const sbp = senteOnBoard.split(',').map((piece) => 's' + piece)
-    const gbp = goteOnBoard.split(',').map((piece) => 'g' + piece)
+    const sbp = senteOnBoard === '' ? [] : senteOnBoard.split(',').map((piece) => 's' + piece)
+    const gbp = goteOnBoard === '' ? [] : goteOnBoard.split(',').map((piece) => 'g' + piece)
     let sof = senteOnHand.split(',').map((a) => duplicateLetter(a)).toString()
     const sop = sof === '' ? [] : sof.split(',').map((piece) => 's' + piece + 'S' + piece)
     let gof = goteOnHand.split(',').map((a) => duplicateLetter(a)).toString()
@@ -74,7 +74,7 @@ const getBranchArray = (movesArray: string[]) => movesArray.map((e, index) => ({
     marker: e,
     index: index
 })).filter((e) => (e.marker.indexOf('C:') !== -1))
-    .map((e) => ({marker: e.marker.replace(/C:(\d+).*/,'$1'), index: e.index}))
+    .map((e) => ({marker: e.marker.replace(/C:(\d+).*/, '$1'), index: e.index}))
 
 
 /**
@@ -84,7 +84,7 @@ const getBranchArray = (movesArray: string[]) => movesArray.map((e, index) => ({
  */
 export const movementNotBranch = (index: number, movementArray: string[]) => {
     const thisMovement = movementArray[index];
-    const isNotBranchHead =(index==0)?true:(movementArray[index - 1][0] !== 'C')
+    const isNotBranchHead = (index == 0) ? true : (movementArray[index - 1][0] !== 'C')
     const param = thisMovement.match(rePattern)
 
     return (param?.groups?.branch !== 'J') && isNotBranchHead
@@ -102,7 +102,7 @@ export const prepBranchPoints = (movesArray: string[]) => {
     }).filter((e, index) => {
 
         let moveComponents = e.move.match(rePattern) as RegExpMatchArray
-        return ((moveComponents?.groups?.branch === 'J') && (( index===0) || (movesArray[index - 1][0] !== 'C')))
+        return ((moveComponents?.groups?.branch === 'J') && ((index === 0) || (movesArray[index - 1][0] !== 'C')))
     })
     // call nexMoveNote, store the returned value with index.
     const NotesArray = resultArray.map(e => {
@@ -155,7 +155,7 @@ export const displayWithSideSymbol = (side: 's' | 'g', name: string) => symboliz
 export const extractComments = (moveLine: string) => {
     const commentArray = moveLine.match(/\*\*\*(.*)\*\*\*/);
     if (commentArray) {
-       const trimmedCommentArray = commentArray.map(i => i.slice(3, -3))
+        const trimmedCommentArray = commentArray.map(i => i.slice(3, -3))
         return lineBreakComments(trimmedCommentArray[0])
     }
 
@@ -164,7 +164,7 @@ export const extractComments = (moveLine: string) => {
      const comment = (index >= 0) ? moveLine.slice(index + 1) : ''
      return comment.replaceAll('*', '<br>')*/
 }
-export const lineBreakComments=(comment:string)=>{
+export const lineBreakComments = (comment: string) => {
     return comment.replace(/\*\*\*\*\*\*/g, '\n')
 }
 

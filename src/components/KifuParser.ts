@@ -91,7 +91,7 @@ const goteNamePattern = /後手：([^\n]*)[\r\n$]/;
 const uwateNamePattern = /上手：([^\n]*)[\r\n$]/;
 const boardFlipPattern = /.*盤面回転/;
 const gotebanPattern = /.*後手番/;
-const shimotePattern = /.*下手番/;
+const uwatePattern = /.*上手番/;
 const locationPattern = /場所：([^\n]*)[\r\n$]/
 const timeAllowedPattern = /持ち時間：([^\n]*)[\r\n$]/
 const timeSpentPattern = /消費時間：([^\n]*)[\r\n$]/
@@ -152,7 +152,7 @@ export class KifuParser {
 
 
         this.boardFlip = (kifu.search(boardFlipPattern) >= 0)
-        this.goteban = kifu.search(gotebanPattern) + kifu.search(shimotePattern) >= 0 ? 1 : 0
+        this.goteban = kifu.search(gotebanPattern) + kifu.search(uwatePattern)  >= 0 ? 1 : 0
         const KifuArray = kifu.split('\n');
         const i = this.findLine(boardMarker, KifuArray)
         // console.log('i=', i)

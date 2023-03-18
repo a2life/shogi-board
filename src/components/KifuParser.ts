@@ -232,13 +232,13 @@ export class KifuParser {
                 .replace(/\n&(.*)/g, '&&&$1&&&') //tack bookmark line(s) to previous move for later processing
                 .replace(/\n(まで.*)/g,"===$1===")
                 .split('\n');//tack away end of move wording
-                console.log('movesArray2',movesArray2)
+           //     console.log('movesArray2',movesArray2)
                 const commentLine = movesArray2.slice(1,2).toString()
                 const commentSearch=commentLine.slice(commentLine.search(/\*\*\*/)) ; // if no comment, then '-' will be returned ie., slice(-1)
                 const comment=(commentSearch.length>1)?commentSearch:'';
-                console.log('comment:',comment)
+           //     console.log('comment:',comment)
                 const movesArray =movesArray2.slice(2).filter((e) => e !== '') //create array with moves section
-             console.log('movesArray=', movesArray)
+           //  console.log('movesArray=', movesArray)
             this.moves = movesArray.map((line) => {
                 line = line.trim()
                 let lines = line.split('***'); //separate comment section and preserve it for later display

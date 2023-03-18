@@ -12,12 +12,20 @@
 
 <div class="container">
     <div class="row">
-        <div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At consectetur, eveniet in molestias nam nisi obcaecati, odio officia officiis omnis possimus quas reiciendis voluptas! Enim est eum pariatur quae reiciendis.</p></div>
-        <div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias cumque eaque ipsam non obcaecati quos sed temporibus vitae! Ab ducimus error modi nulla numquam perferendis, quae soluta? Id, libero, maxime!</p></div>
+        <div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At consectetur, eveniet in
+            molestias nam nisi obcaecati, odio officia officiis omnis possimus quas reiciendis voluptas! Enim est eum
+            pariatur quae reiciendis.</p></div>
+        <div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias cumque eaque ipsam non
+            obcaecati quos sed temporibus vitae! Ab ducimus error modi nulla numquam perferendis, quae soluta? Id,
+            libero, maxime!</p></div>
     </div>
     <div class="row">
-        <div id="1" class="col position-relative"><div class="board-app"></div></div>
-        <div id="2" class="col position-relative"><div class="board-app"></div></div>
+        <div id="1" class="col position-relative">
+            <div class="board-app"></div>
+        </div>
+        <div id="2" class="col position-relative">
+            <div class="board-app"></div>
+        </div>
     </div>
     <div class="display-5 p-5">Shogi board with Vite+PreAct. BootStrap optional</div>
     <div style="position:relative">
@@ -53,9 +61,9 @@
         laborum magnam minus officia optio praesentium recusandae reprehenderit repudiandae, rerum similique tempora
         tempore voluptatum!</p>
 
-    <div id="4" class="board-app float-start m-4" ></div>
+    <div id="4" class="board-app float-start m-4"></div>
     <div id="5" class="board-app float-start m-4"></div>
-    <div id="6" class="board-app float-start m-4" ></div>
+    <div id="6" class="board-app float-start m-4"></div>
     <!--div id="7" class="board-app float-start m-4"></div-->
 
 </div>
@@ -65,7 +73,59 @@
 <script>
     const initialSetup__ts81 = [
         {
-            kifu:`# ----  Kifu for Windows V7 V7.44 棋譜ファイル  ----
+            comment: `Single strike of pawn on gold's head`, kifu: `#KIF version=2.0 encoding=UTF-8
+# ---- Kifu for Windows V7 V7.44 棋譜ファイル ----
+開始日時：2020/07/08 22:29:03
+手合割：その他　
+上手の持駒：
+  ９ ８ ７ ６ ５ ４ ３ ２ １
++---------------------------+
+| ・ ・ ・ ・ ・v玉 ・v桂v香|一
+| ・ ・ ・ ・ ・ ・v金 ・ ・|二
+| ・ ・ ・ ・ ・v歩 ・v歩V歩|三
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|四
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|五
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|六
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|七
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|八
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|九
++---------------------------+
+下手の持駒：飛　角　桂　歩二　
+下手：
+上手：
+手数----指手---------消費時間--
+   1 ３三歩打     ( 0:04/00:00:04)
+*Single strike on gold\'s head
+   2 同　金(32)   ( 0:27/00:00:27)+
+   3 ２二歩打     ( 0:03/00:00:07)+
+
+
+変化：3手
+   3 ２二角打     ( 0:04/00:00:08)+
+
+
+変化：3手
+   3 ２二飛打     ( 0:12/00:00:16)+
+*Variety of pieces can be dropped at 2二
+
+
+変化：3手
+   3 ４五桂打     ( 0:07/00:00:11)
+   4 中断         ( 0:15/00:00:42)
+まで3手で中断
+
+変化：2手
+   2 ２二金(32)   ( 1:09/00:01:09)
+   3 ３四桂打     ( 0:57/00:01:01)+
+
+
+変化：3手
+   3 ３九飛打     ( 0:03/00:00:07)
+
+`
+        },
+        {
+            kifu: `# ----  Kifu for Windows V7 V7.44 棋譜ファイル  ----
 開始日時：2023/03/17 10:09:10
 終了日時：2023/03/17 10:09:23
 手合割：平手　　
@@ -94,8 +154,8 @@
         },
 
         {
-            caption:"focal point",
-            kifu:`# --- Kifu for Windows V6.44 棋譜ファイル ---
+            caption: "focal point",
+            kifu: `# --- Kifu for Windows V6.44 棋譜ファイル ---
 開始日時：2008/06/09(月) 21:47:36
 手合割：平手　　
 後手の持駒：角　銀　歩二　
@@ -150,10 +210,11 @@
 まで11手で中断
 `
         },
-        {caption:"The latest Yagura 3g silver -矢倉３七銀2012年最新型",
-            initialComment : "The program can show branch moves when available.Main course follows the actual game played by Hirose and Watanabe" +
+        {
+            caption: "The latest Yagura 3g silver -矢倉３七銀2012年最新型",
+            initialComment: "The program can show branch moves when available.Main course follows the actual game played by Hirose and Watanabe" +
                 "on October 2012.",
-            moves:[
+            moves: [
                 "*One of the reasons for Yagura's steady popularity is this thanks to Miyata's discovery of  p-65(６五歩).  Let's take a look.",
                 "s-7677=1:７六歩",
                 "g-8483=2:８四歩",
@@ -453,7 +514,8 @@
                 "x"
             ]
         },
-        {  kifu:
+        {
+            kifu:
                 `# ----  Kifu for Windows V6.23 棋譜ファイル  ----
 開始日時：June 13, 2008
 終了日時：2009/06/12(金) 14:54:35
@@ -663,7 +725,7 @@
         },
 
         {
-            kifu:`
+            kifu: `
       # --- Kifu for Windows V6.54 棋譜ファイル ---
 開始日時：2008/06/02(月) 22:06:10
 手合割：その他　
@@ -711,8 +773,8 @@
         },
         {
             initialComment: 'pawn pawn',
-            smooth:false,
-            kifu:`#KIF version=2.0 encoding=UTF-8,
+            smooth: false,
+            kifu: `#KIF version=2.0 encoding=UTF-8,
 
 # ---- Kifu for Windows V7 V7.06 棋譜ファイル ----
 # --- Kifu for Windows V6.54 棋譜ファイル ---
@@ -747,7 +809,7 @@
    7 ５五飛(25)   ( 0:02/00:00:02)`
         }
         ,
-        {caption:'Initial board'},
+        {caption: 'Initial board'},
 
 
     ]

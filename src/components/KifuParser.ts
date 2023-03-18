@@ -14,6 +14,29 @@ Pattern to be recognized
 手数----指手---------消費時間--
  */
 /*
+# ---- Kifu for Windows V7 V7.44 棋譜ファイル ----
+    開始日時：2020/07/08 22:29:03
+手合割：その他
+上手の持駒：なし
+  ９ ８ ７ ６ ５ ４ ３ ２ １
++---------------------------+
+| ・ ・ ・ ・ ・v玉 ・v桂v香|一
+| ・ ・ ・ ・ ・ ・v金 ・ ・|二
+| ・ ・ ・ ・ ・v歩 ・v歩v歩|三
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|四
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|五
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|六
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|七
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|八
+| ・ ・ ・ ・ ・ ・ ・ ・ ・|九
++---------------------------+
+下手の持駒：飛　角　桂　歩二
+下手番
+下手：
+上手：
+
+ */
+/*
 How do I implement bookmark?
 Bookmark starts at the very beginign of line, so it will be \n followed by & catch that,
 then tack it to the end of previous line with unique tag.  my choice.  how about &&&bookmarkname&&&
@@ -68,6 +91,7 @@ const goteNamePattern = /後手：([^\n]*)[\r\n$]/;
 const uwateNamePattern = /上手：([^\n]*)[\r\n$]/;
 const boardFlipPattern = /.*盤面回転/;
 const gotebanPattern = /.*後手番/;
+const shimotePattern = /.*下手番/;
 const locationPattern = /場所：([^\n]*)[\r\n$]/
 const timeAllowedPattern = /持ち時間：([^\n]*)[\r\n$]/
 const timeSpentPattern = /消費時間：([^\n]*)[\r\n$]/
@@ -128,7 +152,7 @@ export class KifuParser {
 
 
         this.boardFlip = (kifu.search(boardFlipPattern) >= 0)
-        this.goteban = (kifu.search(gotebanPattern) >= 0) ? 1 : 0
+        this.goteban = kifu.search(gotebanPattern) + kifu.search(shimotePattern) >= 0 ? 1 : 0
         const KifuArray = kifu.split('\n');
         const i = this.findLine(boardMarker, KifuArray)
         // console.log('i=', i)

@@ -253,7 +253,7 @@ export const Board = (Props: {
                             ? "flip180 playerName playerName-sente text-align-flipped"
                             : "playerName playerName-sente text-align-normal"
                         }>{displayWithSideSymbol('s', senteName)}</div>}
-                    <aside class={flipped ? "flip180 note-window" : "note-window"}>{notation()}</aside>
+                    <aside class={flipped ? "flip180 text-align-flipped note-window" : "note-window text-align-normal"}>{notation()}</aside>
                 </div>
                 <div>
 

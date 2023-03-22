@@ -179,11 +179,11 @@ This will use 60% scaling.
 
 .caption {
     text-align: center;
-    font-size:1.2rem;
+    font-size:0.9rem;
     padding-top:3px;
 }
 .large .caption {
-    font-size:1.5rem;
+    font-size:1.2rem;
     padding-top:5px;
 }
 /*move elements out of the way */

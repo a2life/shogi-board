@@ -1,4 +1,4 @@
-import {ShogiKit} from "./defaults";
+
 
 /**
  * move parser section

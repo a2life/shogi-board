@@ -2,7 +2,8 @@
 This is CSS for shogiboard.
 all ID selectors(start with #) are for backward compatibility only. the latest code will only use
 class selectors
-Idea of this CSS is to position each piece according to classes (C-column and r-row) assigned to a image file.
+Idea of this CSS is to position each piece  according to classes (C-column and r-row) assigned to a image file.
+(Also, part of shogiboard, position of note-window etc., is positioned absolutely by CSS)
 
 the equation is as follows (each image file size is 43 x 48. offsets are after trial and error)
 Original images sizes used for "large" class
@@ -20,17 +21,17 @@ This will use 60% scaling.
 * board-width and height with this scaling will be 246 x 272
 */
 
-.wrapper {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    grid-auto-rows: auto;
-}
+
 
 .board-container {
     display: grid;
     width: 309px;
     grid-template-columns: 309px;
     grid-auto-rows: auto;
+}
+.large .board-container {
+    width:433px;
+    grid-template-columns: 433px;
 }
 
 .row-on-hand {
@@ -39,6 +40,9 @@ This will use 60% scaling.
     padding: 5px;
 
 
+}
+.large .row-on-hand {
+    height:48px;
 }
 
 .koma, .marker {
@@ -55,10 +59,16 @@ This will use 60% scaling.
     top: 328px;
     z-index: 500
 }
+.large .rS {
+    top:464px;
+}
 
 .rG {
     top: -32px;
     z-index: 500
+}
+.large .rG {
+    top:-43px;
 }
 
 .flip180 {
@@ -76,13 +86,24 @@ This will use 60% scaling.
     width: 120px;
     font-size: x-small;
 }
-
+.large .playerName {
+    left:240px;
+    width:188px;
+    font-size:small;
+}
 .playerName-gote {
-    top: 28px;
+    top: 25px;
+}
+
+.large .playerName-gote {
+   top:35px;
 }
 
 .playerName-sente {
     top: -5px;
+}
+.large .playerName-sente {
+    top:0px;
 }
 
 .text-align-normal {
@@ -106,6 +127,10 @@ This will use 60% scaling.
     cursor: pointer;
 }
 
+.large .save-button-position {
+    left:420px;
+}
+
 .flip-button-position {
     position: absolute;
     top: 5px;
@@ -117,10 +142,7 @@ This will use 60% scaling.
     z-index: 500;
 }
 
-.on-hand-count {
-    font-size: smaller;
-    text-align: right
-}
+
 
 .row-on-hand span {
     position: absolute;
@@ -136,6 +158,10 @@ This will use 60% scaling.
     z-index: 700
 }
 
+.large .row-on-hand span {
+    font-size:x-small;
+}
+
 .button-bar-grid {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -146,15 +172,6 @@ This will use 60% scaling.
 
 }
 
-.shogiBoard {
-    margin: auto;
-    /* padding: 100px;*/
-}
-
-.shogiBoard.large {
-    margin-left: 10px;
-}
-
 .lostworld {
     left: -20000px;
     top: -20000px;
@@ -162,125 +179,19 @@ This will use 60% scaling.
 
 .caption {
     text-align: center;
+    font-size:1.2rem;
+    padding-top:3px;
 }
-
+.large .caption {
+    font-size:1.5rem;
+    padding-top:5px;
+}
+/*move elements out of the way */
 .c0 {
     left: -20000px
 }
-
-/* move elements out of the way */
 .r0 {
     top: -20000px
-}
-
-.shogiBoard, .buttonAnchor, .forSnapshot {
-    position: relative;
-}
-
-.table_s {
-    display: table;
-}
-
-.row_s {
-    display: table-row;
-}
-
-.cell {
-    display: table-cell;
-    vertical-align: top;
-}
-
-.hide {
-    display: none;
-}
-
-.bbBox {
-    height: 25px;
-    width: 100%;
-}
-
-.small .bbBox {
-    height: 23px;
-}
-
-.large .bbBox {
-    height: 26px;
-}
-
-.senteMochigoma {
-    vertical-align: bottom;
-}
-
-.statusLine {
-    height: 25px;
-    vertical-align: middle;
-    font-size: 0.8em;
-}
-
-.large .statusLine {
-    font-size: 1em;
-}
-
-.player2 {
-    top: 135px;
-    height: 15px;
-    left: 309px;
-    width: 100px;
-}
-
-.small .player2 {
-    top: 119px;
-    left: 261px;
-}
-
-.large .player2 {
-    top: 200px;
-    left: 430px;
-    width: 160px;
-    font-size: 1.2em;
-}
-
-.player1 {
-    top: 174px;
-    height: 15px;
-    left: 309px;
-    width: 100px;
-}
-
-.small .player1 {
-    top: 162px;
-    left: 261px;
-}
-
-.large .player1 {
-    top: 246px;
-    left: 430px;
-    width: 160px;
-    font-size: 1.2em;
-}
-
-.type0width {
-    width: 409px;
-}
-
-.large .type0width {
-    width: 585px;
-}
-
-.small .type0width {
-    width: 357px;
-}
-
-.type3width {
-    width: 309px;
-}
-
-.large .type3width {
-    width: 410px;
-}
-
-.small .type3width {
-    width: 267px;
 }
 
 .board {
@@ -296,11 +207,6 @@ This will use 60% scaling.
     height: 454px;
 }
 
-.small .board {
-    width: 246px;
-    height: 273px;
-}
-
 .boardbase-grid {
     position: relative;
     width: 309px;
@@ -308,46 +214,13 @@ This will use 60% scaling.
     height: 326px;
 }
 
-.boardbase {
-    position: relative;
-    width: 309px;
-    min-width: 309px;
-    height: 326px;
-    margin: 30px;
+.large .boardbase-grid {
+    width:433px;
+    min-width:433px;
+    height:464px;
+
 }
 
-.large .boardbase {
-    width: 440px;
-    min-width: 440px;
-    height: 470px;
-}
-
-.small .boardbase {
-    width: 266px;
-    min-width: 266px;
-    height: 292px;
-}
-
-
-.komadai {
-    width: 100px;
-    min-width: 100px;
-    height: 150px;
-    line-height: 15px;
-    background: #f4c151;
-}
-
-.large .komadai {
-    height: 220px;
-    width: 140px;
-    min-width: 140px;
-}
-
-.small .komadai {
-    width: 90px;
-    min-width: 90px;
-    height: 133px;
-}
 
 .large .koma, .large .marker, .large .komadai img {
     width: 43px;
@@ -357,35 +230,6 @@ This will use 60% scaling.
 .small .koma, .small .marker, .small .komadai img {
     width: 26px;
     height: 29px;
-}
-
-.player1, .player2 {
-    position: absolute;
-    font-size: 0.8em;
-    text-align: center;
-}
-
-.buttonBar {
-    position: absolute;
-    top: 326px;
-    left: 80px;
-    height: 20px;
-    z-index: 10;
-    font: menu;
-}
-
-.large .buttonBar {
-    top: 465px;
-    left: 100px;
-    height: 23px;
-    font-size: 1.5em;
-}
-
-.small .buttonBar {
-    top: 290px;
-    left: 74px;
-    height: 20px;
-    font-size: 0.7em;
 }
 
 .comment {
@@ -425,15 +269,16 @@ This will use 60% scaling.
     width: 100px;
 
 }
+.large .note-window {
+    font-size:1rem;
+    top:18px;
+    left:283px;
+    width:140px;
+}
 
 .large .comment {
     height: 120px;
 }
-
-.small .comment {
-    min-height: 100px;
-}
-
 
 .c1 {
     left: 258px;
@@ -516,32 +361,32 @@ This will use 60% scaling.
     left: 322px;
 }
 
-.large .c3 {
+.large .c3, .c-r, .cr {
     left: 279px;
 }
 
-.large .c4 {
+.large .c4, .c-b, .cb {
     left: 236px;
 }
 
-.large .c5 {
+.large .c5, .c-g, .cg {
     left: 193px;
 }
 
-.large .c6 {
+.large .c6, .c-s,  .cs {
     left: 150px;
 }
 
-.large .c7 {
+.large .c7, .c-n, .cn {
     left: 107px;
 }
 
-.large .c8 {
+.large .c8, .c-l, .cl {
     left: 64px;
 }
 
-.large .c9 {
-    left: 23px;
+.large .c9, .c-p, .cp {
+    left: 21px;
 }
 
 .large .r1 {

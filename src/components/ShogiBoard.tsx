@@ -223,7 +223,7 @@ export const Board = (Props: {
     const [flipped, setFlipped] = useState(false);
     const flipHandler = () => setFlipped(!flipped); //flip screen action
     return <div class="board-container">
-        {(caption!.length > 0) && <div className="h5 text-center pt-1">{caption}</div>}
+        {(caption!.length > 0) && <div className="caption">{caption}</div>}
         <div style="position:relative;">
             <div class={flipped ? "flip180 animate-move" : "animate-move"}>
                 <div class="row-on-hand">

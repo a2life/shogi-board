@@ -41,7 +41,7 @@ const rePattern = new RegExp('^(?<pre>[sgC*xX])[\\-+0-9a-z]+((?<branch>[J=])(?<m
 
 export const preProcessMoves = ((moves: string[] | string) => {
     let movesArray: string[];
-    let initialComment = '';
+    let lineZeroComment = '';
     if (typeof moves === "string") {
         movesArray = moves.split(',')
     } else {
@@ -61,12 +61,12 @@ export const preProcessMoves = ((moves: string[] | string) => {
         return t
     })
     if (movesArray[0][0] === '*') { //if the first line is comment then,
-        initialComment = movesArray[0]
+        lineZeroComment = movesArray[0]
         //   console.log('initialComment', initialComment)
         movesArray.splice(0, 1)
     }
 
-    return {movesArray, initialComment}
+    return {movesArray, lineZeroComment}
 })
 
 

@@ -24,11 +24,11 @@ export function BoardRenderer(prop: { setup: ShogiKit,index:number }) {
     moves=moves||``;
     initialComment=initialComment || '';
 
-    let  {movesArray, initialComment:lineZeroComment} = preProcessMoves(moves);
+    let  {movesArray, lineZeroComment} = preProcessMoves(moves);
  //   console.log(movesArray);
     const commentWindow:boolean = (movesArray.toString().indexOf('*'))>0 || initialComment.length>0; //
 
-    initialComment=(initialComment.length>0)?`${initialComment} ${extractComments(lineZeroComment)}`:extractComments(lineZeroComment);
+    initialComment=(initialComment.length>0)?`${initialComment}\n${extractComments(lineZeroComment)}`:extractComments(lineZeroComment);
 
 
     const branchList=prepBranchPoints(movesArray)

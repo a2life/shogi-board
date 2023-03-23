@@ -126,8 +126,13 @@ export class KifuParser {
 
     constructor(kifu: string) {
         this.kifu = kifu
-        this.parseData(kifu)
-        if (kifu.includes(headerPattern)) this.parseMoves(kifu)
+        let headerPart=kifu  //in case there is no moves part
+        if (kifu.includes(headerPattern)) { //header part exists, so
+            headerPart=kifu.slice(0,kifu.search(headerPattern)) //limit header part up to headerPattern
+        }
+        this.parseData(headerPart)
+        this.parseMoves(kifu)
+
     }
 
     parseData(kifu: string) {
@@ -317,18 +322,8 @@ export class KifuParser {
 
 
     public parse() {
-        /*export interface ShogiKit {
-         markerAt: string
-            pieceSetSelection?: string
-            gridStyleSelection?: string
-            boardStyleSelection?: string
-            focusImageSelection?: string
-            caption?: string
-            initialComment?: string;
-            tesuu?: number;
 
-        }*/
-// console.log('moves:',this.moves);
+
         return {
             senteOnBoard: this.sOnBoard,
             goteOnBoard: this.gOnBoard,

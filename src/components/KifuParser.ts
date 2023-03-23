@@ -43,6 +43,8 @@ then tack it to the end of previous line with unique tag.  my choice.  how about
 So in the meantime, I will change comment format to ***comment***
 */
 
+import {getSuperiorOnBoard} from "./teai";
+
 const lookupList = [
     {key: "10", pat: /＋\s/},
     {key: "1", pat: /十/g},
@@ -139,12 +141,13 @@ export class KifuParser {
         this.startDate = findMatch(startDatePattern)
         this.endDate = findMatch(endDatePattern)
         this.teai = findMatch(teaiPattern)
+        this.gOnBoard = getSuperiorOnBoard(this.teai); //overwrite gOnBoard in case teai exists.
         this.event = findMatch(eventPattern)
         this.location = findMatch(locationPattern)
         this.catalog = findMatch(catalogingPattern)
         this.timeAllowed = findMatch(timeAllowedPattern)
         this.timeSpent = findMatch(timeSpentPattern)
-
+        console.log('teai',this.teai)
         if (kifu.match(senteNamePattern) !== null) this.senteName = kifu.match(senteNamePattern)![1]
         else if (kifu.match(shimoteNamePattern) !== null) this.senteName = kifu.match(shimoteNamePattern)![1]
         if (kifu.match(goteNamePattern) !== null) this.goteName = kifu.match(goteNamePattern)![1]

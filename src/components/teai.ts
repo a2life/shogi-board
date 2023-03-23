@@ -18,7 +18,7 @@ const handyCap=["平手","香落ち","右香落ち","角落ち","飛車落ち","
 
 type HandyCaptType ={[key:string]: string}
 const handyCapArray:HandyCaptType={
-    "平手":"",　// send back empty string
+    "平手":"",　// send back empty string to force default
     "香落ち":"11l,21n,31s,41g,51k,61g,71s,81n,22b,82r,13p,23p,33p,43p,53p,63p,73p,83p,93p", //左側(角のある側)の香
     "右香落ち":"21n,31s,41g,51k,61g,71s,81n,91l,22b,82r,13p,23p,33p,43p,53p,63p,73p,83p,93p",
     "角落ち":"11l,21n,31s,41g,51k,61g,71s,81n,91l,82r,13p,23p,33p,43p,53p,63p,73p,83p,93p",
@@ -34,7 +34,7 @@ const handyCapArray:HandyCaptType={
     "右七枚落ち":"11l,21n,31s,41g,51k,61g,71s,81n,91l,22b,82r,13p,23p,33p,43p,53p,63p,73p,83p,93p", // not implemented. returns Hirate
     "八枚落ち":"41g,51k,61g,13p,23p,33p,43p,53p,63p,73p,83p,93p", //
     "十枚落ち":"51k,13p,23p,33p,43p,53p,63p,73p,83p,93p",
-    "その他":""
+    "その他":"" //send back empty string to force default
 }
 
 export const getSuperiorOnBoard= (line: string) =>

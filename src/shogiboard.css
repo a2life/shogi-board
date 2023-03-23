@@ -135,8 +135,12 @@ This will use 60% scaling.
     position: absolute;
     top: 5px;
     cursor: pointer;
-}
 
+}
+.text-highlight {
+    color:white;
+    background:darkgray;
+}
 .tsume .rG {
     top: -1000px;
     z-index: 500;

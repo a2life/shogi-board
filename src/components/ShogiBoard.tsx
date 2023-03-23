@@ -293,7 +293,7 @@ export const Board = (Props: {
             }
             {commentWindow && <div class="comment">{comment}</div>}
             <div class="save-flip-box">
-                <div class="flip-button-position" title='Flip board'
+                <div class={flipped?"flip-button-position text-highlight":"flip-button-position"} title='Flip board'
                      onClick={flipHandler}>&#x21c5;</div>
                 {!!kifu &&
                     <div title='download Kifu' class="save-button-position"

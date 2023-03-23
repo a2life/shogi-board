@@ -149,7 +149,7 @@ export class KifuParser {
         this.catalog = findMatch(catalogingPattern)
         this.timeAllowed = findMatch(timeAllowedPattern)
         this.timeSpent = findMatch(timeSpentPattern)
-        console.log('teai',this.teai)
+       // console.log('teai',this.teai)
         if (kifu.match(senteNamePattern) !== null) this.senteName = kifu.match(senteNamePattern)![1]
         else if (kifu.match(shimoteNamePattern) !== null) this.senteName = kifu.match(shimoteNamePattern)![1]
         if (kifu.match(goteNamePattern) !== null) this.goteName = kifu.match(goteNamePattern)![1]

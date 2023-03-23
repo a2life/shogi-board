@@ -11,7 +11,7 @@ import * as I from "./Icons";
 
 export const Board = (Props: {
     pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string,
-    flags: { commentWindow: boolean, HasBranch: boolean, showMarker: boolean, animate: boolean }, kifu: string | undefined,
+    flags: { commentWindow: boolean, HasBranch: boolean, showMarker: boolean, animate: boolean, flip:boolean }, kifu: string | undefined,
     senteName: string | undefined, goteName: string | undefined, markerAt: string
 }) => {
 
@@ -220,7 +220,7 @@ export const Board = (Props: {
 
     }
 
-    const [flipped, setFlipped] = useState(false);
+    const [flipped, setFlipped] = useState(flags.flip);
     const flipHandler = () => setFlipped(!flipped); //flip screen action
     return <div class="board-container">
         {(caption!.length > 0) && <div className="caption">{caption}</div>}

@@ -160,6 +160,7 @@ export class KifuParser {
 
         this.goteban = superiorOnBoard.length + kifu.search(gotebanPattern) + kifu.search(uwatePattern)  >= 0 ? 1 : 0
         //goteban is 1 if handycap game is specified or goteban or uwateban directive is specifically called out
+        // result of calculation area is -2 if no match and supeiroOnBoard="" so >=0 is correct operation.
         const KifuArray = kifu.split('\n');
         const i = this.findLine(boardMarker, KifuArray)
         // console.log('i=', i)
@@ -337,6 +338,7 @@ export class KifuParser {
             goteName: this.goteName,
             moves: this.moves,
             teai: this.teai,
+            flip: this.boardFlip,
             startDate: this.startDate,
             endData: this.endDate,
             eventName: this.event,

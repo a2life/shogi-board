@@ -22,6 +22,8 @@ export interface ShogiKit {
     animate:boolean;
     smooth?:boolean;
 
+    flip: boolean;
+
 
 }
 
@@ -42,6 +44,7 @@ export const defaultParams: ShogiKit = {
     tesuu: 1,
     showMarker:false,
     animate:true,
+    flip:false
 
 
 

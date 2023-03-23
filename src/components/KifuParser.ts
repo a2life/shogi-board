@@ -141,7 +141,9 @@ export class KifuParser {
         this.startDate = findMatch(startDatePattern)
         this.endDate = findMatch(endDatePattern)
         this.teai = findMatch(teaiPattern)
-        this.gOnBoard = getSuperiorOnBoard(this.teai); //overwrite gOnBoard in case teai exists.
+        const superiorOnBoard = getSuperiorOnBoard(this.teai);
+        if (superiorOnBoard.length>0)this.gOnBoard=superiorOnBoard;//overwrite gOnBoard in case teai exits.
+
         this.event = findMatch(eventPattern)
         this.location = findMatch(locationPattern)
         this.catalog = findMatch(catalogingPattern)
@@ -155,7 +157,9 @@ export class KifuParser {
 
 
         this.boardFlip = (kifu.search(boardFlipPattern) >= 0)
-        this.goteban = kifu.search(gotebanPattern) + kifu.search(uwatePattern)  >= 0 ? 1 : 0
+
+        this.goteban = superiorOnBoard.length + kifu.search(gotebanPattern) + kifu.search(uwatePattern)  >= 0 ? 1 : 0
+        //goteban is 1 if handycap game is specified or goteban or uwateban directive is specifically called out
         const KifuArray = kifu.split('\n');
         const i = this.findLine(boardMarker, KifuArray)
         // console.log('i=', i)

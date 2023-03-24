@@ -1,17 +1,21 @@
 /**
- * data provider for image set locations
+ * data provider of image set locations
  */
 
- export const imgRoot = '/assets/img/'
+export const imgRoot = '/assets/img/'
 
 const banImageArray=[
     "ban_dirty.png", //option 0
     "ban_gohan.png",
     "ban_kaya_a.png",
     "ban_kaya_b.png",
+    "ban_kaya_c.png",
+    "ban_kaya_d.png",
     "ban_muji.png",
     "ban_oritatami.png",
-    "ban_stripe.png" //option 6
+    "ban_paper.png",
+    "ban_paper_y.png",
+    "ban_stripe.png" //option 10
 ]
 
 const masu_array = [

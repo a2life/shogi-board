@@ -41,7 +41,7 @@ then
 <li style="text-decoration: line-through;">'Save' button for downloading kif</li>
 <li style="text-decoration: line-through;">Tweak display to show 'Sente' and 'Gote' names</li>
  <li style="text-decoration: line-through;">Initial Move count to start showing the board in the middle of the game</li>
-<li>Handy-cap setup</li>
+<li style="text-decoration: line-through;">Handy-cap setup</li>
 <li style="text-decoration: line-through;">Find area to display players' names</li>
 </ol>
 
@@ -100,19 +100,25 @@ to create a board, place div element with board-app class, like so
 
     <div class='board-app'></div>
 
+This will show shogiboard with 'normal' size.
+
+    <div class='board-app large'></div>
+
+This will show shogiboard with 'large' size.
+
 Then attach the Javascript snippet with the array object with name 'initialSetup__ts81'.
 
 This variable name 'initialSetup_ts81'is hard coded in index.js as declared global variable. this array need to be stuffed with Shogi data
 
  
-<code>
-&lt;script&gt;
-const initialSetup__ts81=[
-    { ...object literal...}
+
+    <script>
+        const initialSetup__ts81=[
+            { ...object literal...}
       ]
-&lt/script&gt;
+    </script>
     
-</code>
+
 
 You may add multiple object literal in the initialSetup__ts81 array. Just add matching number of divs with board-app class name.
 
@@ -172,9 +178,10 @@ parameters--
 - showMarker:boolean. When set to true, it turns on marker indicator to show the last move.
 - markerAt: string Indicating the initial grid position that will be highlighted. default is "out of the way", ex., "24" for position ２四 for the initial display. Afterwards, showMarker behavior takes over. ShowMarker flag need to be set to true.
 - moves : data representing piece moves. ex. "s-2627","g-8687","s-2526","g-8586" (this represents ２六歩、８四歩、２五歩、８五歩).
-- kifu: The program can read kakinoki style kifu notation. If this string is provided, it will take precedence over other individual parameters (such as move)
-- Currently the parser does not support handicap games.
+- kifu: The program can read kakinoki style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (such as move)
 - startup and tesuu: Those two are the same. the board will advance its move to asigned move number. Allows board to start from middle of the game. if both are defined, then 'startAt' takes precedence.
+- animate or smooth: set to true by default. pieces will glide and board will rotate when flip is specified.
+- flip: rotate board 180 degree.
 
 Moves, along with *onHand and *onBoard parameter can be used to do quick construction of shogiboard without the use of kifu source 
 
@@ -249,20 +256,28 @@ Branch is supported in the following way. (Use array of string rather than strin
     "kifstr=7",
     "x"
 
-In the above example, when move reaches the third move (J3), list box will be created and the user is presented with a choice with labelA1 and Label A2. If he choses label A1, then make a move, the user will then presented with the list box with choise of LabelB1 and Label B2.
+In the above example, when move reaches the third move (J3),
+list box will be created and the user is presented with
+a choice with labelA1 and Label A2. If the user chooses label A1,
+then make a move, the user will then be presented with the list
+box with choices of LabelB1 and Label B2.
 
-This manual method will quickly become old. 
+This manual method is will quickly become tiresome. 
 Therefore, a most likely scenario is to create kifu file using application 
 such as Kifu for windows and create Kifu file, then assign the output to
 kifu=`` variable. 
 
-Storing of  this kifu file can be statically embedded in javascript file
-like this demo but of course those Kifu files can be stored in the 
+Storing of  this kifu file can be statically embedded in
+javascript file like this demo but of course 
+those Kifu files can be stored in the 
 web server and then have server side script 
 (PHP based, NodeJs based, etc.,) to create a initialSetup object and
 serve from the server.
 
-(note) When supplying the kifu from the server, kifu will be surrounded by back tick (`) as a string literals .Care should be taken to escape back slash as string literal will not process it as a combination of next character.
+(note) When supplying the kifu from the server,
+kifu will be surrounded by back tick (`) as a string literals. 
+Care should be taken to escape each backslash so that string literal
+will not process it as a combination of next character.
 
 
 

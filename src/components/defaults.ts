@@ -24,6 +24,11 @@ export interface ShogiKit {
 
     flip: boolean;
 
+    koma?:number;
+    grid?:number;
+    marker?:number;
+    ban?:number;
+
 
 }
 

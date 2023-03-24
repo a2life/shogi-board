@@ -12,7 +12,8 @@ import * as I from "./Icons";
 export const Board = (Props: {
     pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string,
     flags: { commentWindow: boolean, HasBranch: boolean, showMarker: boolean, animate: boolean, flip:boolean }, kifu: string | undefined,
-    senteName: string | undefined, goteName: string | undefined, markerAt: string
+    senteName: string | undefined, goteName: string | undefined, markerAt: string,
+    graphics:{koma:string,ban:string,grid:string,marker:string}
 }) => {
 
     let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu, markerAt} = Props
@@ -240,10 +241,10 @@ export const Board = (Props: {
                 </div>
 
                 <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
-                    <RenderBoard/>
-                    {showMarker && <MarkerAt c={markerPosition[0]} r={markerPosition[1]}/>}
+                    <RenderBoard ban={Props.graphics.ban} grid={Props.graphics.grid}/>
+                    {showMarker && <MarkerAt c={markerPosition[0]} r={markerPosition[1]} marker={Props.graphics.marker}/>}
 
-                    {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={previousAct} animate={animate}/>))}
+                    {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={previousAct} animate={animate} koma={Props.graphics.koma}/>))}
                 </div>
                 <div class="row-on-hand">
                     {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&

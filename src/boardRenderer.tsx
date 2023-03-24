@@ -2,10 +2,30 @@ import {Board} from "./components/ShogiBoard";
 import {defaultParams, ShogiKit} from "./components/defaults";
 import {unifyPieces, preProcessMoves, prepBranchPoints, extractComments, lineBreakComments} from "./components/utils";
 import {KifuParser} from "./components/KifuParser";
+import {boardImageSet, DataSet, imgRoot} from "./components/SetImageSelection";
 
 export function BoardRenderer(prop: { setup: ShogiKit,index:number }) {
     let dataPack={}// stuff datapack in case kifu is available
     let propTranslate:{tesuu?:number,animate?:boolean} ={} //prop conversion
+    const propKeys=Object.keys(prop)  //get keys and find if koma, ban, grid or focus image option is set.
+    // need to write a object to filter boardImageSet parameters
+    let graphicsOptions ={} as DataSet;
+    if ('koma' in prop.setup){
+        graphicsOptions.koma=prop.setup.koma
+    }
+    if ('ban' in prop.setup){
+        graphicsOptions.ban=prop.setup.ban
+    }
+    if ('grid' in prop.setup){
+        graphicsOptions.grid=prop.setup.grid
+    }
+    if ('marker' in prop.setup){
+        graphicsOptions.marker=prop.setup.marker
+    }
+
+    // --- here, do somethign to build options
+    const {koma,ban,grid,marker} = boardImageSet(graphicsOptions) // get all reference to images path. OK if its empty object
+
     if ('startAt' in prop.setup){   // take startAt as tesuu
         propTranslate.tesuu =prop.setup.startAt;
     }
@@ -40,5 +60,5 @@ export function BoardRenderer(prop: { setup: ShogiKit,index:number }) {
     const HasBranch:boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
     return <Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
                   initialComment={initialComment} tesuu={tesuu || 0} flags={{commentWindow,HasBranch,showMarker,animate,flip}} kifu={kifu}
-            senteName={senteName} goteName={goteName} markerAt={markerAt}/>
+            senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma,ban,grid,marker}}/>
 }

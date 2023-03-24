@@ -2,45 +2,36 @@ const pngNames = ['fu', 'to', 'kyo', 'nkyo', 'kei', 'nkei', 'gin', 'ngin', 'kin'
 const codeNames = 'pPlLnNsSgbBrRk' //code representation of each shogi piece
 
 
-const imgRoot = '/assets/img/'
-const banImage = imgRoot + "ban/ban_kaya_a.png"
-const gridImage = imgRoot + 'masu/masu_dot_xy.png'
-const markerImg = imgRoot + 'focus/focus_trpt_g.png'
-const komaSelection = 'koma_ryoko_1'
-
-
-
 /**
  *
  * @param prop  {piece:string} is   spcr,  side, piece, column, row. for example, 'g82r', 'g93p',
  * 'gpGp' for Gote, column position pawn, row position Gote(onHand area), and piece is pwn
  * @constructor
  */
-export const RenderPiece=(prop:{piece:string,mover:string,animate:boolean})=>{
+export const RenderPiece=(prop:{piece:string,mover:string,animate:boolean ,koma:string})=>{
    //side need to be capital
-    const piece=prop.piece
-    const inPlay=prop.mover
-    const animate=prop.animate
-
+    const {piece, mover:inPlay, animate,koma}=prop
     const pngName = piece[0].toUpperCase()+pngNames[codeNames.indexOf(piece[3])]
     const animateClass=(animate)?' animate-move':'';
     const moveClass=(inPlay===piece.slice(1,3))?' onMove':'';
     const classes = `koma c${piece[1]} r${piece[2]}${moveClass}${animateClass}`
-    const pieceImage = `/assets/img/koma/${komaSelection}/${pngName}.png`
+
+
+    const pieceImage = `${koma}/${pngName}.png`
     return <img src={pieceImage} class={classes} alt=""/>
 }
 
-export const RenderBoard=()=>(
+export const RenderBoard=(Props:{ban:string,grid:string})=>(
     <>
-        <img class="board" src={banImage}
+        <img class="board" src={Props.ban}
              alt=""/>
-        <img class="board" src={gridImage}
+        <img class="board" src={Props.grid}
              alt=""/>
 
     </>
 )
 
-export const MarkerAt = (Props: { c: string, r: string }) => {
+export const MarkerAt = (Props: { c: string, r: string, marker:string }) => {
     const classes = `marker c${Props.c} r${Props.r}`
-    return (<img class={classes} src={markerImg} alt=""/>)
+    return (<img class={classes} src={Props.marker} alt=""/>)
 }

@@ -5,13 +5,13 @@
  export const imgRoot = '/assets/img/'
 
 const banImageArray=[
-    "ban_dirty.png",
+    "ban_dirty.png", //option 0
     "ban_gohan.png",
     "ban_kaya_a.png",
     "ban_kaya_b.png",
     "ban_muji.png",
     "ban_oritatami.png",
-    "ban_stripe.png"
+    "ban_stripe.png" //option 6
 ]
 
 const masu_array = [
@@ -23,14 +23,20 @@ const masu_array = [
 ]
 
 const focus_array =[
-    "focus_thin_b.png",
+    "focus_thin_b.png", //option 0
     "focus_thin_g.png",
     "focus_thin_r.png",
     "focus_thin_y.png",
     "focus_trpt_b.png",
     "focus_trpt_g.png",
     "focus_trpt_r.png",
-    "focus_trpt_y.png"
+    "focus_trpt_y.png",
+    "focus_bold_b.png",
+    "focus_bold_g.png",
+    "focus_bold_o.png",
+    "focus_bold_r.png",
+    "focus_bold_y.png",
+    "focus_handwriting.png" //option 13
 ]
 const komaSetArray = [
     'koma_dirty',  //option 0

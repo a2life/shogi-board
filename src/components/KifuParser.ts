@@ -128,7 +128,9 @@ export class KifuParser {
         this.kifu = kifu
         let headerPart=kifu  //in case there is no moves part
         if (kifu.includes(headerPattern)) { //header part exists, so
-            headerPart=kifu.slice(0,kifu.search(headerPattern)) //limit header part up to headerPattern
+            headerPart=kifu.slice(0,kifu.search(headerPattern)+1) //limit header part up to headerPattern
+            // +1 to backup linebreak. Otherwise, the last line will not have carriage return and will not
+            //match with goteName pattern, which is usually the last attribute before header pattern
         }
         this.parseData(headerPart)
         this.parseMoves(kifu)

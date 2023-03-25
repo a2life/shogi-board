@@ -16,6 +16,7 @@ export interface ShogiKit {
     tesuu?: number;
     startAt?:number;
     kifu?:string;
+    file?:string;
     senteName?:string;
     goteName?:string;
     showMarker:boolean;

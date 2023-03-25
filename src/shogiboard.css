@@ -365,31 +365,31 @@ This will use 60% scaling.
     left: 322px;
 }
 
-.large .c3, .c-r, .cr {
+.large .c3, .large .c-r, .large .cr {
     left: 279px;
 }
 
-.large .c4, .c-b, .cb {
+.large .c4,.large .c-b,.large .cb {
     left: 236px;
 }
 
-.large .c5, .c-g, .cg {
+.large .c5, .large .c-g,.large .cg {
     left: 193px;
 }
 
-.large .c6, .c-s,  .cs {
+.large .c6, .large .c-s, .large .cs {
     left: 150px;
 }
 
-.large .c7, .c-n, .cn {
+.large .c7, .large .c-n, .large .cn {
     left: 107px;
 }
 
-.large .c8, .c-l, .cl {
+.large .c8, .large .c-l, .large .cl {
     left: 64px;
 }
 
-.large .c9, .c-p, .cp {
+.large .c9, .large .c-p, .large .cp {
     left: 21px;
 }
 

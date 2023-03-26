@@ -2,9 +2,13 @@
 export interface ShogiKit {
 
     senteOnBoard: string
+    sOnBoard?: string  // legacy. will be converted to senteOnHand
     goteOnBoard: string
+    gOnBoard?: string;
     senteOnHand: string
+    sOnHand?:string
     goteOnHand: string
+    gOnHand?:string;
     markerAt: string
     pieceSetSelection?: string
     gridStyleSelection?: string
@@ -12,6 +16,7 @@ export interface ShogiKit {
     focusImageSelection?: string
     caption?: string
     initialComment?: string;
+    comment?:string // legacy, will be interpreted as initialComment
     moves?: string[]|string;
     tesuu?: number;
     startAt?:number;

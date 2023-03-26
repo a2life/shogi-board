@@ -100,7 +100,7 @@ const timeSpentPattern = /消費時間：([^\n]*)[\r\n$]/
 const eventPattern = /棋戦：([^\n]*)[\r\n$]/
 const catalogingPattern = /戦型：([^\n]*)[\r\n$]/
 const headerPattern = '\n手数----指手';
-const movesPattern = /(\d+)\s+([\d\w+]+)(?:\((\d+)\))?[ /():0-9]*(J?)(\*?[^\n]*)|変化：([\w]+)|.*/ //move line here is already processed with lookups
+const movesPattern = /(\d+)\s+([\w+]+)(?:\((\d+)\))?[ /():0-9]*(J?)(\*?[^\n]*)|変化：(\w+)|.*/ //move line here is already processed with lookups
 const moveName = /\d+\s+([\S　]*)[(\s]/ //this regex applied to original move line with Kanji.
 
 export class KifuParser {
@@ -124,16 +124,19 @@ export class KifuParser {
     gOnBoard = "11l,21n,31s,41g,51k,61g,71s,81n,91l,22b,82r,13p,23p,33p,43p,53p,63p,73p,83p,93p";
     goteban = 0;
 
+
     constructor(kifu: string) {
         this.kifu = kifu
+        this.moves=[]
+
         let headerPart=kifu  //in case there is no moves part
         if (kifu.includes(headerPattern)) { //header part exists, so
             headerPart=kifu.slice(0,kifu.search(headerPattern)+1) //limit header part up to headerPattern
             // +1 to backup linebreak. Otherwise, the last line will not have carriage return and will not
             //match with goteName pattern, which is usually the last attribute before header pattern
+            this.parseMoves(kifu) // if header pattern exists, then moves part exsits.
         }
         this.parseData(headerPart)
-        this.parseMoves(kifu)
 
     }
 
@@ -296,7 +299,7 @@ export class KifuParser {
             })
             if (comment.length>0) this.moves=[comment,...this.moves]
         }
-
+            else this.moves=[' ']
     }
 
     findLine(target: string, scrArray: string[]) {
@@ -307,7 +310,7 @@ export class KifuParser {
      *  return expanted string array such as 'b,l,p,p,p'
      * @param onHand; onHand data such as "b,l,p3"
      */
-    parseRepeat(onHand: string) {
+    /*parseRepeat(onHand: string) {
 
         let hands = ""
         if (onHand.length === 0) return hands
@@ -322,26 +325,27 @@ export class KifuParser {
 
     }
 
-
+*/
     public parse() {
-
-
-        return {
+        let returnObject ={
             senteOnBoard: this.sOnBoard,
             goteOnBoard: this.gOnBoard,
             senteOnHand: this.sOnHand,
             goteOnHand: this.gOnHand,
             senteName: this.senteName,
             goteName: this.goteName,
-            moves: this.moves,
             teai: this.teai,
             flip: this.boardFlip,
-            startDate: this.startDate,
-            endData: this.endDate,
-            eventName: this.event,
-            catalog: this.catalog,
-            kifu: this.kifu
+     //       startDate: this.startDate,
+    //        endData: this.endDate,
+     //       eventName: this.event,
+     //       catalog: this.catalog,
+            kifu: this.kifu,
+
         }
+        if (this.moves.length>1) returnObject={...returnObject, ...{moves:this.moves}}
+
+        return  returnObject
     }
 }
 

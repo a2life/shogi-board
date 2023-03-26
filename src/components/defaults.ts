@@ -38,7 +38,7 @@ export const defaultParams: ShogiKit = {
     goteOnBoard: "11l,21n,31s,41g,51k,61g,71s,81n,91l,22b,82r,13p,23p,33p,43p,53p,63p,73p,83p,93p",
     senteOnHand: '',
     goteOnHand: '',
-    markerAt: '0,0',
+    markerAt: '00',
 
     pieceSetSelection: '',
     gridStyleSelection: 'masu/masu_dot_xy.png',
@@ -47,7 +47,7 @@ export const defaultParams: ShogiKit = {
     caption: '',
     initialComment: '',
     moves: [''],
-    tesuu: 1,
+    tesuu: 0,
     showMarker:false,
     animate:true,
     flip:false

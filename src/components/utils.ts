@@ -47,23 +47,26 @@ export const preProcessMoves = ((moves: string[] | string) => {
     } else {
         movesArray = moves
     }
-    movesArray = movesArray.map((e, index) => {
-        let t = e.trim()
-        if (t[2] && t[2].toLowerCase() === 'x') return 'x'
-        if (t.slice(2, 4) == '00') {
-            const prevMove = movesArray[index - 1];
-            if (prevMove[0] === 'C') {
-                // handling for branch head is to be implemented.
-            } else {
-                t.replace('00', prevMove.slice(2, 4))
+    if (movesArray.length>1) {
+        movesArray = movesArray.map((e, index) => {
+            let t = e.trim()
+            if (t[2] && t[2].toLowerCase() === 'x') return 'x'
+            if (t.slice(2, 4) == '00') {
+                const prevMove = movesArray[index - 1];
+                if (prevMove[0] === 'C') {
+                    // handling for branch head is to be implemented.
+                } else {
+                    t.replace('00', prevMove.slice(2, 4))
+                }
             }
+            return t
+        })
+        if (movesArray[0][0] === '*') { //if the first line is comment then,
+            lineZeroComment = movesArray[0]
+            //   console.log('initialComment', initialComment)
+            movesArray.splice(0, 1)
         }
-        return t
-    })
-    if (movesArray[0][0] === '*') { //if the first line is comment then,
-        lineZeroComment = movesArray[0]
-        //   console.log('initialComment', initialComment)
-        movesArray.splice(0, 1)
+
     }
 
     return {movesArray, lineZeroComment}
@@ -127,7 +130,7 @@ export const prepBranchPoints = (movesArray: string[]) => {
         } while (moveElements.groups!.branch === 'J')
         return Note
     })
-    //  set up branch node with index, so if counter is at index, looking up this array will returns branch options.
+    //  set up branch node with index, so if counter is at index, looking up this array will return branch options.
     //  like { index: [{index:index, movement:movement}, , ,]}
     let branchIndicators = {} as any
     NotesArray.forEach((branch: { note: string, index: number }[]) => {

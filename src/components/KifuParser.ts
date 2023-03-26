@@ -38,8 +38,8 @@ Pattern to be recognized
  */
 /*
 How do I implement bookmark?
-Bookmark starts at the very beginign of line, so it will be \n followed by & catch that,
-then tack it to the end of previous line with unique tag.  my choice.  how about &&&bookmarkname&&&
+Bookmark starts at the very beginning of line, so it will be \n followed by & catch that,
+then tack it to the end of previous line with unique tag.  my choice.  how about &&&bookMarkName&&&
 So in the meantime, I will change comment format to ***comment***
 */
 
@@ -132,9 +132,9 @@ export class KifuParser {
         let headerPart=kifu  //in case there is no moves part
         if (kifu.includes(headerPattern)) { //header part exists, so
             headerPart=kifu.slice(0,kifu.search(headerPattern)+1) //limit header part up to headerPattern
-            // +1 to backup linebreak. Otherwise, the last line will not have carriage return and will not
+            // +1 to back up linebreak. Otherwise, the last line will not have carriage return and will not
             //match with goteName pattern, which is usually the last attribute before header pattern
-            this.parseMoves(kifu) // if header pattern exists, then moves part exsits.
+            this.parseMoves(kifu) // if header pattern exists, then moves part exists.
         }
         this.parseData(headerPart)
 
@@ -169,8 +169,8 @@ export class KifuParser {
         this.boardFlip = (kifu.search(boardFlipPattern) >= 0)
 
         this.goteban = superiorOnBoard.length + kifu.search(gotebanPattern) + kifu.search(uwatePattern)  >= 0 ? 1 : 0
-        //goteban is 1 if handycap game is specified or goteban or uwateban directive is specifically called out
-        // result of calculation area is -2 if no match and supeiroOnBoard="" so >=0 is correct operation.
+        //goteban is 1 if handicap game is specified or goteban or uwateban directive is specifically called out
+        // result of calculation area is -2 if no match and superiorOnBoard="" so >=0 is correct operation.
         const KifuArray = kifu.split('\n');
         const i = this.findLine(boardMarker, KifuArray)
         // console.log('i=', i)
@@ -307,7 +307,7 @@ export class KifuParser {
     }
 
     /**
-     *  return expanted string array such as 'b,l,p,p,p'
+     *  return expanded string array such as 'b,l,p,p,p'
      * @param onHand; onHand data such as "b,l,p3"
      */
     /*parseRepeat(onHand: string) {

@@ -22,7 +22,9 @@ This will use 60% scaling.
 */
 
 
-
+.board-app {
+    margin: 15px 8px 0;
+}
 .board-container {
     display: grid;
     width: 309px;

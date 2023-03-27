@@ -34,7 +34,7 @@ export interface ShogiKit {
     grid?:number;
     marker?:number;
     ban?:number;
-
+    maskBranch:boolean;
 
 }
 
@@ -55,7 +55,8 @@ export const defaultParams: ShogiKit = {
     tesuu: 0,
     showMarker:false,
     animate:true,
-    flip:false
+    flip:false,
+    maskBranch:false //hide branch valid option at the start of dropdown
 
 
 

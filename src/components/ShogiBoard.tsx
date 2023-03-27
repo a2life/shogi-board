@@ -11,7 +11,7 @@ import * as I from "./Icons";
 
 export const Board = (Props: {
     pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string,
-    flags: { commentWindow: boolean, HasBranch: boolean, showMarker: boolean, animate: boolean, flip:boolean }, kifu: string | undefined,
+    flags: { commentWindow: boolean, HasBranch: boolean, showMarker: boolean, animate: boolean, flip:boolean, maskBranch:boolean }, kifu: string | undefined,
     senteName: string | undefined, goteName: string | undefined, markerAt: string,
     graphics:{koma:string,ban:string,grid:string,marker:string}
 }) => {
@@ -240,7 +240,7 @@ export const Board = (Props: {
 
                 </div>
 
-                <div class=" boardbase-grid" onClick={playOneMoveHandler} onContextMenu={moveBackHandler}>
+                <div class=" boardbase-grid" onClick={(!!Props.branchList[moveCounter] && Props.flags.maskBranch)?()=>{}:playOneMoveHandler  } onContextMenu={moveBackHandler}>
                     <RenderBoard ban={Props.graphics.ban} grid={Props.graphics.grid}/>
                     {showMarker && <MarkerAt c={markerPosition[0]} r={markerPosition[1]} marker={Props.graphics.marker}/>}
 
@@ -275,12 +275,12 @@ export const Board = (Props: {
                                 disabled={moveCounter === 0}>
                             <I.Back/></button>
                         <button class="btn btn-sm btn-outline-secondary" value="Play" onClick={playOneMoveHandler}
-                                disabled={endOfMoves(moveCounter)}>
+                                disabled={endOfMoves(moveCounter)|| !!Props.branchList[moveCounter] && Props.flags.maskBranch}>
                             <I.Play/></button>
                         {HasBranch &&
                             <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward"
                                     onClick={skipToNextBranchHandler}
-                                    disabled={endOfMoves(moveCounter)}>
+                                    disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && Props.flags.maskBranch}>
                                 <I.SkipForward/></button>}
                         <button class="btn btn-sm btn-outline-secondary" value="Skip-to-End" onClick={skipEndHandler}
                                 disabled={endOfMoves(moveCounter)}>
@@ -288,8 +288,8 @@ export const Board = (Props: {
 
                     </div>
                     {!!Props.branchList[moveCounter] &&
-                        <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]}
-                                      branchingHandler={branchingHandler}/>}
+                        <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]} nextMove={Props.flags.maskBranch}
+                                      branchingHandler={branchingHandler}/> }
                 </div>
             }
             {commentWindow && <div class="comment">{comment}</div>}

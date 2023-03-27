@@ -129,14 +129,14 @@ export class KifuParser {
         this.kifu = kifu
         this.moves=[]
 
-        let headerPart=kifu  //in case there is no moves part
         if (kifu.includes(headerPattern)) { //header part exists, so
-            headerPart=kifu.slice(0,kifu.search(headerPattern)+1) //limit header part up to headerPattern
+            const headerPart=kifu.slice(0,kifu.search(headerPattern)+1) //limit header part up to headerPattern
             // +1 to back up linebreak. Otherwise, the last line will not have carriage return and will not
             //match with goteName pattern, which is usually the last attribute before header pattern
+            this.parseData(headerPart)
             this.parseMoves(kifu) // if header pattern exists, then moves part exists.
         }
-        this.parseData(headerPart)
+        else   this.parseData(kifu) //kifu with no moves involved.
 
     }
 
@@ -169,6 +169,7 @@ export class KifuParser {
         this.boardFlip = (kifu.search(boardFlipPattern) >= 0)
 
         this.goteban = superiorOnBoard.length + kifu.search(gotebanPattern) + kifu.search(uwatePattern)  >= 0 ? 1 : 0
+        // console.log('goteban',this.goteban)
         //goteban is 1 if handicap game is specified or goteban or uwateban directive is specifically called out
         // result of calculation area is -2 if no match and superiorOnBoard="" so >=0 is correct operation.
         const KifuArray = kifu.split('\n');
@@ -278,6 +279,9 @@ export class KifuParser {
                 if (!!found![2]) {
                     const count = found![1]
                     const side = ((parseInt(found![1]) + this.goteban) % 2 === 1) ? 's' : 'g'
+                //   console.log(parseInt(found![1]))
+                //    console.log('this.goteban',this.goteban)
+                //    console.log('side', side);
                     const to = found![2].trim();
                     const from = (!!found![3]) ? found![3] : ""
                     const note = (!!found![4]) ? found![4] : "=" // note is "J" or "="

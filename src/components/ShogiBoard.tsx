@@ -288,7 +288,7 @@ export const Board = (Props: {
 
                     </div>
                     {!!Props.branchList[moveCounter] &&
-                        <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]} nextMove={Props.flags.maskBranch}
+                        <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]} maskBranch={Props.flags.maskBranch}
                                       branchingHandler={branchingHandler}/> }
                 </div>
             }

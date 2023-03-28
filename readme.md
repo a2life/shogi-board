@@ -170,20 +170,24 @@ Inside the program, the second object, which main part is a kifu file literal, w
 
 
 parameters--
-- mysteryMoves : (Currently Not implemented) When branch moves exists, then a dropdown list will be displayed at the branch point. It usually shows the default move.  if this parameter is set to 1, then the first selection shows "Select" and not actual move.
+- maskBranch :boolean.  When branch moves exists, then a dropdown list will be displayed at the branch
+point. It usually shows the default move.  if this parameter is set to 1, then the first selection shows
+"Next Move" and forces user to select move. when "next move" is displayed in the option window, forward button and tap 
+forward are also disabled.
 - sOnHand : string indicating on hand pieces for sente. default is none. ex. "l,l,p" (see below)
 - gOnHand : string indicating on hand pieces for gote. default is none ex. "l,l,p" (see below)
 - sOnBoard: string indicating on board pieces for sente. default is initial setup for sente for no handicap game. ex. "11l,21n,31s,41g,51k,13p,22b"
 - gOnBoard: string indicating on board pieces for sente. default is initial setup for gote for no handicap game. ex. "99l,28r"
-- showMarker:boolean. When set to true, it turns on marker indicator to show the last move.
+- showMarker:boolean When set to true, it turns on marker indicator to show the last move.
 - markerAt: string Indicating the initial grid position that will be highlighted. default is "out of the way", ex., "24" for position ２四 for the initial display. Afterwards, showMarker behavior takes over. ShowMarker flag need to be set to true.
-- moves : data representing piece moves. ex. "s-2627","g-8687","s-2526","g-8586" (this represents ２六歩、８四歩、２五歩、８五歩).
+- moves : string[], data representing piece moves. ex. ["s-2627","g-8687","s-2526","g-8586"] 
+(this represents ２六歩、８四歩、２五歩、８五歩).
 - kifu: The program can read kakinoki style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (such as move)
-- startup and tesuu: Those two are the same. the board will advance its move to asigned move number. Allows board to start from middle of the game. if both are defined, then 'startAt' takes precedence.
-- animate or smooth: set to true by default. pieces will glide and board will rotate when flip is specified.
-- flip: rotate board 180 degree.
+- startup and tesuu: number  Those two are the same. the board will advance its move to asigned move number. Allows board to start from middle of the game. if both are defined, then 'startAt' takes precedence.
+- animate or smooth: boolean Set to false by default. pieces will glide rather than abruptly jump.
+- flip: boolean default to false when set to true,  Rotate board 180 degree. 
 
-Moves, along with *onHand and *onBoard parameter can be used to do quick construction of shogiboard without the use of kifu source 
+Moves, along with onHand and onBoard parameter can be used to do quick construction of shogiboard without the use of kifu source 
 
 Moves do not need to alternate between hands. Usually the notation goes like below.
 
@@ -223,20 +227,22 @@ second character :  '-' to indicate normal move, '+' to indicate promotion, 'd' 
 
 third and fourth chars:  'move to" coordinate.  34 means 3d, 22 means 2b etc.,
 
-fith and six column : 'move from' coordinate for '-' and '+'. in case of 'd' then only fifthcolumn will be used as piece indicator
+fifth and six column : 'move from' coordinate for '-' and '+'. in case of 'd' then only fifthcolumn will be used as piece indicator
 
-example of move
+example of moves
 
+    [
      "s-7677",  : white move a piece from 77 to 76
      "g-3433",  : black moves a piece from 33 to 34
      "sd55g",   : black drops a gold to 5e.
      "g-3534*do you think this is cool?", : white moves a piece from 34 to 35. Comment windows displays"do you think this is cool?"
      s+2228  : piece at the 28 position is moved to 22 and then get promoted.
      "x"   : end of moves indicator
+    ]
 
-"x" by itself is a special character and denote end of moves.
+"x" by itself is a special character and denotes the end of moves.
 
-Branch is supported in the following way. (Use array of string rather than string. The app accepts both format)
+Branch is supported in the following way.
 
     "kifst=1",  //fisrt move 1
     "kifstr=2",// move 2

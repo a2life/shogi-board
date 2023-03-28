@@ -9,19 +9,24 @@
     <title>Vite BoardRenderer</title>
 </head>
 <body>
-
+<div class="display-5 p-5">Shogi board with Vite+PreAct. BootStrap optional</div>
 <div class="container">
     <div class="row">
-        <div class="col">
-            <div class="board-app"></div>
+
+            <div class="board-app col-lg-4 col-md-5 col-sm-8">3 move tsume problem. if this is included in board-app div, then this is where it will be printed</div>
+
+        <div class="col-lg-6 col-md-5 col-sm-4" >3 move tsume problem is rendered here. The moves and pieces are directly encoded in Jason so
+            there is no download button for kifu, as the kifu record does not exist.  using bootstrap row and col arrangement here
         </div>
-        <div class="col">
-            <div class="board-app"></div>
+
+            <div class="board-app col-4 ">static board, drawn from kifu</div>
+
+        <div class="col col-3"><p>This is html to exercise ts shogiboard app. As you can see, the app can
+            render multiple shogiboard on one page.
+        </p>
+            <p>variety of parameters are available.</p>
         </div>
-        <div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At consectetur, eveniet in
-            molestias nam nisi obcaecati, odio officia officiis omnis possimus quas reiciendis voluptas! Enim est eum
-            pariatur quae reiciendis.</p></div>
-        <div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias cumque eaque ipsam non
+        <div ><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias cumque eaque ipsam non
             obcaecati quos sed temporibus vitae! Ab ducimus error modi nulla numquam perferendis, quae soluta? Id,
             libero, maxime!</p></div>
     </div>
@@ -33,7 +38,7 @@
             <div class="board-app large"></div>
         </div>
     </div>
-    <div class="display-5 p-5">Shogi board with Vite+PreAct. BootStrap optional</div>
+
     <div style="position:relative">
 
         <div class="ms-5">
@@ -67,12 +72,13 @@
         laborum magnam minus officia optio praesentium recusandae reprehenderit repudiandae, rerum similique tempora
         tempore voluptatum!</p>
 
-    <div id="4" class="board-app float-start m-4"></div>
-    <div id="5" class="board-app float-start m-4"></div>
-    <div id="6" class="board-app large float-start m-4"></div>
-    <div id="7" class="board-app float-start m-4"></div>
-    <div id="8" class="board-app float-start m-4"></div>
-    <div id="9" class="board-app float-start m-4"></div>
+    <div id="4" class="board-app float-start"></div>
+    <div id="5" class="board-app float-start"></div>
+    <div id="6" class="board-app large float-start"></div>
+    <div id="7" class="board-app float-start"></div>
+    <div id="8" class="board-app float-start"></div>
+    <div id="9" class="board-app float-start"></div>
+    <div id="10" class="board-app float-start"></div>
     <!--div id="7" class="board-app float-start m-4"></div-->
 
 </div>
@@ -81,14 +87,14 @@
 <script type="module" src="/src/main.tsx"></script>
 <script>
     const initialSetup__ts81 = [
-        {
+        { caption:"One",
     sOnBoard:`21r,24p`,
     gOnBoard:`12k,13p,22s`,
     sOnHand:`g`,
     moves:["sd11g","g-0022","s+2321","x"]
     },
         {
-            caption:"static board",
+            caption:"Two, static board",
             kifu:`後手の持駒：なし
   ９ ８ ７ ６ ５ ４ ３ ２ １
 +---------------------------+
@@ -106,7 +112,7 @@
 `
         },
         {
-          caption:"HandyCap game",
+          caption:"Three HandyCap game",
             showMarker:true,
            koma:`0`,
           kifu:`
@@ -162,7 +168,7 @@
 
 `
         },
-        {   caption:"Hello world",
+        {   caption:"Four, Hello world",
             grid:'2', ban:'9',koma:'0',
             showMarker:true,
             kifu:`#KIF version=2.0 encoding=UTF-8
@@ -206,7 +212,7 @@
 *Knowning this single drop of Pawn at the head of King get you a lot of mileage.
 `
         },
-        {
+        {  caption:"five",
             initialComment: `Single strike of pawn on gold's head`,
             maskBranch:true,
             kifu: `#KIF version=2.0 encoding=UTF-8
@@ -260,7 +266,7 @@
 
 `
         },
-        {
+        {   caption:"6",
             initialComment:`Initial comment`,
             kifu: `# ----  Kifu for Windows V7 V7.44 棋譜ファイル  ----
 開始日時：2023/03/17 10:09:10
@@ -291,7 +297,7 @@
         },
 
         {
-            caption: "focal point",
+            caption: "seven, focal point",
             kifu: `# --- Kifu for Windows V6.44 棋譜ファイル ---
 開始日時：2008/06/09(月) 21:47:36
 手合割：平手　　
@@ -348,7 +354,7 @@
 `
         },
         {
-            caption: "The latest Yagura 3g silver -矢倉３七銀2012年最新型",
+            caption: "Eight, The latest Yagura 3g silver -矢倉３七銀2012年最新型",
             initialComment: "The program can show branch moves when available.Main course follows the actual game played by Hirose and Watanabe" +
                 "on October 2012.",
             moves: [
@@ -651,7 +657,7 @@
                 "x"
             ]
         },
-        {
+        {  caption:"Nine",
             kifu:
                 `# ----  Kifu for Windows V6.23 棋譜ファイル  ----
 開始日時：June 13, 2008
@@ -861,7 +867,7 @@
 `
         },
 
-        {
+        {  caption:"Ten",
             kifu: `
       # --- Kifu for Windows V6.54 棋譜ファイル ---
 開始日時：2008/06/02(月) 22:06:10
@@ -908,7 +914,7 @@
 まで13手で中断
 `
         },
-        {
+        {   caption:"Eleven",
             initialComment: 'pawn pawn',
             smooth: false,
             kifu: `#KIF version=2.0 encoding=UTF-8,
@@ -946,7 +952,7 @@
    7 ５五飛(25)   ( 0:02/00:00:02)`
         }
         ,
-        {caption: 'Initial board'},
+        {caption: 'Twelve, Initial board'},
 
 
     ]

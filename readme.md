@@ -37,15 +37,7 @@ then
 <code>npm run serve </code> to server built project
 
 ### todos
-<ol>
-<li style="text-decoration: line-through;">'Save' button for downloading kif</li>
-<li style="text-decoration: line-through;">Tweak display to show 'Sente' and 'Gote' names</li>
- <li style="text-decoration: line-through;">Initial Move count to start showing the board in the middle of the game</li>
-<li style="text-decoration: line-through;">Handy-cap setup</li>
-<li style="text-decoration: line-through;">Find area to display players' names</li>
-</ol>
-
-
+- add file parameter to fetch kifu file. Current setup requires shogi data is already avaialble in loaded javascript object array and javascript requesting file upload will delay program startup. This will introduce async operation and I currently have zero use case for this, so just maybe.
 
 ## Guide
 

@@ -11,6 +11,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
         senteOnBoard?: string, senteOnHand?: string,
         goteOnBoard?: string, goteOnHand?: string,
         initialComment?:string
+        showMarker?:boolean
     } = {} //prop conversion
     const propKeys = Object.keys(prop)  //get keys and find if koma, ban, grid or focus image option is set.
     // need to write a object to filter boardImageSet parameters
@@ -37,7 +38,8 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     if ('sOnHand' in prop.setup) propTranslate.senteOnHand = prop.setup.sOnHand;
     if ('gOnBoard' in prop.setup) propTranslate.goteOnBoard= prop.setup.gOnBoard;
     if('gOnHand' in prop.setup) propTranslate.goteOnHand=prop.setup.gOnHand;
-    if('comment' in prop.setup) propTranslate.initialComment=prop.setup.comment
+    if('comment' in prop.setup) propTranslate.initialComment=prop.setup.comment;
+    if('markerAt' in prop.setup) propTranslate.showMarker=true;
 
 
     if (!!prop.setup.kifu) {

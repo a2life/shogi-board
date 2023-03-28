@@ -1,16 +1,12 @@
 # Shogi board using Typescript with viteJS and Preact
 
-### work in progress
 ## The program reads data input(s) and render shogiboard(s) and mimic piece moves on web page.
-#### Displays shogiboard and pieces with Initial arrangement and moves information written in JavaScript literals.
+#### Displays shogiboard and pieces with Initial arrangement and moves information that is written in JavaScript literals.
 #### This is a rewrite of modx/PHP/JS projects from 2012 using TypeScript (ie., 100% client side solution.) - original project is https://github.com/a2life/Web_shogiboard
 
 Initial development period: June 2021 - August 2021
 Finishing up -   March 2023
 
-State of the coding is 'Beta release'.  Initial functionality has been confirmed. However, there maybe 'edge' case that the code may still have issues.
-
-I have not exercised enough use case to fully validate the code. 
 
 Page demo running can be seen  <a href='https://shogishack.net/annex/js-shogi-board.html'>in this link </a>.
 
@@ -22,27 +18,26 @@ To get started, clone repository and then do
 then
 
 <code>npm run dev</code>  to run dev server
- - This will run the project with demo page. It is currently configured to show four shogi-boards. 
- - First one is a simple three move tsume. It shows the last move with the marker highlighting the last move. Note forward and back buttons for replay.  click on the board will also advance the move. Right click to move back.
- - Second board shows simple hisshi program. source is in kifu format  and embedded in 'initialSetup' object array.
- - Third board shows piece moves with some branching. Parameters used here are pre-compiled by PHP based web server and placed as javascript object.
- - Fourth board is created from Kakinoki-style kifu list, that is embeded as a JavaScript variable.
- - Data to render those boards are in JavaScript section of index.html,  contained in 'initialSetup' array.
- - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago, but still missing features from old project. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
+ - This will run the project with demo page. It is currently configured to show multiple shogi-boards with different configuration. 
+ - Data to render those boards are in JavaScript section of index.html,  contained in object array with globally declared variable name of 'initialSetup_ts81'.
+ - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago, but missing file fetching option. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
  - The previous project relied on modx CMS as a framework. This new setup do not rely on specific CMS. Only thing required will be for the hosting side to provide shogi data in Javascript array.
 
 
-<code>npm run build </code> to build project
+<code>npm run build </code> to build project with example index.html
 
 <code>npm run serve </code> to server built project
 
 ### todos
-- add file parameter to fetch kifu file. Current setup requires shogi data is already avaialble in loaded javascript object array and javascript requesting file upload will delay program startup. This will introduce async operation and I currently have zero use case for this, so just maybe.
+- To add file parameter to fetch kifu file. Current setup requires shogi data is already avaialble in loaded javascript object array.
+Javascript to request file upload then render it after the data receipt is a different animal.This will introduce async operation and I currently have
+zero use case for this scenario,  so just maybe.
+- BookMarking:  Kif format document specifies & as 'bookmark' token. I have not seen this used in any kifu that I have encountered but this will be very useful to bookmark any points in branched move. current 'startAt' parameter will only work in main branch position.
 
 ## Guide
 
 This is a TypeScript / Preact  project with vitejs as a bundler to display shogiboard on webpages. 
-Intended usage is to display shogiboard for explaining shogi piece movement and stragety.
+Intended usage is to display shogiboard for explaining game of shogi piece movement and stragety.
 
 This application is not intended to be used to play shogi. The purpose of this application is to display recorded Shogi movements.
 <ol>
@@ -166,16 +161,16 @@ parameters--
 point. It usually shows the default move.  if this parameter is set to true, then the first selection shows
 "Next Move" and forces user to select move. when "next move" is displayed in the option window, forward button and tap 
 forward are also disabled.
-- sOnHand : string indicating on hand pieces for sente. default is none. ex. "l,l,p" (see below)
-- gOnHand : string indicating on hand pieces for gote. default is none ex. "l,l,p" (see below)
-- sOnBoard: string indicating on board pieces for sente. default is initial setup for sente for no handicap game. ex. "11l,21n,31s,41g,51k,13p,22b"
-- gOnBoard: string indicating on board pieces for sente. default is initial setup for gote for no handicap game. ex. "99l,28r"
-- showMarker:boolean When set to true, it turns on marker indicator to show the last move.
-- markerAt: string Indicating the initial grid position that will be highlighted. default is "out of the way", ex., "24" for position ２四 for the initial display. Afterwards, showMarker behavior takes over. If this parameter exists, then ShowMarker flag will be also set to true.
+- sOnHand or senteOnHand : string indicating on hand pieces for sente. default is none. ex. "l,l,p" (see below)
+- gOnHand or goteOnHand: string indicating on hand pieces for gote. default is none ex. "l,l,p" (see below)
+- sOnBoard or senteOnBoard: string indicating on board pieces for sente. default is initial setup for sente for no handicap game. ex. "11l,21n,31s,41g,51k,13p,22b"
+- gOnBoard or goteOnBoard: string indicating on board pieces for sente. default is initial setup for gote for no handicap game. ex. "99l,28r"
+- showMarker:boolean When set to true, it turns on marker indicator to show the last move. When markerAt is set, showMarker will be automatically set to true.
+- markerAt: string Indicating the initial grid position that will be highlighted. default is 00 position which is "out of the way".  ex., "24" for position ２四 for the initial display. Afterwards, showMarker behavior takes over. If this parameter exists, then ShowMarker flag will be also set to true.
 - moves : string[], data representing piece moves. ex. ["s-2627","g-8687","s-2526","g-8586"] 
 (this represents ２六歩、８四歩、２五歩、８五歩).
-- kifu: The program can read kakinoki style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (such as move)
-- startup and tesuu: number  Those two are the same. the board will advance its move to asigned move number. Allows board to start from middle of the game. if both are defined, then 'startAt' takes precedence.
+- kifu: The program can read kakinoki style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (moves, sOnHand,gOnHand,gOnBoard,sOnBoard)
+- startup and tesuu: number  Those two are the same. the board will advance its move to asigned move number. Allows board to start from middle of the game record. if both are defined, then 'startAt' takes precedence.
 - animate or smooth: boolean Set to false by default. pieces will glide rather than abruptly jump.
 - flip: boolean default to false when set to true,  Rotate board 180 degree. 
 
@@ -273,7 +268,7 @@ web server and then have server side script
 serve from the server.
 
 (note) When supplying the kifu from the server,
-kifu will be surrounded by back tick (`) as a string literals. 
+kifu will be surrounded by back tick (`) as a string literals in JavaScript. 
 Care should be taken to escape each backslash so that string literal
 will not process it as a combination of next character and make kifu information not properly parsed.
 

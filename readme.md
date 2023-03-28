@@ -21,7 +21,7 @@ then
  - This will run the project with demo page. It is currently configured to show multiple shogi-boards with different configuration. 
  - Data to render those boards are in JavaScript section of index.html,  contained in object array with globally declared variable name of 'initialSetup_ts81'.
  - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago, but missing file fetching option. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
- - The previous project relied on modx CMS as a framework. This new setup do not rely on specific CMS. Only thing required will be for the hosting side to provide shogi data in Javascript array.
+ - The previous project relied on modx CMS as a framework. This new setup does not rely on specific CMS. Only thing required will be for the hosting side to provide shogi data in Javascript array.
 
 
 <code>npm run build </code> to build project with example index.html
@@ -29,7 +29,7 @@ then
 <code>npm run serve </code> to server built project
 
 ### todos
-- To add file parameter to fetch kifu file. Current setup requires shogi data is already avaialble in loaded javascript object array.
+- To add file parameter to fetch kifu file. The current setup requires shogi data is already avaialble in loaded javascript object array.
 Javascript to request file upload then render it after the data receipt is a different animal.This will introduce async operation and I currently have
 zero use case for this scenario,  so just maybe.
 - BookMarking:  Kif format document specifies & as 'bookmark' token. I have not seen this used in any kifu that I have encountered but this will be very useful to bookmark any points in branched move. current 'startAt' parameter will only work in main branch position.

@@ -75,7 +75,7 @@ const lookupList = [
     {key: "d", pat: /打/},
     {key: "J", pat: /\+/},
     {key: "+", pat: /成/},
-    {key: "x", pat: /(投了|中断)/},
+    {key: "x", pat: /(投了|中断|詰み|不詰|持将棋|千日手|反則勝ち|反則負け|入玉勝ち)/},
     {key: " ", pat: /　/g} //replace zenkaku space with hankaku space
 
 ]
@@ -99,7 +99,7 @@ const timeAllowedPattern = /持ち時間：([^\n]*)[\r\n$]/
 const timeSpentPattern = /消費時間：([^\n]*)[\r\n$]/
 const eventPattern = /棋戦：([^\n]*)[\r\n$]/
 const catalogingPattern = /戦型：([^\n]*)[\r\n$]/
-const headerPattern = '\n手数----指手';
+const movesHeaderPattern = '\n手数----指手';
 const movesPattern = /(\d+)\s+([\w+]+)(?:\((\d+)\))?[ /():0-9]*(J?)(\*?[^\n]*)|変化：(\w+)|.*/ //move line here is already processed with lookups
 const moveName = /\d+\s+([\S　]*)[(\s]/ //this regex applied to original move line with Kanji.
 
@@ -129,8 +129,8 @@ export class KifuParser {
         this.kifu = kifu
         this.moves=[]
 
-        if (kifu.includes(headerPattern)) { //header part exists, so
-            const headerPart=kifu.slice(0,kifu.search(headerPattern)+1) //limit header part up to headerPattern
+        if (kifu.includes(movesHeaderPattern)) { //header part exists, so
+            const headerPart=kifu.slice(0,kifu.search(movesHeaderPattern)+1) //limit header part up to headerPattern
             // +1 to back up linebreak. Otherwise, the last line will not have carriage return and will not
             //match with goteName pattern, which is usually the last attribute before header pattern
             this.parseData(headerPart)
@@ -245,8 +245,8 @@ export class KifuParser {
     }
 
     parseMoves(kifu: string) {  //parse moves and extract line 0 comment, if it exists.
-        if (kifu.search(headerPattern)) {
-            const movesArray2 = kifu.slice(kifu.search(headerPattern), kifu.length)
+        if (kifu.search(movesHeaderPattern)) {
+            const movesArray2 = kifu.slice(kifu.search(movesHeaderPattern), kifu.length)
                 .replace(/\n\*(.*)/g, '***$1***') //tack comment only line(s) except for the 1st line comment to previous move for later processing
                 .replace(/\n&(.*)/g, '&&&$1&&&') //tack bookmark line(s) to previous move for later processing
                 .replace(/\n(まで.*)/g,"===$1===")
@@ -303,7 +303,7 @@ export class KifuParser {
             })
             if (comment.length>0) this.moves=[comment,...this.moves]
         }
-            else this.moves=[' ']
+            else this.moves=['']
     }
 
     findLine(target: string, scrArray: string[]) {

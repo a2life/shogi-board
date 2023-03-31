@@ -21,6 +21,7 @@ const banImageArray=[
 const masu_array = [
     "masu_dot.png",
     "masu_dot_xy.png",
+    "masu_dot_xya.png",
     "masu_handwriting.png",
     "masu_nodot.png",
     "masu_nodot_yx.png"

@@ -71,9 +71,10 @@ const lookupList = [
     {key: "B", pat: /馬/g},
     {key: "k", pat: /[玉王]/g},
     {key: "g", pat: /金/g},
-    {key: "00", pat: /同　/},
+    {key: "00", pat: /同　?/},
     {key: "d", pat: /打/},
     {key: "J", pat: /\+/},
+    {key: "",pat:/左|右|引|直|行|不成|上|下/g},　//These words will be ignored (redundant with coordination already available) ignore 不成　before checking for  成
     {key: "+", pat: /成/},
     {key: "x", pat: /(投了|中断|詰み|不詰|持将棋|千日手|反則勝ち|反則負け|入玉勝ち)/},
     {key: " ", pat: /　/g} //replace zenkaku space with hankaku space
@@ -261,6 +262,7 @@ export class KifuParser {
             this.moves = movesArray.map((line) => {
                 line = line.trim()
                 let lines = line.split('***'); //separate comment section and preserve it for later display
+                //todo this split does not consider &&& bookmarker. Need to implement this.
                 let lineXlated = lines[0]; //and only translate first section
 
                 for (const elem in lookupList) {

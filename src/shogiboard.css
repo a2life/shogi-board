@@ -129,6 +129,7 @@ This will use 60% scaling.
     cursor: pointer;
 }
 
+
 .large .save-button-position {
     left:420px;
 }
@@ -282,7 +283,14 @@ This will use 60% scaling.
     left:283px;
     width:140px;
 }
-
+.endOfMove {
+    font-size: 0.75rem;
+    position:absolute;
+    top:390px;
+    left:200px;
+    text-align:right;
+    width:100px;
+}
 .large .comment {
     height: 120px;
 }

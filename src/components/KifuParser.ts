@@ -74,7 +74,7 @@ const lookupList = [
     {key: "00", pat: /同　?/},
     {key: "d", pat: /打/},
     {key: "J", pat: /\+/},
-    {key: "",pat:/左|右|引|直|行|不成|上|下/g},　//These words will be ignored (redundant with coordination already available) ignore 不成　before checking for  成
+    {key: "", pat: /左|右|引|直|行|不成|上|下/g},　//These words will be ignored (redundant with coordination already available) ignore 不成　before checking for  成
     {key: "+", pat: /成/},
     {key: "x", pat: /(投了|中断|詰み|不詰|持将棋|千日手|反則勝ち|反則負け|入玉勝ち)/},
     {key: " ", pat: /　/g} //replace zenkaku space with hankaku space
@@ -128,16 +128,15 @@ export class KifuParser {
 
     constructor(kifu: string) {
         this.kifu = kifu
-        this.moves=[]
+        this.moves = []
 
         if (kifu.includes(movesHeaderPattern)) { //header part exists, so
-            const headerPart=kifu.slice(0,kifu.search(movesHeaderPattern)+1) //limit header part up to headerPattern
+            const headerPart = kifu.slice(0, kifu.search(movesHeaderPattern) + 1) //limit header part up to headerPattern
             // +1 to back up linebreak. Otherwise, the last line will not have carriage return and will not
             //match with goteName pattern, which is usually the last attribute before header pattern
             this.parseData(headerPart)
             this.parseMoves(kifu) // if header pattern exists, then moves part exists.
-        }
-        else   this.parseData(kifu) //kifu with no moves involved.
+        } else this.parseData(kifu) //kifu with no moves involved.
 
     }
 
@@ -153,14 +152,14 @@ export class KifuParser {
         this.endDate = findMatch(endDatePattern)
         this.teai = findMatch(teaiPattern)
         const superiorOnBoard = getSuperiorOnBoard(this.teai);
-        if (superiorOnBoard.length>0)this.gOnBoard=superiorOnBoard;//overwrite gOnBoard in case teai exits.
+        if (superiorOnBoard.length > 0) this.gOnBoard = superiorOnBoard;//overwrite gOnBoard in case teai exits.
 
         this.event = findMatch(eventPattern)
         this.location = findMatch(locationPattern)
         this.catalog = findMatch(catalogingPattern)
         this.timeAllowed = findMatch(timeAllowedPattern)
         this.timeSpent = findMatch(timeSpentPattern)
-       // console.log('teai',this.teai)
+        // console.log('teai',this.teai)
         if (kifu.match(senteNamePattern) !== null) this.senteName = kifu.match(senteNamePattern)![1]
         else if (kifu.match(shimoteNamePattern) !== null) this.senteName = kifu.match(shimoteNamePattern)![1]
         if (kifu.match(goteNamePattern) !== null) this.goteName = kifu.match(goteNamePattern)![1]
@@ -169,7 +168,7 @@ export class KifuParser {
 
         this.boardFlip = (kifu.search(boardFlipPattern) >= 0)
 
-        this.goteban = superiorOnBoard.length + kifu.search(gotebanPattern) + kifu.search(uwatePattern)  >= 0 ? 1 : 0
+        this.goteban = superiorOnBoard.length + kifu.search(gotebanPattern) + kifu.search(uwatePattern) >= 0 ? 1 : 0
         // console.log('goteban',this.goteban)
         //goteban is 1 if handicap game is specified or goteban or uwateban directive is specifically called out
         // result of calculation area is -2 if no match and superiorOnBoard="" so >=0 is correct operation.
@@ -250,15 +249,15 @@ export class KifuParser {
             const movesArray2 = kifu.slice(kifu.search(movesHeaderPattern), kifu.length)
                 .replace(/\n\*(.*)/g, '***$1***') //tack comment only line(s) except for the 1st line comment to previous move for later processing
                 .replace(/\n&(.*)/g, '&&&$1&&&') //tack bookmark line(s) to previous move for later processing
-                .replace(/\n(まで.*)/g,"===$1===")
+                .replace(/\n(まで.*)/g, "===$1===")
                 .split('\n');//tack away end of move wording
-           //     console.log('movesArray2',movesArray2)
-                const commentLine = movesArray2.slice(1,2).toString()
-                const commentSearch=commentLine.slice(commentLine.search(/\*\*\*/)) ; // if no comment, then '-' will be returned ie., slice(-1)
-                const comment=(commentSearch.length>1)?commentSearch:'';
-           //     console.log('comment:',comment)
-                const movesArray =movesArray2.slice(2).filter((e) => e !== '') //create array with moves section
-           //  console.log('movesArray=', movesArray)
+            //     console.log('movesArray2',movesArray2)
+            const commentLine = movesArray2.slice(1, 2).toString()
+            const commentSearch = commentLine.slice(commentLine.search(/\*\*\*/)); // if no comment, then '-' will be returned ie., slice(-1)
+            const comment = (commentSearch.length > 1) ? commentSearch : '';
+            //     console.log('comment:',comment)
+            const movesArray = movesArray2.slice(2).filter((e) => e !== '') //create array with moves section
+            //  console.log('movesArray=', movesArray)
             this.moves = movesArray.map((line) => {
                 line = line.trim()
                 let lines = line.split('***'); //separate comment section and preserve it for later display
@@ -275,24 +274,32 @@ export class KifuParser {
                 lines[0] = lineXlated;
 
                 const found = (lines.join("***")).match(movesPattern)
-                //   console.log('found', found)
+                //console.log('found', found)
 
                 let parsed;
                 if (!!found![2]) {
                     const count = found![1]
                     const side = ((parseInt(found![1]) + this.goteban) % 2 === 1) ? 's' : 'g'
-                //   console.log(parseInt(found![1]))
-                //    console.log('this.goteban',this.goteban)
-                //    console.log('side', side);
+                    //   console.log(parseInt(found![1]))
+                    //    console.log('this.goteban',this.goteban)
+                    //    console.log('side', side);
                     const to = found![2].trim();
+
                     const from = (!!found![3]) ? found![3] : ""
                     const note = (!!found![4]) ? found![4] : "=" // note is "J" or "="
                     const comment = (!!found![5]) ? found![5].trim() : ''
-                    const name = line.match(moveName)![1]
-                    parsed = side + '-' + to + from + note + count + ':' + name + comment
-                    parsed = parsed.replace(/-(...)\+/, '+$1') // s-nn+ => s+nn
-                    parsed = parsed.replace(/-(...)d/, 'd$1') // s-68sd => sd68s
-                    parsed = parsed.replace(/([+-]\d\d)[pPlLnNsSgkrRbB]/, '$1')// remove piece information
+                    const name = line.match(moveName)![1] // get original notation for display window.
+                    if (to === 'x') { // in case of 投了、中断、etc., give different treatment
+                        parsed = to + ':' + name + comment
+                    } else { //otherwise, parse movement further
+                        parsed = side + '-' + to + from + note + count + ':' + name + comment
+                        parsed = parsed.replace(/-(...)\+/, '+$1') // s-nn+ => s+nn
+                        parsed = parsed.replace(/-(...)d/, 'd$1') // s-68sd => sd68s
+                        parsed = parsed.replace(/([+-]\d\d)[pPlLnNsSgkrRbB]/, '$1')// remove piece information
+
+                    }
+
+
                 } else if (!!found![6]) {
                     parsed = 'C:' + found![6]
                 } else
@@ -303,9 +310,8 @@ export class KifuParser {
 
 
             })
-            if (comment.length>0) this.moves=[comment,...this.moves]
-        }
-            else this.moves=['']
+            if (comment.length > 0) this.moves = [comment, ...this.moves]
+        } else this.moves = ['']
     }
 
     findLine(target: string, scrArray: string[]) {
@@ -316,6 +322,7 @@ export class KifuParser {
      *  return expanded string array such as 'b,l,p,p,p'
      * @param onHand; onHand data such as "b,l,p3"
      */
+
     /*parseRepeat(onHand: string) {
 
         let hands = ""
@@ -333,7 +340,7 @@ export class KifuParser {
 
 */
     public parse() {
-        let returnObject ={
+        let returnObject = {
             senteOnBoard: this.sOnBoard,
             goteOnBoard: this.gOnBoard,
             senteOnHand: this.sOnHand,
@@ -342,16 +349,16 @@ export class KifuParser {
             goteName: this.goteName,
             teai: this.teai,
             flip: this.boardFlip,
-     //       startDate: this.startDate,
-    //        endData: this.endDate,
-     //       eventName: this.event,
-     //       catalog: this.catalog,
+            //       startDate: this.startDate,
+            //        endData: this.endDate,
+            //       eventName: this.event,
+            //       catalog: this.catalog,
             kifu: this.kifu,
 
         }
-        if (this.moves.length>1) returnObject={...returnObject, ...{moves:this.moves}}
+        if (this.moves.length > 1) returnObject = {...returnObject, ...{moves: this.moves}}
 
-        return  returnObject
+        return returnObject
     }
 }
 

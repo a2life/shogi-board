@@ -7,6 +7,7 @@ import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
 import {scoreArray, movementNotBranch, getMoveNote, displayWithSideSymbol, extractComments,extractBookMark} from "./utils";
 import {ShowBranches} from "./ShowBranches";
 import {saveAs} from "file-saver";
+import {endOfMoveComment} from "./eomNote";
 import * as I from "./Icons";
 
 export const Board = (Props: {
@@ -255,13 +256,17 @@ export const Board = (Props: {
                             : "playerName playerName-sente text-align-normal"
                         }>{displayWithSideSymbol('s', senteName)}</div>}
                     <aside class={flipped ? "flip180 text-align-flipped note-window" : "note-window text-align-normal"}>{notation()}</aside>
+
                 </div>
                 <div>
 
                 </div>
             </div>
             {movesArray.toString().length > 0 &&
-                <div class="button-bar-grid">
+                <>
+                    {endOfMoves(moveCounter) &&  <aside class="endOfMove">{endOfMoveComment(movesArray[moveCounter])}</aside>}
+
+                    <div class="button-bar-grid">
                     <div class="btn-group">
                         <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}
                                 disabled={moveCounter === 0}>
@@ -291,6 +296,7 @@ export const Board = (Props: {
                         <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]} maskBranch={Props.flags.maskBranch}
                                       branchingHandler={branchingHandler}/> }
                 </div>
+                </>
             }
             {commentWindow && <div class="comment">{comment}</div>}
             <div class="save-flip-box">

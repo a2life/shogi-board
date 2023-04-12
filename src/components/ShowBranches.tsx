@@ -1,5 +1,6 @@
 export const ShowBranches = (props: { Notes: { note: string, index: number }[], branchingHandler: (e: Event) => void, index: number ,maskBranch?:boolean }) => {
 
+
     const MoveSelect = ()=><option disabled value="default">Next Move</option>
     if(props.maskBranch){ // in case of masked branch, shuffle options order for quiz
         let currentIndex= props.Notes.length, randomIndex;
@@ -13,8 +14,11 @@ export const ShowBranches = (props: { Notes: { note: string, index: number }[], 
     if (props.Notes.length > 1) {
         return (
             <select class="option-select" onChange={props.branchingHandler}
-                value={props.maskBranch?"default":props.index}   > {props.maskBranch && MoveSelect()} {props.Notes.map((e) => {
-                return <option value={e.index}>{e.note}</option>
+                value={props.maskBranch?"default":props.index}   > {props.maskBranch && MoveSelect()} {props.Notes.map((e)=> {
+              return <>
+                  {(e.index===0) &&  <option value={e.index} hidden >{e.note}</option>} //add hidden element with same value so onChange will always trigger
+                  <option value={e.index} >{e.note}</option>
+              </>
             })}</select>)
     } else {
         return <></>

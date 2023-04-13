@@ -17,7 +17,8 @@ export const endOfMoveComment = (s: string | undefined) => {
         if (Array.isArray(found)) {
             if (typeof (found[3]) === "string") return found[3]
             else if (found[1] === "中断") {
-                return found[2]
+                //return found[2]
+                return ""
             } else {
                 return found[1] + found[2]
             }

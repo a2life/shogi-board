@@ -35,7 +35,7 @@ const duplicateLetter = (a: string) => {
     for (let count = 0; count < qty; count++) s.push(a[0])
     return s.toString();
 }
-const rePattern = new RegExp('^(?<pre>[sgC*xX])[\\-+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９　歩と香成桂銀金角馬飛竜玉王投了同直左右引打上下寄行不]*)\\*?(.*)')
+const rePattern = new RegExp('^(?<pre>[sgC*xX])[\\-+0-9a-z]+((?<branch>[J=])(?<move>\\d+))?:?(?<Note>[一二三四五六七八九１-９　歩と香杏成桂圭銀全金角馬飛竜龍玉王投了同直左右引打上下寄行不]*)\\*?(.*)')
 // const brPattern = new RegExp('J(\\d\\d)')
 
 

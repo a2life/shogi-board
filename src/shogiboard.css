@@ -252,6 +252,14 @@ This will use 60% scaling.
     border-radius: 5px;
     box-sizing: border-box;
 }
+.side-comment {
+    width:100%;
+    white-space:pre-wrap;
+    font-size:1.1rem;
+    margin-left:2rem;
+    margin-top:2rem;
+
+}
 
 .option-select {
     padding: .375rem 2.25rem .375rem .75rem;

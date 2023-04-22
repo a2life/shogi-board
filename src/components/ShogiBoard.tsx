@@ -4,7 +4,14 @@ import '../shogiboard.css'
 import {useState} from "preact/hooks";
 import {moveParser, moveAndRemember} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
-import {scoreArray, movementNotBranch, getMoveNote, displayWithSideSymbol, extractComments,extractBookMark} from "./utils";
+import {
+    scoreArray,
+    movementNotBranch,
+    getMoveNote,
+    displayWithSideSymbol,
+    extractComments,
+    extractBookMark
+} from "./utils";
 import {ShowBranches} from "./ShowBranches";
 import {saveAs} from "file-saver";
 import {endOfMoveComment} from "./eomNote";
@@ -12,9 +19,17 @@ import * as I from "./Icons";
 
 export const Board = (Props: {
     pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string,
-    flags: { commentWindow: boolean, HasBranch: boolean, showMarker: boolean, animate: boolean, flip:boolean, maskBranch:boolean }, kifu: string | undefined,
+    flags: {
+        commentWindow: boolean,
+        HasBranch: boolean,
+        showMarker: boolean,
+        animate: boolean,
+        flip: boolean,
+        maskBranch: boolean,
+        sideComment:boolean
+    }, kifu: string | undefined,
     senteName: string | undefined, goteName: string | undefined, markerAt: string,
-    graphics:{koma:string,ban:string,grid:string,marker:string}
+    graphics: { koma: string, ban: string, grid: string, marker: string }
 }) => {
 
     let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu, markerAt} = Props
@@ -224,90 +239,106 @@ export const Board = (Props: {
 
     const [flipped, setFlipped] = useState(flags.flip);
     const flipHandler = () => setFlipped(!flipped); //flip screen action
-    return <div class="board-container">
-        {(caption!.length > 0) && <div className="caption">{caption}</div>}
-        <div style="position:relative;">
-            <div class={flipped ? "flip180 animate-move" : "animate-move"}>
-                <div class="row-on-hand">
-                    {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
-                        <span class={flipped?`c${p[0]} flip180`:`c${p[0]}` }>{p.slice(1)}</span>)}
+    return <div class={Props.flags.sideComment?"row":""}>
+        <div class="board-container">
+            {(caption!.length > 0) && <div className="caption">{caption}</div>}
+            <div style="position:relative;">
+                <div class={flipped ? "flip180 animate-move" : "animate-move"}>
+                    <div class="row-on-hand">
+                        {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
+                            <span class={flipped ? `c${p[0]} flip180` : `c${p[0]}`}>{p.slice(1)}</span>)}
 
-                    {!!goteName && <div class={flipped
-                        ? "flip180 playerName playerName-gote text-align-flipped"
-                        : "playerName playerName-gote text-align-normal"
-                    }
-                    >{displayWithSideSymbol('g', goteName)}</div>}
+                        {!!goteName && <div class={flipped
+                            ? "flip180 playerName playerName-gote text-align-flipped"
+                            : "playerName playerName-gote text-align-normal"
+                        }
+                        >{displayWithSideSymbol('g', goteName)}</div>}
 
-
-                </div>
-
-                <div class=" boardbase-grid" onClick={(!!Props.branchList[moveCounter] && Props.flags.maskBranch)?()=>{}:playOneMoveHandler  } onContextMenu={moveBackHandler}>
-                    <RenderBoard ban={Props.graphics.ban} grid={Props.graphics.grid}/>
-                    {showMarker && <MarkerAt c={markerPosition[0]} r={markerPosition[1]} marker={Props.graphics.marker}/>}
-
-                    {piecesInfo.split(',').map((p) => (<RenderPiece piece={p} mover={previousAct} animate={animate} koma={Props.graphics.koma}/>))}
-                </div>
-                <div class="row-on-hand">
-                    {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
-                        <span class={flipped?`c${p[0]} flip180`:`c${p[0]}` }>{p.slice(1)}</span>)}
-                    {!!senteName && <div
-                        class={flipped
-                            ? "flip180 playerName playerName-sente text-align-flipped"
-                            : "playerName playerName-sente text-align-normal"
-                        }>{displayWithSideSymbol('s', senteName)}</div>}
-                    <aside class={flipped ? "flip180 text-align-flipped note-window" : "note-window text-align-normal"}>{notation()}</aside>
-
-                </div>
-                <div>
-
-                </div>
-            </div>
-            {movesArray.toString().length > 0 &&
-                <>
-                    {endOfMoves(moveCounter) &&  <aside class="endOfMove">{endOfMoveComment(movesArray[moveCounter])}</aside>}
-
-                    <div class="button-bar-grid">
-                    <div class="btn-group">
-                        <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}
-                                disabled={moveCounter === 0}>
-                            <I.SkipStart/></button>
-                        {HasBranch &&
-                            <button class="btn btn-sm btn-outline-secondary" value="Skip-Backward"
-                                    onClick={skipToPrevBranchHandler}
-                                    disabled={moveCounter === 0}>
-                                <I.SkipBack/></button>}
-                        <button class="btn btn-sm btn-outline-secondary" value="Back" onClick={moveBackHandler}
-                                disabled={moveCounter === 0}>
-                            <I.Back/></button>
-                        <button class="btn btn-sm btn-outline-secondary" value="Play" onClick={playOneMoveHandler}
-                                disabled={endOfMoves(moveCounter)|| !!Props.branchList[moveCounter] && Props.flags.maskBranch}>
-                            <I.Play/></button>
-                        {HasBranch &&
-                            <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward"
-                                    onClick={skipToNextBranchHandler}
-                                    disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && Props.flags.maskBranch}>
-                                <I.SkipForward/></button>}
-                        <button class="btn btn-sm btn-outline-secondary" value="Skip-to-End" onClick={skipEndHandler}
-                                disabled={endOfMoves(moveCounter)}>
-                            <I.SkipEnd/></button>
 
                     </div>
-                    {!!Props.branchList[moveCounter] &&
-                        <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]} maskBranch={Props.flags.maskBranch}
-                                      branchingHandler={branchingHandler}/> }
+
+                    <div class=" boardbase-grid"
+                         onClick={(!!Props.branchList[moveCounter] && Props.flags.maskBranch) ? () => {
+                         } : playOneMoveHandler} onContextMenu={moveBackHandler}>
+                        <RenderBoard ban={Props.graphics.ban} grid={Props.graphics.grid}/>
+                        {showMarker &&
+                            <MarkerAt c={markerPosition[0]} r={markerPosition[1]} marker={Props.graphics.marker}/>}
+
+                        {piecesInfo.split(',').map((p) => (
+                            <RenderPiece piece={p} mover={previousAct} animate={animate} koma={Props.graphics.koma}/>))}
+                    </div>
+                    <div class="row-on-hand">
+                        {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
+                            <span class={flipped ? `c${p[0]} flip180` : `c${p[0]}`}>{p.slice(1)}</span>)}
+                        {!!senteName && <div
+                            class={flipped
+                                ? "flip180 playerName playerName-sente text-align-flipped"
+                                : "playerName playerName-sente text-align-normal"
+                            }>{displayWithSideSymbol('s', senteName)}</div>}
+                        <aside
+                            class={flipped ? "flip180 text-align-flipped note-window" : "note-window text-align-normal"}>{notation()}</aside>
+
+                    </div>
+                    <div>
+
+                    </div>
                 </div>
-                </>
-            }
-            {commentWindow && <div class="comment">{comment}</div>}
-            <div class="save-flip-box">
-                <div class={flipped?"flip-button-position text-highlight":"flip-button-position"} title='Flip board'
-                     onClick={flipHandler}>&#x21c5;</div>
-                {!!kifu &&
-                    <div title='download Kifu' class="save-button-position"
-                         onClick={saveKifu}>&#x21f2;</div>}
+                {movesArray.toString().length > 0 &&
+                    <>
+                        {endOfMoves(moveCounter) &&
+                            <aside class="endOfMove">{endOfMoveComment(movesArray[moveCounter])}</aside>}
+
+                        <div class="button-bar-grid">
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}
+                                        disabled={moveCounter === 0}>
+                                    <I.SkipStart/></button>
+                                {HasBranch &&
+                                    <button class="btn btn-sm btn-outline-secondary" value="Skip-Backward"
+                                            onClick={skipToPrevBranchHandler}
+                                            disabled={moveCounter === 0}>
+                                        <I.SkipBack/></button>}
+                                <button class="btn btn-sm btn-outline-secondary" value="Back" onClick={moveBackHandler}
+                                        disabled={moveCounter === 0}>
+                                    <I.Back/></button>
+                                <button class="btn btn-sm btn-outline-secondary" value="Play"
+                                        onClick={playOneMoveHandler}
+                                        disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && Props.flags.maskBranch}>
+                                    <I.Play/></button>
+                                {HasBranch &&
+                                    <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward"
+                                            onClick={skipToNextBranchHandler}
+                                            disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && Props.flags.maskBranch}>
+                                        <I.SkipForward/></button>}
+                                <button class="btn btn-sm btn-outline-secondary" value="Skip-to-End"
+                                        onClick={skipEndHandler}
+                                        disabled={endOfMoves(moveCounter)}>
+                                    <I.SkipEnd/></button>
+
+                            </div>
+                            {!!Props.branchList[moveCounter] &&
+                                <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]}
+                                              maskBranch={Props.flags.maskBranch}
+                                              branchingHandler={branchingHandler}/>}
+                        </div>
+                    </>
+                }
+
+                <div class="save-flip-box">
+                    <div class={flipped ? "flip-button-position text-highlight" : "flip-button-position"}
+                         title='Flip board'
+                         onClick={flipHandler}>&#x21c5;</div>
+                    {!!kifu &&
+                        <div title='download Kifu' class="save-button-position"
+                             onClick={saveKifu}>&#x21f2;</div>}
+                </div>
+
             </div>
-
+            {commentWindow && !Props.flags.sideComment && <div class="comment">{comment}</div>}
         </div>
-    </div>
 
-};
+            {commentWindow && Props.flags.sideComment && <div class="side-comment col">{comment}</div>}
+
+    </div>
+}
+    ;

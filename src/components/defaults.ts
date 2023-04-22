@@ -35,6 +35,7 @@ export interface ShogiKit {
     marker?:number;
     ban?:number;
     maskBranch:boolean;
+    sideComment:boolean;
 
 }
 
@@ -56,7 +57,8 @@ export const defaultParams: ShogiKit = {
     showMarker:false,
     animate:true,
     flip:false,
-    maskBranch:false //hide branch valid option at the start of dropdown
+    maskBranch:false, //hide branch valid option at the start of dropdown
+    sideComment:false //false means comment window will be at the bottom
 
 
 

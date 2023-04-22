@@ -63,7 +63,8 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
         showMarker,
         animate,
         flip,
-        maskBranch
+        maskBranch,
+        sideComment
     }
         = {...defaultParams, ...propTranslate, ...dataPack, ...prop.setup,} //each array set will override if variable exists.
 
@@ -87,6 +88,6 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
     return <Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
                   initialComment={initialComment} tesuu={tesuu || 0}
-                  flags={{commentWindow, HasBranch, showMarker, animate, flip, maskBranch}} kifu={kifu}
+                  flags={{commentWindow, HasBranch, showMarker, animate, flip, maskBranch,sideComment}} kifu={kifu}
                   senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}}/>
 }

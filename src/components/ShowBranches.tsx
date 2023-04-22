@@ -13,7 +13,7 @@ export const ShowBranches = (props: { Notes: { note: string, index: number }[], 
     }
     if (props.Notes.length > 1) {
         return (
-            <select class="option-select" onChange={props.branchingHandler}
+            <select class="option-select"  title="branch-selector" onChange={props.branchingHandler}
                 value={props.maskBranch?"default":props.index}   > {props.maskBranch && MoveSelect()} {props.Notes.map((e,index)=> {
               return <>
                   {(index===0) &&  <option value={e.index} hidden >{e.note}</option>}

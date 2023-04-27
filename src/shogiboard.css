@@ -23,7 +23,8 @@ This will use 60% scaling.
 
 
 .board-app {
-    margin: 15px 4px 0;
+
+    padding: 0 5px 0 ;
 }
 .board-container {
     display: grid;
@@ -188,6 +189,7 @@ This will use 60% scaling.
     text-align: center;
     font-size:0.9rem;
     padding-top:3px;
+    margin-top:20px;
 }
 .large .caption {
     font-size:1.2rem;

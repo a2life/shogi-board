@@ -1,0 +1,9 @@
+graphics file that been used have following restriction
+
+1. koma_ryoko1 : appears to be public domain. This is a default image files that is used
+2. koma_hidetchi :  copyrighted by Hidetchi, used under permission from Mr. Kawasaki. If you want to use this file on your site, please write a nice letter to him.
+3. other koma graphics : Licensed under Creative Common 2.2 as "CC BY NC" by koma syokunin1. Therefore, free for personal use but commercial use is restricted.
+However, the link to his e-mail address seems broken.
+
+
+Rest of the code is under ISC license.

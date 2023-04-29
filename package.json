@@ -1,5 +1,9 @@
 {
-  "version": "0.0.0",
+  "name":"ts_shogiboard",
+  "version": "1.0.0",
+  "description": "Shogi board renderer for web page",
+  "homepage": "https://github.com/a2life/shogi-board",
+  "license": "ISC",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

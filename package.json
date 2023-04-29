@@ -1,8 +1,12 @@
 {
-  "name":"ts_shogiboard",
+  "name": "ts_shogiboard",
   "version": "1.0.0",
   "description": "Shogi board renderer for web page",
   "homepage": "https://github.com/a2life/shogi-board",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/a2life/shogi-board.git"
+  },
   "license": "ISC",
   "scripts": {
     "dev": "vite",
@@ -14,10 +18,11 @@
     "preact": "^10.5.13"
   },
   "devDependencies": {
+    "@popperjs/core": "^2.11.7",
     "@preact/preset-vite": "^2.0.0",
     "@types/file-saver": "^2.0.3",
     "bootstrap": "^5.0.2",
     "typescript": "^4.3.2",
-    "vite": "^2.3.8"
+    "vite": "2.9.13"
   }
 }

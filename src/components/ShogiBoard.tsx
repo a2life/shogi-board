@@ -34,7 +34,8 @@ export const Board = (Props: {
 
     let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu, markerAt} = Props
     let initialHistory = [] as history
-    let initialAct = movesArray[0].slice(4, 6)
+  //  let initialAct = movesArray[0].slice(4, 6)
+    let initialAct=markerAt;
     let initialCounter = 0;
     const {commentWindow, HasBranch, showMarker, animate} = flags
     const skipToCounter = (tesuu: number, pieces: string) => {
@@ -71,7 +72,7 @@ export const Board = (Props: {
     const [comment, setComment] = useState(initialComment)
     const startComment = initialComment
     const [moveCounter, setMoveCounter] = useState(initialCounter)
-    const [previousAct, setPreviousAct] = useState(initialAct) //for first 'move' we use 'from' coordinate
+    const [previousAct, setPreviousAct] = useState(markerAt) //for very first 'move' placeholder
     const [history, setHistory] = useState(initialHistory)
     const endOfMoves = (index: number) => {
         if (index >= movesArray.length) return true

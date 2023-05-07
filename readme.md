@@ -169,26 +169,30 @@ forward are also disabled.
 - markerAt: string Indicating the initial grid position that will be highlighted. default is 00 position which is "out of the way".  ex., "24" for position ２四 for the initial display. Afterwards, showMarker behavior takes over. If this parameter exists, then ShowMarker flag will be also set to true.
 - moves : string[], data representing piece moves. ex. ["s-2627","g-8687","s-2526","g-8586"] 
 (this represents ２六歩、８四歩、２五歩、８五歩).
-- kifu: The program can read kakinoki style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (moves, sOnHand,gOnHand,gOnBoard,sOnBoard)
+- kifu: The program can read kakinoki(柿木) style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (moves, sOnHand,gOnHand,gOnBoard,sOnBoard)
 - startup and tesuu: number  Those two are the same. the board will advance its move to asigned move number. Allows board to start from middle of the game record. if both are defined, then 'startAt' takes precedence.
 - animate or smooth: boolean Set to false by default. pieces will glide rather than abruptly jump.
 - flip: boolean default to false when set to true,  Rotate board 180 degree. 
-
+- grid: number. default is 1. Corresponds to different graphics for grid.
+- ban: number  default is 2. Corresponds to different graphics for ShogiBoard
+- koma: number default is 5. Corresponds to different graphics for koma.
+- marker: number default is 1. Corresponds to different color for marker.
+- See SetImageSelection.ts for options available for grid,ban,koma and marker.
 Moves, along with onHand and onBoard parameter can be used to do quick construction of shogiboard without the use of kifu source 
 
 Moves do not need to alternate between hands. Usually the notation goes like below.
 
-          s-xxxx,g-xxxx,s-xxxx,g-xxxx
+          ["s-xxxx","g-xxxx","s-xxxx","g-xxxx"]
 
 but
 
-          s-xxxx,s-xxxx,s-xxxx,g-xxxx
+          ["s-xxxx","s-xxxx","s-xxxx","g-xxxx"]
 
 is also allowed. it will be handy for teaching how to construct a castle.
 
 Branching is supported. Branch moves will be shown in front of button bar if the selections are available.
 
-Piece represntations in moves, sOnHand,gOnHand,sOnBoard and gOnBoard parameters are as follows.
+Piece representations in moves, sOnHand,gOnHand,sOnBoard and gOnBoard parameters are as follows.
 
     l : lance
     L : lance promoted
@@ -204,7 +208,7 @@ Piece represntations in moves, sOnHand,gOnHand,sOnBoard and gOnBoard parameters 
 
 Move notation
 
-Anything after '*' is considered as a comment and will be displayed in comment window.
+Anything after '***' and before '***' is considered as a comment paragraph and will be displayed in comment window.
 
 kifstr is 5 or 6 character string.
 
@@ -222,7 +226,7 @@ example of moves
      "s-7677",  : white move a piece from 77 to 76
      "g-3433",  : black moves a piece from 33 to 34
      "sd55g",   : black drops a gold to 5e.
-     "g-3534*do you think this is cool?", : white moves a piece from 34 to 35. Comment windows displays"do you think this is cool?"
+     "g-3534***do you think this is cool?******words after carriage return***", : white moves a piece from 34 to 35. Comment windows displays"do you think this is cool?<cr>words after carriage return"
      s+2228  : piece at the 28 position is moved to 22 and then get promoted.
      "x"   : end of moves indicator
     ]

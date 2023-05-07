@@ -1,14 +1,14 @@
 # Shogi board using Typescript with viteJS and Preact
 
-## The program reads data input(s) and render shogiboard(s) and mimic piece moves on web page.
-#### Displays shogiboard and pieces with Initial arrangement and moves information that is written in JavaScript literals.
-#### This is a rewrite of modx/PHP/JS projects from 2012 using TypeScript (ie., 100% client side solution.) - original project is https://github.com/a2life/Web_shogiboard
+## The program reads data input(s) and render shogi board(s) and mimic piece moves on web page.
+#### Displays shogi board and pieces with Initial arrangement and moves information that is written in JavaScript literals.
+#### This is a rewrite of modx/PHP/JS projects from 2012. This one uses TypeScript with Preact (In another word, 100% client side solution.) - original project is https://github.com/a2life/Web_shogiboard
 
 Initial development period: June 2021 - August 2021
-Finishing up -   March 2023
+First Deployed in production site -   March 2023
 
 
-Page demo running can be seen  <a href='https://shogishack.net/annex/js-shogi-board.html'>in this link </a>.
+A demo running in website can be seen  <a href='https://shogishack.net/annex/js-shogi-board.html'>in this link </a>.
 
 To get started, clone repository and then do
 
@@ -18,7 +18,7 @@ To get started, clone repository and then do
 then
 
 <code>npm run dev</code>  to run dev server
- - This will run the project with demo page. It is currently configured to show multiple shogi-boards with different configuration. 
+ - This will run the project with demo page on local server. It is currently configured to show multiple shogi-boards with different configuration. 
  - Data to render those boards are in JavaScript section of index.html,  contained in object array with globally declared variable name of 'initialSetup_ts81'.
  - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago, but missing file fetching option. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
  - The previous project relied on modx CMS as a framework. This new setup does not rely on specific CMS. Only thing required will be for the hosting side to provide shogi data in Javascript array.
@@ -29,15 +29,15 @@ then
 <code>npm run serve </code> to server built project
 
 ### todos
-- To add file parameter to fetch kifu file. The current setup requires shogi data is already avaialble in loaded javascript object array.
+- To add file parameter to fetch kifu file. The current setup requires shogi data is already available in loaded javascript object array.
 Javascript to request file upload then render it after the data receipt is a different animal.This will introduce async operation and I currently have
 zero use case for this scenario,  so just maybe.
 - BookMarking:  Kif format document specifies & as 'bookmark' token. I have not seen this used in any kifu that I have encountered but this will be very useful to bookmark any points in branched move. current 'startAt' parameter will only work in main branch position.
 
 ## Guide
 
-This is a TypeScript / Preact  project with vitejs as a bundler to display shogiboard on webpages. 
-Intended usage is to display shogiboard for explaining game of shogi piece movement and stragety.
+This is a TypeScript / Preact  project with ViteJs as a bundler to display shogi board on webpages. 
+Intended usage is to display shogi board for explaining game of shogi piece movement and strategy.
 
 This application is not intended to be used to play shogi. The purpose of this application is to display recorded Shogi movements.
 <ol>
@@ -48,19 +48,19 @@ This application is not intended to be used to play shogi. The purpose of this a
 
 ### Highlight of the project
 <ol>
-<li>The program can take standard Kakinoki style Kifu format as one of Initial setup parameter and parse them into playable shogiboard display.</li>
+<li>The program can take standard Kakinoki(柿木) style Kifu format as one of Initial setup parameter and parse them into playable shogi board display.</li>
 <li>Own instruction set in JavaScript Object format for piece movement and placement. Kifu is first translated to this internal instructions and executed.</li>
 <li>Branching is supported</li>
-<li>Play forward, backword or jump to branch point with play buttons.  mouse clicking on the board will also move pieces forward or backwards</li>
+<li>Play forward, backward or jump to branch point with play buttons.  mouse clicking on the board will also move pieces forward or backwards</li>
 
 <li>CSS based board and piece placement. Change CSS to modify board and piece appearance.</li>
-<li>Multiple shogiboard on single web page.  put place holder as div element with class name of 'board-app'. If you place two such divs on the page, then the app will render two shogiboards.  You need to provide rendering data array in Javascript. 
+<li>Multiple shogi board on single web page.  put placeholder as div element with class name of 'board-app'. If you place two such divs on the page, then the app will render two shogi boards.  You need to provide rendering data array in Javascript. 
 </li>
 <li>If Kifu is applied, then download icon is available. Clicking on it will download the kifu file as 'download.kif'</li>
 </ol>
 
 ### Theory of board rendering.
-Plaecement of shogi piece on the board is managed by class atributes of html <img> tag.
+Placement of shogi piece on the board is managed by class attributes of html <img> tag.
 For example, to place Sente's king on the 55 location, the following image tag is created and inserted to containing div element 
 by the program.
 
@@ -68,11 +68,11 @@ by the program.
           
 
 The class indicator .c5 and r5 place a piece to relevant location (column 5, row 5) according to css definition.
-to move the piece from 55 to 44, the program will manupulate the class so that the tag will be now
+to move the piece from 55 to 44, the program will manipulate the class so that the tag will be now
 
           <img src="[PathToKoma]//sou.png"  class="koma c4 r4" alt="" />
 
-the browser will reposition the piece and it gives the illusion that the piece has "moved"
+the browser will reposition the piece. This gives the illusion that the piece has "moved"
 
 buttonBar block is dynamically created if "moves" exists. 
 
@@ -87,11 +87,11 @@ to create a board, place div element with board-app class, like so
 
     <div class='board-app'></div>
 
-This will show shogiboard with 'normal' size.
+This will show shogi board with 'normal' size.
 
     <div class='board-app large'></div>
 
-This will show shogiboard with 'large' size.
+This will show shogi board with 'large' size.
 
 Then attach the Javascript snippet with the array object with name 'initialSetup__ts81'.
 
@@ -153,7 +153,7 @@ Below example shows the two object literals with data to display on the board
     まで5手で先手の勝ち`
     }]
     
-Inside the program, the second object, which main part is a kifu file literal, will be 'pre-processed" to create object literals comparable to the first object. In the project 8 years ago, this 'pre-processing' was done in the PHP server side script.  In this implementation, 'pre-processing' is done on the client side JavaScript (in your browser)
+Inside the program, the second object, which main part is a kifu file literal, will be 'pre-processed' to create object literals comparable to the first object. In the project 8 years ago, this 'pre-processing' was done in the PHP server side script.  In this implementation, 'pre-processing' is done on the client side JavaScript (in your browser)
 
 
 parameters--
@@ -166,11 +166,11 @@ forward are also disabled.
 - sOnBoard or senteOnBoard: string indicating on board pieces for sente. default is initial setup for sente for no handicap game. ex. "11l,21n,31s,41g,51k,13p,22b"
 - gOnBoard or goteOnBoard: string indicating on board pieces for sente. default is initial setup for gote for no handicap game. ex. "99l,28r"
 - showMarker:boolean When set to true, it turns on marker indicator to show the last move. When markerAt is set, showMarker will be automatically set to true.
-- markerAt: string Indicating the initial grid position that will be highlighted. default is 00 position which is "out of the way".  ex., "24" for position ２四 for the initial display. Afterwards, showMarker behavior takes over. If this parameter exists, then ShowMarker flag will be also set to true.
+- markerAt: string Indicating the initial grid position that will be highlighted. default is 00 position which is "out of the way".  ex., "24" for position ２四 for the initial display. Afterward, showMarker behavior takes over. If this parameter exists, then ShowMarker flag will be also set to true.
 - moves : string[], data representing piece moves. ex. ["s-2627","g-8687","s-2526","g-8586"] 
 (this represents ２六歩、８四歩、２五歩、８五歩).
 - kifu: The program can read kakinoki(柿木) style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (moves, sOnHand,gOnHand,gOnBoard,sOnBoard)
-- startup and tesuu: number  Those two are the same. the board will advance its move to asigned move number. Allows board to start from middle of the game record. if both are defined, then 'startAt' takes precedence.
+- startup and tesuu: number  Those two are the same. the board will advance its move to assigned move number. Allows board to start from middle of the game record. if both are defined, then 'startAt' takes precedence.
 - animate or smooth: boolean Set to false by default. pieces will glide rather than abruptly jump.
 - flip: boolean default to false when set to true,  Rotate board 180 degree. 
 - grid: number. default is 1. Corresponds to different graphics for grid.
@@ -178,7 +178,7 @@ forward are also disabled.
 - koma: number default is 5. Corresponds to different graphics for koma.
 - marker: number default is 1. Corresponds to different color for marker.
 - See SetImageSelection.ts for options available for grid,ban,koma and marker.
-Moves, along with onHand and onBoard parameter can be used to do quick construction of shogiboard without the use of kifu source 
+Moves, along with onHand and onBoard parameter can be used to do quick construction of shogi board without the use of kifu source 
 
 Moves do not need to alternate between hands. Usually the notation goes like below.
 
@@ -216,9 +216,9 @@ first character  ; Either s or g to notate the Side   s = sente(black) and g = g
 
 second character :  '-' to indicate normal move, '+' to indicate promotion, 'd'  to indicate drop
 
-third and fourth chars:  'move to" coordinate.  34 means 3d, 22 means 2b etc.,
+third and fourth chars:  'move to' coordinate.  34 means 3d, 22 means 2b etc.,
 
-fifth and six column : 'move from' coordinate for '-' and '+'. in case of 'd' then only fifthcolumn will be used as piece indicator
+fifth and six column : 'move from' coordinate for '-' and '+'. in case of 'd' then only fifth column will be used as piece indicator
 
 example of moves
 

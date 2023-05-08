@@ -20,9 +20,12 @@
         <div class="col-12 col-xxl-9 col-xl-8 col-lg-8 col-md-6 col-sm-12 col-xs-12 mt-5"><p>Hello world</p></div>
 
         <div class="board-app  col "></div>
-        <div class="col  col-lg-8  col-xl-8 col-xxl-9 ">What's up? what's up Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque dolores est facilis impedit magnam reprehenderit sapiente sequi. A, dolore dolorem dolores dolorum error magnam mollitia nesciunt nulla obcaecati possimus sequi?</div>
+        <div class="col  col-lg-8  col-xl-8 col-xxl-9 ">What's up? what's up Lorem ipsum dolor sit amet, consectetur
+            adipisicing elit. Cumque dolores est facilis impedit magnam reprehenderit sapiente sequi. A, dolore dolorem
+            dolores dolorum error magnam mollitia nesciunt nulla obcaecati possimus sequi?
+        </div>
 
-            <div class="board-app "></div>
+        <div class="board-app "></div>
         <div class="board-app "></div>
         <div class="board-app "></div>
         <div class="board-app "></div>
@@ -40,15 +43,31 @@
         <div class="board-app "></div>
 
 
-</div>
+    </div>
 
 </div>
 
 
 <script type="module" src="/src/main.tsx"></script>
 <script>
-    const initialSetup__ts81 = [
-        {kifu:`
+    const initialSetup__ts81 = [{
+        sideComment: `true`,
+        initialComment: `The Sente drops Silver at the head of Bishop...`,
+        showMarker: true,
+        goteOnBoard: "32r,22b",
+        senteOnHand: `s`,
+        senteOnBoard: ``,
+        markerAt:"23",
+        moves: ["sd23s",
+            "g-8232***Rook escapes to the side***",
+            "s+2223***Silver captures Bishop***",
+            "g-2282***and then, Rook takes Silver******Looking at the value table, Sente lost Silver(-5 points) and gained Bishop(+8), so you gained total of 3 ponts and Gote lost 3 points.******in Another word, there are 6 points gap created among players with this exchange***",
+            "x"]
+
+    },
+        {
+            showMarker: true,
+            kifu: `
         # ----  Kifu for Windows V7 V7.44 棋譜ファイル  ----
 開始日時：2023/04/21 14:43:25
 手合割：平手　　
@@ -94,8 +113,10 @@
   24 投了         ( 0:11/00:01:26)
 
 まで23手で後手の勝ち
-        `},
-        {kifu:`# ----  Kifu for Windows V7 V7.44 棋譜ファイル  ----
+        `
+        },
+        {
+            kifu: `# ----  Kifu for Windows V7 V7.44 棋譜ファイル  ----
 開始日時：2023/04/26 10:05:00
 手合割：その他　
 上手の持駒：なし
@@ -116,7 +137,8 @@
 手数----指手---------消費時間--
    1 ２五歩打     ( 0:00/00:00:00)
 *For more of those Pawn technique, please check "Pawn Sampler" section of this site.
-`},
+`
+        },
         {
             kifu: `
 #KIF version=2.0 encoding=UTF-8
@@ -159,6 +181,8 @@
         `
         },
         {
+            maskBranchOnce: true,
+
             moves: [
                 "s-5768J1:５七銀左(68)",
                 "C:1",

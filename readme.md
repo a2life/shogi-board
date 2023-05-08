@@ -157,10 +157,7 @@ Inside the program, the second object, which main part is a kifu file literal, w
 
 
 parameters--
-- maskBranch :boolean.  When branch moves exists, then a dropdown list will be displayed at the branch
-point. It usually shows the default move.  if this parameter is set to true, then the first selection shows
-"Next Move" and forces user to select move. when "next move" is displayed in the option window, forward button and tap 
-forward are also disabled.
+
 - sOnHand or senteOnHand : string indicating on hand pieces for sente. default is none. ex. "l,l,p" (see below)
 - gOnHand or goteOnHand: string indicating on hand pieces for gote. default is none ex. "l,l,p" (see below)
 - sOnBoard or senteOnBoard: string indicating on board pieces for sente. default is initial setup for sente for no handicap game. ex. "11l,21n,31s,41g,51k,13p,22b"
@@ -172,6 +169,11 @@ forward are also disabled.
 - kifu: The program can read kakinoki(柿木) style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (moves, sOnHand,gOnHand,gOnBoard,sOnBoard)
 - startup and tesuu: number  Those two are the same. the board will advance its move to assigned move number. Allows board to start from middle of the game record. if both are defined, then 'startAt' takes precedence.
 - animate or smooth: boolean Set to false by default. pieces will glide rather than abruptly jump.
+- maskBranch :boolean default is false.  When branch moves exists, then a dropdown list will be displayed at the branch
+    point. It usually shows the default move.  if this parameter is set to true, then the first selection shows
+    "Next Move" and forces user to select move. Also, the select option order is randomized. when "next move" is displayed in the option window, forward button and tap
+    forward are disabled.
+- maskBranchOnce : boolean, default is false. Similar to maskBranch but it does mask branch window only once. subsequent or replayed branch will not be masked.
 - flip: boolean default to false when set to true,  Rotate board 180 degree. 
 - grid: number. default is 1. Corresponds to different graphics for grid.
 - ban: number  default is 2. Corresponds to different graphics for ShogiBoard

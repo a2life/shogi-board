@@ -12,6 +12,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
         goteOnBoard?: string, goteOnHand?: string,
         initialComment?:string
         showMarker?:boolean
+        maskBranch?:boolean
     } = {} //prop conversion
     const propKeys = Object.keys(prop)  //get keys and find if koma, ban, grid or focus image option is set.
     // need to write a object to filter boardImageSet parameters
@@ -40,6 +41,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     if('gOnHand' in prop.setup) propTranslate.goteOnHand=prop.setup.gOnHand;
     if('comment' in prop.setup) propTranslate.initialComment=prop.setup.comment;
     if('markerAt' in prop.setup) propTranslate.showMarker=true;
+    if('maskBranchOnce' in prop.setup) propTranslate.maskBranch=true;
 
 
     if (!!prop.setup.kifu) {
@@ -64,6 +66,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
         animate,
         flip,
         maskBranch,
+        maskBranchOnce,
         sideComment
     }
         = {...defaultParams, ...propTranslate, ...dataPack, ...prop.setup,} //each array set will override if variable exists.
@@ -88,6 +91,6 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
     return <Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
                   initialComment={initialComment} tesuu={tesuu || 0}
-                  flags={{commentWindow, HasBranch, showMarker, animate, flip, maskBranch,sideComment}} kifu={kifu}
+                  flags={{commentWindow, HasBranch, showMarker, animate, flip, maskBranch,maskBranchOnce,sideComment}} kifu={kifu}
                   senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}}/>
 }

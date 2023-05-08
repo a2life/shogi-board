@@ -26,6 +26,7 @@ export const Board = (Props: {
         animate: boolean,
         flip: boolean,
         maskBranch: boolean,
+        maskBranchOnce:boolean,
         sideComment:boolean
     }, kifu: string | undefined,
     senteName: string | undefined, goteName: string | undefined, markerAt: string,
@@ -74,6 +75,7 @@ export const Board = (Props: {
     const [moveCounter, setMoveCounter] = useState(initialCounter)
     const [previousAct, setPreviousAct] = useState(markerAt) //for very first 'move' placeholder
     const [history, setHistory] = useState(initialHistory)
+    const [maskBranch, setMaskBranch]=useState(Props.flags.maskBranch)
     const endOfMoves = (index: number) => {
         if (index >= movesArray.length) return true
         else
@@ -87,7 +89,9 @@ export const Board = (Props: {
                     return false
             }
     }
-
+    const resetMaskBranch =()=>{if (Props.flags.maskBranchOnce){
+        setMaskBranch(false);
+    }}
     const updateStates = (pieces: any, miniHistory: history, nextMove: string, index: number) => {
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
@@ -190,7 +194,7 @@ export const Board = (Props: {
         //    setMoveCounter(parseInt(newTarget))
         const moveCounter = parseInt(newTarget)
         takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action
-
+        if(Props.flags.maskBranchOnce && maskBranch) setMaskBranch(false)
     }
     const skipToNextBranchHandler = () => {
         let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove: string,
@@ -259,7 +263,7 @@ export const Board = (Props: {
                     </div>
 
                     <div class=" boardbase-grid"
-                         onClick={(!!Props.branchList[moveCounter] && Props.flags.maskBranch) ? () => {
+                         onClick={(!!Props.branchList[moveCounter] && maskBranch) ? () => {
                          } : playOneMoveHandler} onContextMenu={moveBackHandler}>
                         <RenderBoard ban={Props.graphics.ban} grid={Props.graphics.grid}/>
                         {showMarker &&
@@ -304,12 +308,12 @@ export const Board = (Props: {
                                     <I.Back/></button>
                                 <button class="btn btn-sm btn-outline-secondary" value="Play"
                                         onClick={playOneMoveHandler}
-                                        disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && Props.flags.maskBranch}>
+                                        disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && maskBranch}>
                                     <I.Play/></button>
                                 {HasBranch &&
                                     <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward"
                                             onClick={skipToNextBranchHandler}
-                                            disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && Props.flags.maskBranch}>
+                                            disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && maskBranch}>
                                         <I.SkipForward/></button>}
                                 <button class="btn btn-sm btn-outline-secondary" value="Skip-to-End"
                                         onClick={skipEndHandler}
@@ -319,9 +323,10 @@ export const Board = (Props: {
                             </div>
                             {!!Props.branchList[moveCounter] &&
                                 <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]}
-                                              maskBranch={Props.flags.maskBranch}
+                                              maskBranch={maskBranch}
                                               branchingHandler={branchingHandler}/>}
                         </div>
+
                     </>
                 }
 

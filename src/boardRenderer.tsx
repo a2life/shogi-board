@@ -41,7 +41,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     if('gOnHand' in prop.setup) propTranslate.goteOnHand=prop.setup.gOnHand;
     if('comment' in prop.setup) propTranslate.initialComment=prop.setup.comment;
     if('markerAt' in prop.setup) propTranslate.showMarker=true;
-    if('maskBranchOnce' in prop.setup) propTranslate.maskBranch=true;
+
 
 
     if (!!prop.setup.kifu) {

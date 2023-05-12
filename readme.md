@@ -117,7 +117,13 @@ Below example shows the two object literals with data to display on the board
     goteOnBoard: "41s,51k,61s",
     senteOnHand: 's1',
     goteOnHand: 'r2,p3,l1,g1',
-    moves: '*Juicy initial comment,s+5216*Spirit of this problem!,g-5261,sd62s*The rest is easy,x',
+    moves: [
+        "***Juicy initial comment***",
+        "s+5216***Spirit of this problem!***",
+        "g-5261",
+        "sd62s***The rest is easy***",
+        "x"
+        ],
     caption: "Three move tsume with extra pieces in gote on-hand area"
     },
     {
@@ -170,10 +176,11 @@ parameters--
 - startup and tesuu: number  Those two are the same. the board will advance its move to assigned move number. Allows board to start from middle of the game record. if both are defined, then 'startAt' takes precedence.
 - animate or smooth: boolean Set to false by default. pieces will glide rather than abruptly jump.
 - maskBranch :boolean default is false.  When branch moves exists, then a dropdown list will be displayed at the branch
-    point. It usually shows the default move.  if this parameter is set to true, then the first selection shows
+    point. It usually shows the default move.  if this parameter is set to true, then the selection window shows
     "Next Move" and forces user to select move. Also, the select option order is randomized. when "next move" is displayed in the option window, forward button and tap
     forward are disabled.
 - maskBranchOnce : boolean, default is false. Similar to maskBranch but it does mask branch window only once. subsequent or replayed branch will not be masked.
+- If more controlled branch masking is desired, you can add '?' as a first character of comment line. First branching moves after the comment will be masked. See below.
 - flip: boolean default to false when set to true,  Rotate board 180 degree. 
 - grid: number. default is 1. Corresponds to different graphics for grid.
 - ban: number  default is 2. Corresponds to different graphics for ShogiBoard
@@ -210,7 +217,11 @@ Piece representations in moves, sOnHand,gOnHand,sOnBoard and gOnBoard parameters
 
 Move notation
 
-Anything after '***' and before '***' is considered as a comment paragraph and will be displayed in comment window.
+Anything after three asterisks and before three asterisks is considered as a comment paragraph and will be displayed in comment window.
+
+If the first character of the comment is '?' or whole comment is just '?' (surrounded by three asterisks) this will affect 
+the first branching dropdown list after the comment and option window
+will show "Next move" instead of default move. Next move must be selected from dropdown list. Order of selection list will be randomized. 
 
 kifstr is 5 or 6 character string.
 

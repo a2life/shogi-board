@@ -1,7 +1,7 @@
 type history = { pieces: string, playedOn: string, counter: number }[]
 
 import '../shogiboard.css'
-import {useState} from "preact/hooks";
+import {useEffect, useState} from "preact/hooks";
 import {moveParser, moveAndRemember} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
 import {
@@ -76,6 +76,8 @@ export const Board = (Props: {
     const [previousAct, setPreviousAct] = useState(markerAt) //for very first 'move' placeholder
     const [history, setHistory] = useState(initialHistory)
     const [maskBranch, setMaskBranch]=useState(Props.flags.maskBranch)
+
+    useEffect(()=>{if (comment[0]=='?') { setComment(comment.slice(1)); setMaskBranch(true)}},[comment] ) //if the first character of the comment is ? then set maskBranch frag.
     const endOfMoves = (index: number) => {
         if (index >= movesArray.length) return true
         else
@@ -89,9 +91,7 @@ export const Board = (Props: {
                     return false
             }
     }
-    const resetMaskBranch =()=>{if (Props.flags.maskBranchOnce){
-        setMaskBranch(false);
-    }}
+
     const updateStates = (pieces: any, miniHistory: history, nextMove: string, index: number) => {
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
@@ -194,7 +194,7 @@ export const Board = (Props: {
         //    setMoveCounter(parseInt(newTarget))
         const moveCounter = parseInt(newTarget)
         takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action
-        if(Props.flags.maskBranchOnce && maskBranch) setMaskBranch(false)
+        setMaskBranch(Props.flags.maskBranch) //reset maskBranch flag if it was temporary altered
     }
     const skipToNextBranchHandler = () => {
         let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove: string,

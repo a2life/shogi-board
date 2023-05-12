@@ -77,8 +77,9 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
 
     let {movesArray, lineZeroComment} = preProcessMoves(moves);
     //   console.log(movesArray);
-    const commentWindow: boolean = (movesArray.toString().indexOf('*')) > 0 || initialComment.length > 0; //
-
+    const commentWindow: boolean = (movesArray.toString().replaceAll("***?***","").indexOf('*')) > 0 || initialComment.length > 1; //
+    //if moves array includes the ***comment*** section except for ***?*** which is used to signal masked next branch instruction, or initial comment
+    //exists (but string length is more than 1), then commentWindow flag is true.
     initialComment = (initialComment.length > 0) ? `${initialComment}\n${extractComments(lineZeroComment)}` : extractComments(lineZeroComment);
 
 

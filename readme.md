@@ -2,7 +2,7 @@
 
 ## The program reads data input(s) and render shogi board(s) and mimic piece moves on web page.
 #### Displays shogi board and pieces with Initial arrangement and moves information that is written in JavaScript literals.
-#### This is a rewrite of modx/PHP/JS projects from 2012. This one uses TypeScript with Preact (In another word, 100% client side solution.) - original project is https://github.com/a2life/Web_shogiboard
+#### This is a rewrite of modx/PHP/JS projects from 2012. This new project is written with TypeScript with Preact (In another word, 100% client side solution.) - original PHP/JS/JQuery project is https://github.com/a2life/Web_shogiboard
 
 Initial development period: June 2021 - August 2021
 First Deployed in production site -   March 2023
@@ -187,7 +187,7 @@ parameters--
 - koma: number default is 5. Corresponds to different graphics for koma.
 - marker: number default is 1. Corresponds to different color for marker.
 - See SetImageSelection.ts for options available for grid,ban,koma and marker.
-Moves, along with onHand and onBoard parameter can be used to do quick construction of shogi board without the use of kifu source 
+- Moves, along with onHand and onBoard parameter can be used to do quick construction of shogi board without the use of kifu source 
 
 Moves do not need to alternate between hands. Usually the notation goes like below.
 

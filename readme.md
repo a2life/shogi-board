@@ -233,15 +233,15 @@ third and fourth chars:  'move to' coordinate.  34 means 3d, 22 means 2b etc.,
 
 fifth and six column : 'move from' coordinate for '-' and '+'. in case of 'd' then only fifth column will be used as piece indicator
 
-example of moves
+some example of moves
 
     [
-     "s-7677",  : white move a piece from 77 to 76
-     "g-3433",  : black moves a piece from 33 to 34
-     "sd55g",   : black drops a gold to 5e.
-     "g-3534***do you think this is cool?******words after carriage return***", : white moves a piece from 34 to 35. Comment windows displays"do you think this is cool?<cr>words after carriage return"
-     s+2228  : piece at the 28 position is moved to 22 and then get promoted.
-     "x"   : end of moves indicator
+     "s-7677",  // white move a piece from 77 to 76
+     "g-3433",  // black moves a piece from 33 to 34
+     "sd55g",   // black drops a gold to 5e.
+     "g-3534***do you think this is cool?******words after carriage return***", // white moves a piece from 34 to 35. Comment windows displays"do you think this is cool?<cr>words after carriage return"
+     s+2228  // piece at the 28 position is moved to 22 and then get promoted.
+     "x"   // end of moves indicator
     ]
 
 "x" by itself is a special character and denotes the end of moves.

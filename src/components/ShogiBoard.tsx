@@ -75,7 +75,7 @@ export const Board = (Props: {
     const [moveCounter, setMoveCounter] = useState(initialCounter)
     const [previousAct, setPreviousAct] = useState(markerAt) //for very first 'move' placeholder
     const [history, setHistory] = useState(initialHistory)
-    const [maskBranch, setMaskBranch]=useState(Props.flags.maskBranch)
+    const [maskBranch, setMaskBranch]=useState(Props.flags.maskBranch || Props.flags.maskBranchOnce)
 
     useEffect(()=>{if (comment[0]=='?') { setComment(comment.slice(1)); setMaskBranch(true)}},[comment] ) //if the first character of the comment is ? then set maskBranch frag.
     const endOfMoves = (index: number) => {

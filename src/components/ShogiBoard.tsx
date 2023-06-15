@@ -291,7 +291,7 @@ export const Board = (Props: {
                 {movesArray.toString().length > 0 &&
                     <>
                         {endOfMoves(moveCounter) &&
-                            <aside class="endOfMove">{endOfMoveComment(movesArray[moveCounter])}</aside>}
+                            <aside class="endOfMove">{endOfMoveComment(movesArray[moveCounter])[0]}</aside>}
 
                         <div class="button-bar-grid">
                             <div class="btn-group">
@@ -340,10 +340,17 @@ export const Board = (Props: {
                 </div>
 
             </div>
-            {commentWindow && !Props.flags.sideComment && <div class="comment">{comment}</div>}
+            {commentWindow && !Props.flags.sideComment && <div class="comment">
+                {comment.length>0 && <span>{comment}<br/></span>} {endOfMoves(moveCounter) &&
+                <span>{endOfMoveComment(movesArray[moveCounter])[1]}</span>}
+            </div>}
         </div>
 
-            {commentWindow && Props.flags.sideComment && <div class="side-comment col">{comment}</div>}
+            {commentWindow && Props.flags.sideComment && <div class="side-comment col">
+                {comment.length>0 && <span>{comment}<br/></span>}{endOfMoves(moveCounter) &&
+                    <span class="endOfMove">{endOfMoveComment(movesArray[moveCounter])[1]}</span>}
+
+            </div>}
 
     </div>
 }

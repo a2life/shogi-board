@@ -8,33 +8,29 @@
  */
 
 
-const endOfMoveComment_pre = (s: string | undefined) => {
+export const endOfMoveComment = (s: string | undefined) => {
     if (typeof (s) === "string") {
-        //   console.log('endofmove string:', s);
-        const found = s.match(/[xC]:(.*)===(.*)===|[xc]:(.*)/);
+        console.log('endofmove string:', s);
+        const found = s.match(/[xC]:(.*)[*=]{3}(.*)[*=]{3}|[xc]:(.*)/);
         //if long description exists, it is returned in found[1] else description is in found[0]
         //  console.log(found);
+
         if (Array.isArray(found)) {
-            if (typeof (found[3]) === "string") return found[3]
-            else if (found[1] === "中断") {
-                return found[2]
-            } else {
-                return found[1] + found[2]
-            }
-        } else return ""
+            console.log(found)
+            const f3=(typeof(found[3])==='string')?found[3]:'';
+            const f1=(typeof(found[1])==='string')?found[1]:'';
+            const f2=(typeof(found[2])==='string')?found[2]:'';
+            console.log([f1+f3,f2])
+            return [f1+f3,f2];
+
+        } else return []
 
 
-    } else return ""
+    } else return []
 
 
 }
 
-const removeChudan = (s: string): string => (s.includes("中断")) ? "" : s
+// const removeChudan = (s: string): string => (s.includes("中断")) ? "" : s
 
 //export const endOfMoveComment=(s:string|undefined)=>removeChudan(endOfMoveComment_pre(s));
-
-
-export const endOfMoveComment = (s: string) =>
-    [endOfMoveComment_pre,
-        removeChudan]
-        .reduce((curry, item) => item(curry), s)

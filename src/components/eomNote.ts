@@ -16,11 +16,9 @@ export const endOfMoveComment = (s: string | undefined) => {
         //  console.log(found);
 
         if (Array.isArray(found)) {
-            console.log(found)
             const f3=(typeof(found[3])==='string')?found[3]:'';
             const f1=(typeof(found[1])==='string')?found[1]:'';
             const f2=(typeof(found[2])==='string')?found[2]:'';
-            console.log([f1+f3,f2])
             return [f1+f3,f2];
 
         } else return []

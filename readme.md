@@ -18,7 +18,7 @@ To get started, clone repository and then do
 then
 
 <code>npm run dev</code>  to run dev server
- - This will run the project with demo page on local server. It is currently configured to show multiple shogi-boards with different configuration. 
+ - This will run the project with demo page on local server. index.html file has enough data to show multiple shogi-boards with different parameter settings. 
  - Data to render those boards are in JavaScript section of index.html,  contained in object array with globally declared variable name of 'initialSetup_ts81'.
  - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago, but missing file fetching option. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
  - The previous project relied on modx CMS as a framework. This new setup does not rely on specific CMS. Only thing required will be for the hosting side to provide shogi data in Javascript array.
@@ -64,17 +64,18 @@ Placement of shogi piece on the board is managed by class attributes of html <im
 For example, to place Sente's king on the 55 location, the following image tag is created and inserted to containing div element 
 by the program.
 
-          <img src="[PathToKoma]//sou.png"  class="koma c5 r5" alt="" />
+          <img src="[PathToKoma]/sou.png"  class="koma c5 r5" alt="" />
           
 
 The class indicator .c5 and r5 place a piece to relevant location (column 5, row 5) according to css definition.
 to move the piece from 55 to 44, the program will manipulate the class so that the tag will be now
 
-          <img src="[PathToKoma]//sou.png"  class="koma c4 r4" alt="" />
+          <img src="[PathToKoma]/sou.png"  class="koma c4 r4" alt="" />
 
 the browser will reposition the piece. This gives the illusion that the piece has "moved"
 
 buttonBar block is dynamically created if "moves" exists. 
+commend block will be dynamically created if there is/are comment(s) in Kifu record. 
 
 ### Preparing the board
 board rendering mechanism is basically a couple of js module.

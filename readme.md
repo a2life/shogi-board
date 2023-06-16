@@ -32,7 +32,7 @@ then
 - To add file parameter to fetch kifu file. The current setup requires shogi data is already available in loaded javascript object array.
 Javascript to request file upload then render it after the data receipt is a different animal.This will introduce async operation and I currently have
 zero use case for this scenario,  so just maybe.
-- BookMarking:  Kif format document specifies & as 'bookmark' token. I have not seen this used in any kifu that I have encountered but this will be very useful to bookmark any points in branched move. current 'startAt' parameter will only work in main branch position.
+- BookMarking:  Kif format document specifies & as 'bookmark' token. I have not seen this used in any kifu that I have encountered but this will be very useful to bookmark any points in branched move. current 'startAt' parameter will only work in main branch position. Currently the program 'sees' & but do nothing about it.
 
 ## Guide
 

@@ -57,7 +57,7 @@ export const Board = (Props: {
         return {pieces, miniHistory, move, counter}
 
     }
-    if (tesuu > 1) {
+    if (tesuu > 0) {
         const modifiedProps = skipToCounter(tesuu, pieces)
         pieces = modifiedProps.pieces
         initialHistory = modifiedProps.miniHistory

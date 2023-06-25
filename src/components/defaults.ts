@@ -37,6 +37,7 @@ export interface ShogiKit {
     maskBranch:boolean;
     maskBranchOnce:boolean;
     sideComment:boolean;
+    sfen?:string;
 
 }
 

@@ -3,9 +3,11 @@ import {defaultParams, ShogiKit} from "./components/defaults";
 import {unifyPieces, preProcessMoves, prepBranchPoints, extractComments, lineBreakComments} from "./components/utils";
 import {KifuParser} from "./components/KifuParser";
 import {boardImageSet, DataSet, imgRoot} from "./components/SetImageSelection";
+import {parseSFEN} from "./components/SfenParser";
 
 export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
-    let dataPack = {}// stuff datapack in case kifu is available
+    let kifuDataPack = {}// stuff datapack in case kifu is available
+    let sfenData={}
     let propTranslate: {
         tesuu?: number, animate?: boolean,
         senteOnBoard?: string, senteOnHand?: string,
@@ -42,11 +44,14 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     if('comment' in prop.setup) propTranslate.initialComment=prop.setup.comment;
     if('markerAt' in prop.setup) propTranslate.showMarker=true;
 
-
+    if (!!prop.setup.sfen) {
+        const [sob,gob,soh,goh,side,count]=parseSFEN(prop.setup.sfen);
+        sfenData={senteOnHand:soh,goteOnHand:goh,senteOnBoard:sob,goteOnBoard:gob}
+    }
 
     if (!!prop.setup.kifu) {
         const data = new KifuParser(prop.setup.kifu)
-        dataPack = data.parse();
+        kifuDataPack = data.parse();
 
     }  //otherwise fall back to individual parameters that are available
     let {
@@ -69,7 +74,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
         maskBranchOnce,
         sideComment
     }
-        = {...defaultParams, ...propTranslate, ...dataPack, ...prop.setup,} //each array set will override if variable exists.
+        = {...defaultParams, ...propTranslate, ...sfenData, ...kifuDataPack,  ...prop.setup,} //each array set will override if variable exists.
 
     const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand);
     moves = moves || ``;

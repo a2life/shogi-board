@@ -148,8 +148,8 @@ export const prepBranchPoints = (movesArray: string[]) => {
 export const getMoveNote = (movement: string) => {
     let moveElements = movement.match(rePattern) as RegExpMatchArray
     if (moveElements.groups!.move === undefined) {
-        return
-    } //if readable notation is not included in move string then return nothing
+        return symbolizeSide(moveElements.groups!.pre)+ moveElements.groups!.Note
+    } //if readable move is not included in move string then return nothing
     else return moveElements.groups!.move + '.' + symbolizeSide(moveElements.groups!.pre) + moveElements.groups!.Note
 }
 

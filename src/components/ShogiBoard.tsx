@@ -348,7 +348,7 @@ export const Board = (Props: {
 
             {commentWindow && Props.flags.sideComment && <div class="side-comment col">
                 {comment.length>0 && <span>{comment}<br/></span>}{endOfMoves(moveCounter) &&
-                    <span class="endOfMove">{endOfMoveComment(movesArray[moveCounter])[1]}</span>}
+                    <span style="font-size:0.75rem">{endOfMoveComment(movesArray[moveCounter])[1]}</span>}
 
             </div>}
 

@@ -178,5 +178,12 @@ export const extractBookMark = (moveLine: string) => {
         return trimmedCommentArray[0] + '\n'
     }
 
-    return '';
+    return ''
+}
+
+export const addExtension=(target:string, extension:string)=>{
+    if (target.slice(-extension.length)==extension){
+        return target
+    }
+    else return target+extension
 }

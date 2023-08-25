@@ -82,6 +82,13 @@ This will use 60% scaling.
 .animate-move {
     transition: 0.4s;
 }
+.flip-button{
+    animation: fadein 0.5s;
+}
+@keyframes fadein {
+    from {opacity:0;}
+    to {opacity:1;}
+}
 
 .playerName {
     position: absolute;
@@ -140,6 +147,13 @@ This will use 60% scaling.
     top: 5px;
     cursor: pointer;
 
+}
+
+.image-capture-position {
+    position:absolute;
+    top:5px;
+    cursor: pointer;
+    left:284px;
 }
 .text-highlight {
     color:white;

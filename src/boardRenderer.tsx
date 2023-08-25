@@ -98,5 +98,5 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     return <Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
                   initialComment={initialComment} tesuu={tesuu || 0}
                   flags={{commentWindow, HasBranch, showMarker, animate, flip, maskBranch,maskBranchOnce,sideComment}} kifu={kifu}
-                  senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}}/>
+                  senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}} id={prop.index}/>
 }

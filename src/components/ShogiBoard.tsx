@@ -1,3 +1,5 @@
+import {saveImage} from "./imagecopy";
+
 type history = { pieces: string, playedOn: string, counter: number }[]
 
 import '../shogiboard.css'
@@ -10,7 +12,7 @@ import {
     getMoveNote,
     displayWithSideSymbol,
     extractComments,
-    extractBookMark
+    extractBookMark, addExtension
 } from "./utils";
 import {ShowBranches} from "./ShowBranches";
 import {saveAs} from "file-saver";
@@ -30,7 +32,8 @@ export const Board = (Props: {
         sideComment:boolean
     }, kifu: string | undefined,
     senteName: string | undefined, goteName: string | undefined, markerAt: string,
-    graphics: { koma: string, ban: string, grid: string, marker: string }
+    graphics: { koma: string, ban: string, grid: string, marker: string },
+    id: number
 }) => {
 
     let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu, markerAt} = Props
@@ -234,21 +237,28 @@ export const Board = (Props: {
     }
 
     const saveKifu = () => { //this button will only display when kifu is available, so no check on Props.kifu is performed here
-        const response = window.confirm('Save kif as "download.kif?')
+        const response = window.prompt('Save kifu record. (kifu file format)', "download.kif")
         if (response) {
             const blob = new Blob([kifu!], {type: 'text/plain;charset=utf-8'})
-            saveAs(blob, "download.kif")
+            saveAs(blob, addExtension(response,'.kifu'))
         }
 
     }
 
     const [flipped, setFlipped] = useState(flags.flip);
     const flipHandler = () => setFlipped(!flipped); //flip screen action
+    const imgCapture=()=>{
+        const response =window.prompt ('save the board image (.png file format):', "board-image.png")
+        if (response) {
+            const boardImageNode = document.getElementById('board-image' + Props.id)!
+            saveImage(boardImageNode,addExtension(response,'.png'));
+        }
+    };
     return <div class={Props.flags.sideComment?"row":""}>
         <div class="board-container">
             {(caption!.length > 0) && <div className="caption">{caption}</div>}
             <div style="position:relative;">
-                <div class={flipped ? "flip180 animate-move" : "animate-move"}>
+                <div id={"board-image"+Props.id} class={flipped ? "flip180 animate-move" : "animate-move"}>
                     <div class="row-on-hand">
                         {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
                             <span class={flipped ? `c${p[0]} flip180` : `c${p[0]}`}>{p.slice(1)}</span>)}
@@ -331,12 +341,14 @@ export const Board = (Props: {
                 }
 
                 <div class="save-flip-box">
-                    <div class={flipped ? "flip-button-position text-highlight" : "flip-button-position"}
+                    <div class="flip-button-position"
                          title='Flip board'
-                         onClick={flipHandler}>&#x21c5;</div>
+                         onClick={flipHandler}>{flipped?<I.rotateL/>:<I.rotateR/>}</div>
                     {!!kifu &&
                         <div title='download Kifu' class="save-button-position"
-                             onClick={saveKifu}>&#x21f2;</div>}
+                             onClick={saveKifu}><I.SaveFile/></div>}
+                        <div title='download image capture' class="image-capture-position" onClick={imgCapture}><I.copyIcon />
+                            </div>
                 </div>
 
             </div>

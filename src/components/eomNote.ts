@@ -11,9 +11,10 @@
 export const endOfMoveComment = (s: string | undefined) => {
     if (typeof (s) === "string") {
         console.log('endofmove string:', s);
-        const found = s.match(/[xC]:(.*)[*=]{3}(.*)[*=]{3}|[xc]:(.*)/);
+        const found = s.match(/[xC]:(.*?)[*=]{3}(.*)[*=]{3}|[xc]:(.*)/);
         //if long description exists, it is returned in found[1] else description is in found[0]
         //  console.log(found);
+        // first * or = match is lazy match
 
         if (Array.isArray(found)) {
             const f3=(typeof(found[3])==='string')?found[3]:'';

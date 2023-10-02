@@ -12,7 +12,7 @@ import {
     getMoveNote,
     displayWithSideSymbol,
     extractComments,
-    extractBookMark, addExtension
+    extractBookMark, addExtension, lineBreakComments
 } from "./utils";
 import {ShowBranches} from "./ShowBranches";
 import {saveAs} from "file-saver";
@@ -354,13 +354,13 @@ export const Board = (Props: {
             </div>
             {commentWindow && !Props.flags.sideComment && <div class="comment">
                 {comment.length>0 && <span>{comment}<br/></span>} {endOfMoves(moveCounter) &&
-                <span>{endOfMoveComment(movesArray[moveCounter])[1]}</span>}
+                <span>{lineBreakComments(endOfMoveComment(movesArray[moveCounter])[1])}</span>}
             </div>}
         </div>
 
             {commentWindow && Props.flags.sideComment && <div class="side-comment col">
                 {comment.length>0 && <span>{comment}<br/></span>}{endOfMoves(moveCounter) &&
-                    <span style="font-size:0.75rem">{endOfMoveComment(movesArray[moveCounter])[1]}</span>}
+                    <span style="font-size:0.75rem">{lineBreakComments(endOfMoveComment(movesArray[moveCounter])[1])}</span>}
 
             </div>}
 

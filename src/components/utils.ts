@@ -168,7 +168,7 @@ export const extractComments = (moveLine: string) => {
      return comment.replaceAll('*', '<br>')*/
 }
 export const lineBreakComments = (comment: string) => {
-    return comment.replace(/\*\*\*\*\*\*/g, '\n')
+    return comment.replace(/[=*]{6}/g, '\n')
 }
 
 export const extractBookMark = (moveLine: string) => {

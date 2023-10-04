@@ -167,8 +167,10 @@ export const extractComments = (moveLine: string) => {
      const comment = (index >= 0) ? moveLine.slice(index + 1) : ''
      return comment.replaceAll('*', '<br>')*/
 }
-export const lineBreakComments = (comment: string) => {
+export const lineBreakComments = (comment: string|undefined) => {
+    if (comment)
     return comment.replace(/[=*]{6}/g, '\n')
+    else return "";
 }
 
 export const extractBookMark = (moveLine: string) => {

@@ -21,7 +21,7 @@ then
  - This will run the project with demo page on local server. index.html file has enough data to show multiple shogi-boards with different parameter settings. 
  - Data to render those boards are in JavaScript section of index.html,  contained in object array with globally declared variable name of 'initialSetup_ts81'.
  - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago, but missing file fetching option. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
- - The previous project relied on modx CMS as a framework. This new setup does not rely on specific CMS. Only thing required will be for the hosting side to provide shogi data in Javascript array.
+ - The previous project relied on modx CMS as a framework. This new setup does not rely on specific CMS. The only thing required will be for the hosting side to provide shogi data in Javascript array.
 
 
 <code>npm run build </code> to build project with example index.html
@@ -32,7 +32,7 @@ then
 - To add file parameter to fetch kifu file. The current setup requires shogi data is already available in loaded javascript object array.
 Javascript to request file upload then render it after the data receipt is a different animal.This will introduce async operation and I currently have
 zero use case for this scenario,  so just maybe.
-- BookMarking:  Kif format document specifies & as 'bookmark' token. I have not seen this used in any kifu that I have encountered but this will be very useful to bookmark any points in branched move. current 'startAt' parameter will only work in main branch position. Currently the program 'sees' & but do nothing about it.
+- BookMarking:  Kif format document specifies & as 'bookmark' token. I have not seen this used in any kifu that I have encountered but this will be very useful to bookmark any points in branched move. current 'startAt' parameter will only work in main branch position. Currently, the program 'sees' & but do nothing about it.
 
 ## Guide
 
@@ -61,7 +61,7 @@ This application is not intended to be used to play shogi. The purpose of this a
 
 ### Theory of board rendering.
 Placement of shogi piece on the board is managed by class attributes of html <img> tag.
-For example, to place Sente's king on the 55 location, the following image tag is created and inserted to containing div element 
+For example, to place sente's king on the 55 location, the following image tag is created and inserted to containing div element 
 by the program.
 
           <img src="[PathToKoma]/sou.png"  class="koma c5 r5" alt="" />
@@ -282,7 +282,7 @@ Storing of  this kifu file can be statically embedded in
 javascript file like this demo but of course 
 those Kifu files can be stored in the 
 web server and then have server side script 
-(PHP based, NodeJs based, etc.,) to create a initialSetup object and
+(PHP based, Node.js based, etc.,) to create a initialSetup object and
 serve from the server.
 
 (note) When supplying the kifu from the server,

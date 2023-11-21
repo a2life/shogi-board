@@ -1,4 +1,4 @@
-if (typeof(initialSetup__ts81)==='undefined') let initialSetup__ts81=[]
+if (typeof(initialSetup__ts81)==='undefined') {let initialSetup__ts81=[]}
 initialSetup__ts81.push(
 {
     caption: "what",

@@ -4,9 +4,11 @@ import {unifyPieces, preProcessMoves, prepBranchPoints, extractComments, lineBre
 import {KifuParser} from "./components/KifuParser";
 import {boardImageSet, DataSet, imgRoot} from "./components/SetImageSelection";
 import {parseSFEN} from "./components/SfenParser";
+import {useState,useEffect} from "preact/hooks";
 
-export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
-    let kifuDataPack = {}// stuff datapack in case kifu is available
+export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
+    const [urlData,setUrlData]=useState({})
+    let kifuDataPack = {} // stuff datapack in case kifu is available
     let sfenData={}
     let propTranslate: {
         tesuu?: number, animate?: boolean,
@@ -32,7 +34,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
         graphicsOptions.marker = prop.setup.marker
     }
 
-    // --- here, do somethign to build options
+    // --- here, do something to build options
     const {koma, ban, grid, marker} = boardImageSet(graphicsOptions) // get all reference to images path. OK if its empty object
 
     if ('startAt' in prop.setup) propTranslate.tesuu = prop.setup.startAt;
@@ -51,9 +53,24 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
 
     if (!!prop.setup.kifu) {
         const data = new KifuParser(prop.setup.kifu)
-        kifuDataPack = data.parse();
+        kifuDataPack=data.parse();
 
-    }  //otherwise fall back to individual parameters that are available
+    }
+    const getUrlKifu = async (url:string)=> {
+        const response = await fetch(url);
+        const kifu = await response.text();
+        const data = new KifuParser(kifu);
+
+
+       return data.parse();
+    }
+    useEffect(()=>{    if (!!prop.setup.url) {
+        // fetch kifu
+       getUrlKifu(prop.setup.url).then((result)=>setUrlData(result));
+
+    }},[])
+
+    //otherwise fall back to individual parameters that are available
     let {
         senteOnBoard,
         goteOnBoard,
@@ -74,7 +91,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
         maskBranchOnce,
         sideComment
     }
-        = {...defaultParams, ...propTranslate, ...sfenData, ...kifuDataPack,  ...prop.setup,} //each array set will override if variable exists.
+        = {...defaultParams, ...propTranslate, ...sfenData, ...kifuDataPack, ...urlData, ...prop.setup,} //each array set will override if variable exists.
 
     const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand);
     moves = moves || ``;
@@ -82,6 +99,9 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
 
     let {movesArray, lineZeroComment} = preProcessMoves(moves);
     //   console.log(movesArray);
+
+
+
     const commentWindow: boolean = (movesArray.toString().replaceAll("***?***","").indexOf('*')) > 0 || initialComment.length > 1; //
     //if moves array includes the ***comment*** section except for ***?*** which is used to signal masked next branch instruction, or initial comment
     //exists (but string length is more than 1), then commentWindow flag is true.

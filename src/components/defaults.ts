@@ -27,6 +27,7 @@ export interface ShogiKit {
     showMarker:boolean;
     animate:boolean;
     smooth?:boolean;
+    url?:string;
 
     flip: boolean;
 

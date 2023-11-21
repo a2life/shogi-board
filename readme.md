@@ -29,9 +29,7 @@ then
 <code>npm run serve </code> to server built project
 
 ### todos
-- To add file parameter to fetch kifu file. The current setup requires shogi data is already available in loaded javascript object array.
-Javascript to request file upload then render it after the data receipt is a different animal.This will introduce async operation and I currently have
-zero use case for this scenario,  so just maybe.
+
 - BookMarking:  Kif format document specifies & as 'bookmark' token. I have not seen this used in any kifu that I have encountered but this will be very useful to bookmark any points in branched move. current 'startAt' parameter will only work in main branch position. Currently, the program 'sees' & but do nothing about it.
 
 ## Guide
@@ -174,6 +172,7 @@ parameters--
 - moves : string[], data representing piece moves. ex. ["s-2627","g-8687","s-2526","g-8586"] 
 (this represents ２六歩、８四歩、２五歩、８五歩).
 - kifu: The program can read kakinoki(柿木) style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (moves, sOnHand,gOnHand,gOnBoard,sOnBoard)
+- url: Specifies the url for kifu file in kifu format. Currently only the utf8 encoded text is supported. If the file is in SJIS format, first covert it to utf8.  Also, JavaScript fetch API is used for this functionality. This means Cross-origin-Request will be observed. Depending on Server origin and setting, this parameter may not work. 
 - startup and tesuu: number  Those two are the same. the board will advance its move to assigned move number. Allows board to start from middle of the game record. if both are defined, then 'startAt' takes precedence.
 - animate or smooth: boolean Set to false by default. pieces will glide rather than abruptly jump.
 - maskBranch :boolean default is false.  When branch moves exists, then a dropdown list will be displayed at the branch
@@ -275,17 +274,18 @@ box with choices of LabelB1 and Label B2.
 
 This manual method is will quickly become tiresome. 
 Therefore, a most likely scenario is to create kifu file using application 
-such as Kifu for windows and create Kifu file, then assign the output to
-kifu=`` variable. 
+such as Kifu for windows and create Kifu file, then,
+-# assign the KIFU output to kifu=`` parameter,
+-# or specifies the url path to the target kifu file with url="" parameter. This is slightly inefficient due to the script has to fetch the file as a promise object.
 
 Storing of  this kifu file can be statically embedded in
 javascript file like this demo but of course 
 those Kifu files can be stored in the 
 web server and then have server side script 
 (PHP based, Node.js based, etc.,) to create a initialSetup object and
-serve from the server.
+serve from the server with kifu=`kifu-string` or use url="path\to\file.kifu" in initialSetup.
 
-(note) When supplying the kifu from the server,
+(note) When supplying the kifu from the server as a string literal,
 kifu will be surrounded by back tick (`) as a string literals in JavaScript. 
 Care should be taken to escape each backslash so that string literal
 will not process it as a combination of next character and make kifu information not properly parsed.

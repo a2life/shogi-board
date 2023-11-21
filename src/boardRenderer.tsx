@@ -1,8 +1,8 @@
 import {Board} from "./components/ShogiBoard";
 import {defaultParams, ShogiKit} from "./components/defaults";
-import {unifyPieces, preProcessMoves, prepBranchPoints, extractComments, lineBreakComments} from "./components/utils";
+import {unifyPieces, preProcessMoves, prepBranchPoints, extractComments} from "./components/utils";
 import {KifuParser} from "./components/KifuParser";
-import {boardImageSet, DataSet, imgRoot} from "./components/SetImageSelection";
+import {boardImageSet, DataSet} from "./components/SetImageSelection";
 import {parseSFEN} from "./components/SfenParser";
 import {useState,useEffect} from "preact/hooks";
 
@@ -56,6 +56,11 @@ export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
         kifuDataPack=data.parse();
 
     }
+    /**
+     *
+     * @param url :string url path to the kifu. assumes the file pointed to by url is a text file in kifu format
+     * text() assumes the file is in utf8.  sJIS file will not work on this implementation.
+     */
     const getUrlKifu = async (url:string)=> {
         const response = await fetch(url);
         const kifu = await response.text();
@@ -65,7 +70,7 @@ export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
        return data.parse();
     }
     useEffect(()=>{    if (!!prop.setup.url) {
-        // fetch kifu
+        // if url is set, fetch kifu after component is mounted and force rerender.
        getUrlKifu(prop.setup.url).then((result)=>setUrlData(result));
 
     }},[])

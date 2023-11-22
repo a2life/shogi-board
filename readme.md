@@ -162,7 +162,7 @@ Inside the program, the second object, which main part is a kifu file literal, w
 
 
 parameters--
-
+### parameters are object element inside the object literal. The following parameters are currently recognized.
 - sOnHand or senteOnHand : string indicating on hand pieces for sente. default is none. ex. "l,l,p" (see below)
 - gOnHand or goteOnHand: string indicating on hand pieces for gote. default is none ex. "l,l,p" (see below)
 - sOnBoard or senteOnBoard: string indicating on board pieces for sente. default is initial setup for sente for no handicap game. ex. "11l,21n,31s,41g,51k,13p,22b"
@@ -172,9 +172,13 @@ parameters--
 - moves : string[], data representing piece moves. ex. ["s-2627","g-8687","s-2526","g-8586"] 
 (this represents ２六歩、８四歩、２五歩、８五歩).
 - kifu: The program can read kakinoki(柿木) style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (moves, sOnHand,gOnHand,gOnBoard,sOnBoard)
-- url: Specifies the url for kifu file in kifu format. Currently only the utf8 encoded text is supported. If the file is in SJIS format, first covert it to utf8.  Also, JavaScript fetch API is used for this functionality. This means Cross-origin-Request will be observed. Depending on Server origin and setting, this parameter may not work. 
+- url: Specifies the url for kifu file in kifu format. Currently only the utf8 encoded text is supported. 
+If the file is in SJIS format, first covert it to utf8. 
+Also, CORS policy will be observed as this function uses JavaScript fetch API.
+Therefore, depending on Server origin and header setting, this parameter may not work. 
+- sfen: static board information in sfen format. However, move count and side information is not utilized at this time.
 - startup and tesuu: number  Those two are the same. the board will advance its move to assigned move number. Allows board to start from middle of the game record. if both are defined, then 'startAt' takes precedence.
-- animate or smooth: boolean Set to false by default. pieces will glide rather than abruptly jump.
+- animate or smooth: boolean Set to false by default. If set to true, pieces will glide rather than abruptly jump.
 - maskBranch :boolean default is false.  When branch moves exists, then a dropdown list will be displayed at the branch
     point. It usually shows the default move.  if this parameter is set to true, then the selection window shows
     "Next Move" and forces user to select move. Also, the select option order is randomized. when "next move" is displayed in the option window, forward button and tap
@@ -274,19 +278,23 @@ box with choices of LabelB1 and Label B2.
 
 This manual method is will quickly become tiresome. 
 Therefore, a most likely scenario is to create kifu file using application 
-such as Kifu for windows and create Kifu file, then,
--# assign the KIFU output to kifu=`` parameter,
--# or specifies the url path to the target kifu file with url="" parameter. This is slightly inefficient due to the script has to fetch the file as a promise object.
+such as Kifu for windows and create Kifu file to use with the program.
 
-Storing of  this kifu file can be statically embedded in
-javascript file like this demo but of course 
-those Kifu files can be stored in the 
-web server and then have server side script 
-(PHP based, Node.js based, etc.,) to create a initialSetup object and
-serve from the server with kifu=`kifu-string` or use url="path\to\file.kifu" in initialSetup.
+## Using kifu file with the program.
+There are two ways to utilized Kakinoki style kifu file.
+#### Method one
+##### Use parameter kifu:  Simply copy and paste the content of kifu file as a value for kifu element.
+- See example1.js in record folder for example.
+#### Method two
+##### Use parameter url: and specify the file path as a value for url.
+ - This method is slightly inefficient because after the initial script loading and executing,
+the script  has to fetch the file as a promise object, then re-render the board from resolved promise object.
+ - See urlfetch.js for example.
+ - File must be in utf-8 encoded (SJIS encoded kifu will not work)
+
 
 (note) When supplying the kifu from the server as a string literal,
-kifu will be surrounded by back tick (`) as a string literals in JavaScript. 
+kifu value will be surrounded by back tick (`) as a string literals in JavaScript. 
 Care should be taken to escape each backslash so that string literal
 will not process it as a combination of next character and make kifu information not properly parsed.
 

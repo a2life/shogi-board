@@ -5,7 +5,7 @@ import {KifuParser} from "./components/KifuParser";
 import {boardImageSet, DataSet} from "./components/SetImageSelection";
 import {parseSFEN} from "./components/SfenParser";
 import {useState,useEffect} from "preact/hooks";
-import {getUrlKifu} from "./components/urlfetch";
+import {getUrlKifu} from "./components/fetchFile";
 
 export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     const [urlData,setUrlData]=useState({})

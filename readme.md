@@ -172,10 +172,8 @@ parameters--
 - moves : string[], data representing piece moves. ex. ["s-2627","g-8687","s-2526","g-8586"] 
 (this represents ２六歩、８四歩、２五歩、８五歩).
 - kifu: The program can read kakinoki(柿木) style kifu notation. Append entire kifu record inside backtick pair (quoted literal) . it will take precedence over other individual parameters (moves, sOnHand,gOnHand,gOnBoard,sOnBoard)
-- url: Specifies the url for kifu file in kifu format. Currently only the utf8 encoded text is supported. 
-If the file is in SJIS format, first covert it to utf8. 
-Also, CORS policy will be observed as this function uses JavaScript fetch API.
-Therefore, depending on Server origin and header setting, this parameter may not work. 
+- url: Specifies the url for kifu file in kifu format. The utf8 encoded as well as Shift-JIS encoded text file is supported. 
+Also, CORS policy will be enforced. Therefore, depending on Server's origin and header setting, this parameter may not work. 
 - sfen: static board information in sfen format. However, move count and side information is not utilized at this time.
 - startup and tesuu: number  Those two are the same. the board will advance its move to assigned move number. Allows board to start from middle of the game record. if both are defined, then 'startAt' takes precedence.
 - animate or smooth: boolean Set to false by default. If set to true, pieces will glide rather than abruptly jump.
@@ -185,8 +183,8 @@ Therefore, depending on Server origin and header setting, this parameter may not
     forward are disabled.
 - maskBranchOnce : boolean, default is false. Similar to maskBranch but it does mask branch window only once. subsequent or replayed branch will not be masked.
 - If more controlled branch masking is desired, you can add '?' as a first character of comment line. First branching moves after the comment will be masked. See below.
-- flip: boolean default to false when set to true,  Rotate board 180 degree. 
-- grid: number. default is 1. Corresponds to different graphics for grid.
+- flip: boolean default to false. When set to true,  Rotate the board image 180 degree. 
+- grid: number. default is 1. Corresponds to different graphics file for grid.
 - ban: number  default is 2. Corresponds to different graphics for ShogiBoard
 - koma: number default is 5. Corresponds to different graphics for koma.
 - marker: number default is 1. Corresponds to different color for marker.
@@ -276,21 +274,23 @@ a choice with labelA1 and Label A2. If the user chooses label A1,
 then make a move, the user will then be presented with the list
 box with choices of LabelB1 and Label B2.
 
-This manual method is will quickly become tiresome. 
+This method of manually creating each pieces move and managing branch moves will quickly become tiresome. 
 Therefore, a most likely scenario is to create kifu file using application 
-such as Kifu for windows and create Kifu file to use with the program.
+such as Kifu for windows and create Kifu file to use with the program. 
+
+Most Shogi GUI can also generate Kakinoki style kifu file (usually identified with file extension kif or kifu)
 
 ## Using kifu file with the program.
-There are two ways to utilized Kakinoki style kifu file.
+There are two ways to utilized Kakinoki style kifu files.
 #### Method one
 ##### Use parameter kifu:  Simply copy and paste the content of kifu file as a value for kifu element.
 - See example1.js in record folder for example.
 #### Method two
 ##### Use parameter url: and specify the file path as a value for url.
  - This method is slightly inefficient because after the initial script loading and executing,
-the script  has to fetch the file as a promise object, then re-render the board from resolved promise object.
+the script  has to fetch the file content as a promise object, then re-render the board from resolved promise object.
  - See urlfetch.js for example.
- - File must be in utf-8 encoded (SJIS encoded kifu will not work)
+ - File must be in utf-8 encoded or SJIS encoded kifu format.
 
 
 (note) When supplying the kifu from the server as a string literal,

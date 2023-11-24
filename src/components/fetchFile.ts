@@ -13,7 +13,7 @@ export const getUrlKifu = async (url:string)=> {
 const processText=(buffer:ArrayBuffer)=>{
     const encoding = (contentIsSJIS(buffer))?"Shift_JIS":"utf-8"
     const textDecoder = new TextDecoder(encoding)
-    console.log(encoding)
+  //  console.log(encoding)
     return textDecoder.decode(buffer)
 }
 

@@ -2,13 +2,14 @@
 
 ## The program reads data input(s) and render shogi board(s) and mimic piece moves on web page.
 #### Displays shogi board and pieces with Initial arrangement and moves information that is written in JavaScript literals.
-#### This is a rewrite of modx/PHP/JS projects from 2012. This new project is written with TypeScript with Preact (In another word, 100% client side solution.) - original PHP/JS/JQuery project is https://github.com/a2life/Web_shogiboard
+
 
 Initial development period: June 2021 - August 2021
 First Deployed in production site -   March 2023
 
-
 A demo running in website can be seen  <a href='https://shogishack.net/annex/js-shogi-board.html'>in this link </a>.
+
+(This is a rewrite of modx/PHP/JS projects from 2012. This new project is written with TypeScript with Preact (In another word, 100% client side solution.) - original PHP/JS/JQuery project is https://github.com/a2life/Web_shogiboard)
 
 To get started, clone repository and then do
 
@@ -20,7 +21,7 @@ then
 <code>npm run dev</code>  to run dev server
  - This will run the project with demo page on local server. index.html file has enough data to show multiple shogi-boards with different parameter settings. 
  - Data to render those boards are in JavaScript section of index.html,  contained in object array with globally declared variable name of 'initialSetup_ts81'.
- - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago, but missing file fetching option. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
+ - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
  - The previous project relied on modx CMS as a framework. This new setup does not rely on specific CMS. The only thing required will be for the hosting side to provide shogi data in Javascript array.
 
 
@@ -52,7 +53,7 @@ This application is not intended to be used to play shogi. The purpose of this a
 <li>Play forward, backward or jump to branch point with play buttons.  mouse clicking on the board will also move pieces forward or backwards</li>
 
 <li>CSS based board and piece placement. Change CSS to modify board and piece appearance.</li>
-<li>Multiple shogi board on single web page.  put placeholder as div element with class name of 'board-app'. If you place two such divs on the page, then the app will render two shogi boards.  You need to provide rendering data array in Javascript. 
+<li>Multiple shogi boards on single web page.  put placeholder as div element with class name of 'board-app'. If you place two such divs on the page, then the app will render two shogi boards.  You need to provide rendering data array in Javascript. Each board is managed as an element of data array. There is no iframe tags involved.
 </li>
 <li>If Kifu is applied, then download icon is available. Clicking on it will download the kifu file as 'download.kif'</li>
 </ol>

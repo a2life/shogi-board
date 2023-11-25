@@ -1,5 +1,9 @@
 import {KifuParser} from "./KifuParser";
 
+/**
+ *  Returns Kifu string as promise.
+ * @param url web file path to the target kifu file. Supports SJIS and utf-8 encoded Kaiknoki style kifu file.
+ */
 
 export const getUrlKifu = async (url:string)=> {
 

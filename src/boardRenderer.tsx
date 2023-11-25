@@ -9,7 +9,7 @@ import {getUrlKifu} from "./components/fetchFile";
 
 export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     const [urlData,setUrlData]=useState({})
-    let kifuDataPack = {} // stuff datapack in case kifu is available
+    let kifuDataPack = {} // stuff dataPack in case kifu is available
     let sfenData={}
     let propTranslate: {
         tesuu?: number, animate?: boolean,
@@ -60,7 +60,7 @@ export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     /**
      *
      * @param url :string url path to the kifu. assumes the file pointed to by url is a text file in kifu format
-     * text() assumes the file is in utf8.  sJIS file will not work on this implementation.
+     * file content need to be either utf8 or s-jis encoded.
      */
 
     useEffect(()=>{    if (!!prop.setup.url) {

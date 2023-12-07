@@ -7,6 +7,30 @@ import {parseSFEN} from "./components/SfenParser";
 import {useState,useEffect} from "preact/hooks";
 import {getUrlKifu} from "./components/fetchFile";
 
+/**
+ * Renders a Shogi board with the given setup.
+ *
+ * @param prop - The setup object.
+ * @param prop.setup - The Shogi kit setup.
+ * @param prop.setup.koma - The koma image path.
+ * @param prop.setup.ban - The ban image path.
+ * @param prop.setup.grid - The grid image path.
+ * @param prop.setup.marker - The marker image path.
+ * @param prop.setup.startAt - The starting position of the kifu.
+ * @param prop.setup.smooth - Whether to animate the moves.
+ * @param prop.setup.sOnBoard - The sente pieces on the board.
+ * @param prop.setup.sOnHand - The sente pieces on hand.
+ * @param prop.setup.gOnBoard - The gote pieces on the board.
+ * @param prop.setup.gOnHand - The gote pieces on hand.
+ * @param prop.setup.comment - The initial comment.
+ * @param prop.setup.markerAt - The marker position.
+ * @param prop.setup.sfen - The SFEN string.
+ * @param prop.setup.kifu - The kifu string.
+ * @param prop.setup.url - The URL of the kifu file.
+ * @param prop.index - The index of the board renderer.
+ *
+ * @returns The rendered Shogi board.
+ */
 export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     const [urlData,setUrlData]=useState({})
     let kifuDataPack = {} // stuff dataPack in case kifu is available

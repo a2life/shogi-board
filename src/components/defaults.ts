@@ -1,6 +1,6 @@
 
 export interface ShogiKit {
-
+[index:string]:any
     senteOnBoard: string
     sOnBoard?: string  // legacy. will be converted to senteOnHand
     goteOnBoard: string

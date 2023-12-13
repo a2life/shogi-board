@@ -1,7 +1,7 @@
 import {KifuParser} from "./KifuParser";
 
 /**
- *  Returns Kifu string as promise.
+ *  Returns Kifu string as promise, from a file pointed by url
  * @param url web file path to the target kifu file. Supports SJIS and utf-8 encoded Kaiknoki style kifu file.
  */
 

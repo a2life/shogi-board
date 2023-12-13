@@ -35,7 +35,8 @@ export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     const [urlData,setUrlData]=useState({})
     let kifuDataPack = {} // stuff dataPack in case kifu is available
     let sfenData={}
-    let propTranslate: {
+    const  propTranslate: {
+        [index:string]:any
         tesuu?: number, animate?: boolean,
         senteOnBoard?: string, senteOnHand?: string,
         goteOnBoard?: string, goteOnHand?: string,
@@ -43,7 +44,6 @@ export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
         showMarker?:boolean
         maskBranch?:boolean
     } = {} //prop conversion
-    const propKeys = Object.keys(prop)  //get keys and find if koma, ban, grid or focus image option is set.
     // need to write a object to filter boardImageSet parameters
     let graphicsOptions = {} as DataSet;
     if ('koma' in prop.setup) {
@@ -62,14 +62,22 @@ export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     // --- here, do something to build options
     const {koma, ban, grid, marker} = boardImageSet(graphicsOptions) // get all reference to images path. OK if its empty object
 
-    if ('startAt' in prop.setup) propTranslate.tesuu = prop.setup.startAt;
-    if ('smooth' in prop.setup) propTranslate.animate = prop.setup.smooth;
-    if ('sOnBoard' in prop.setup) propTranslate.senteOnBoard = prop.setup.sOnBoard;
-    if ('sOnHand' in prop.setup) propTranslate.senteOnHand = prop.setup.sOnHand;
-    if ('gOnBoard' in prop.setup) propTranslate.goteOnBoard= prop.setup.gOnBoard;
-    if('gOnHand' in prop.setup) propTranslate.goteOnHand=prop.setup.gOnHand;
-    if('comment' in prop.setup) propTranslate.initialComment=prop.setup.comment;
-    if('markerAt' in prop.setup) propTranslate.showMarker=true;
+    const propMap = {
+        'startAt': 'tesuu',
+        'smooth': 'animate',
+        'sOnBoard': 'senteOnBoard',
+        'sOnHand': 'senteOnHand',
+        'gOnBoard': 'goteOnBoard',
+        'gOnHand': 'goteOnHand',
+        'comment': 'initialComment',
+    };
+
+    Object.entries(propMap).forEach(([propKey, translateKey]) => {
+        if (propKey in prop.setup) propTranslate[translateKey] = prop.setup[propKey];
+    })
+
+
+    if('markerAt' in prop.setup) prop.setup.showMarker=true;
 
     if (!!prop.setup.sfen) {
         const [sob,gob,soh,goh,side,count]=parseSFEN(prop.setup.sfen);
@@ -82,7 +90,7 @@ export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
 
     }
     /**
-     *
+     * If url is specified, it will be fetched after component is ready, using useEffect hook.
      * @param url :string url path to the kifu. assumes the file pointed to by url is a text file in kifu format
      * file content need to be either utf8 or s-jis encoded.
      */

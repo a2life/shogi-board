@@ -55,30 +55,40 @@ const komaSetArray = [
 ]
 
 export interface DataSet {
+    [index:string]:any
     koma?:number,
     ban?:number,
     grid?:number,
     marker?:number
 }
 
- export const boardImageSet = ({koma=5, ban=2, grid=1, marker=5}:DataSet={})=>{
-     koma = (koma>=komaSetArray.length||koma<0)?5:koma; //number for
-     ban = (ban>=banImageArray.length||ban<0)?2:ban  // screen number to existing image index
-     grid = (grid>=masu_array.length||grid<0)?1:grid
-     marker= (marker>=focus_array.length||marker<0)?5:marker
+export interface graphicsSet {
+    koma:string,
+    ban:string,
+    grid:string,
+    marker:string
+}
 
-     return {"koma": imgRoot+'koma/'+komaSetArray[koma],
-         'ban':imgRoot+`ban/`+banImageArray[ban],
-         'grid':imgRoot+`masu/`+ masu_array[grid],
-         'marker':imgRoot+`focus/`+focus_array[marker]
-     }
+export const buildGraphicPaths = (graphicsOptions: DataSet): graphicsSet => {
+    const { koma, ban, grid, marker } = boardImageSet(graphicsOptions);
+    return { koma, ban, grid, marker };
+}
+
+function getImage(type:string,index:number,array:string[], defaultIndex:number ):string{
+    if (index>=array.length || index <0) index=defaultIndex;
+    return imgRoot + type + '/'+array[index]
+}
+export const boardImageSet = ({koma=5, ban=2, grid=1, marker=5}:DataSet={})=>{
+
+    return {
+        "koma": getImage('koma', koma, komaSetArray, 5),
+        'ban': getImage('ban', ban, banImageArray, 2),
+        'grid': getImage('masu', grid, masu_array, 1),
+        'marker': getImage('focus', marker, focus_array, 5),
+    }
  }
 
-   export const  komaimagePath=(koma:number  )=> {
-       koma = (koma>=komaSetArray.length||koma<0)?5:koma; //number for
-       return komaSetArray[koma]
 
-   }
 
 
 

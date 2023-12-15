@@ -2,9 +2,9 @@ import {Board} from "./components/ShogiBoard";
 import {defaultParams, ShogiKit} from "./components/defaults";
 import {unifyPieces, preProcessMoves, prepBranchPoints, extractComments} from "./components/utils";
 import {KifuParser} from "./components/KifuParser";
-import {boardImageSet, DataSet} from "./components/SetImageSelection";
+import {buildGraphicPaths, DataSet} from "./components/SetImageSelection";
 import {parseSFEN} from "./components/SfenParser";
-import {useState,useEffect} from "preact/hooks";
+import {useState, useEffect} from "preact/hooks";
 import {getUrlKifu} from "./components/fetchFile";
 
 /**
@@ -31,75 +31,71 @@ import {getUrlKifu} from "./components/fetchFile";
  *
  * @returns The rendered Shogi board.
  */
-export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
-    const [urlData,setUrlData]=useState({})
+export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
+    const [urlData, setUrlData] = useState({})
     let kifuDataPack = {} // stuff dataPack in case kifu is available
-    let sfenData={}
-    const  propTranslate: {
-        [index:string]:any
+    let sfenData = {}
+    let propTranslate: {
+        [index: string]: any,
         tesuu?: number, animate?: boolean,
         senteOnBoard?: string, senteOnHand?: string,
         goteOnBoard?: string, goteOnHand?: string,
-        initialComment?:string
-        showMarker?:boolean
-        maskBranch?:boolean
+        initialComment?: string
+        showMarker?: boolean
+        maskBranch?: boolean
     } = {} //prop conversion
     // need to write a object to filter boardImageSet parameters
-    let graphicsOptions = {} as DataSet;
-    if ('koma' in prop.setup) {
-        graphicsOptions.koma = prop.setup.koma
-    }
-    if ('ban' in prop.setup) {
-        graphicsOptions.ban = prop.setup.ban
-    }
-    if ('grid' in prop.setup) {
-        graphicsOptions.grid = prop.setup.grid
-    }
-    if ('marker' in prop.setup) {
-        graphicsOptions.marker = prop.setup.marker
+
+    let graphicsOptions: DataSet = {};
+    const keysToCopy = ['koma', 'ban', 'grid', 'marker']
+    for (const key of keysToCopy) {
+        if (key in prop.setup) {
+            graphicsOptions[key] = prop.setup[key]
+        }
     }
 
     // --- here, do something to build options
-    const {koma, ban, grid, marker} = boardImageSet(graphicsOptions) // get all reference to images path. OK if its empty object
+    const {koma, ban, grid, marker} = buildGraphicPaths(graphicsOptions) // get all reference to images path. OK if its empty object
 
-    const propMap = {
+    const xlationMap = {
         'startAt': 'tesuu',
         'smooth': 'animate',
         'sOnBoard': 'senteOnBoard',
-        'sOnHand': 'senteOnHand',
         'gOnBoard': 'goteOnBoard',
+        'sOnHand': 'senteOnHand',
         'gOnHand': 'goteOnHand',
-        'comment': 'initialComment',
-    };
-
-    Object.entries(propMap).forEach(([propKey, translateKey]) => {
-        if (propKey in prop.setup) propTranslate[translateKey] = prop.setup[propKey];
+        'comment': 'initialComment'
+    }
+    Object.entries(xlationMap).forEach(([propkey, xlatekey]) => {
+        if (propkey in prop.setup) propTranslate[xlatekey] = prop.setup[propkey]
     })
 
 
-    if('markerAt' in prop.setup) prop.setup.showMarker=true;
+    if ('markerAt' in prop.setup) prop.setup.showMarker = true;
 
     if (!!prop.setup.sfen) {
-        const [sob,gob,soh,goh,side,count]=parseSFEN(prop.setup.sfen);
-        sfenData={senteOnHand:soh,goteOnHand:goh,senteOnBoard:sob,goteOnBoard:gob}
+        const [sob, gob, soh, goh, side, count] = parseSFEN(prop.setup.sfen);
+        sfenData = {senteOnHand: soh, goteOnHand: goh, senteOnBoard: sob, goteOnBoard: gob}
     }
 
     if (!!prop.setup.kifu) {
         const data = new KifuParser(prop.setup.kifu)
-        kifuDataPack=data.parse();
+        kifuDataPack = data.parse();
 
     }
     /**
-     * If url is specified, it will be fetched after component is ready, using useEffect hook.
+     *
      * @param url :string url path to the kifu. assumes the file pointed to by url is a text file in kifu format
      * file content need to be either utf8 or s-jis encoded.
      */
 
-    useEffect(()=>{    if (!!prop.setup.url) {
-        // if url is set, fetch kifu after component is mounted and force rerender.
-       getUrlKifu(prop.setup.url).then((result)=>setUrlData(result));
+    useEffect(() => {
+        if (!!prop.setup.url) {
+            // if url is set, fetch kifu after component is mounted and force rerender.
+            getUrlKifu(prop.setup.url).then((result) => setUrlData(result));
 
-    }},[])
+        }
+    }, [])
 
     //otherwise fall back to individual parameters that are available
     let {
@@ -132,8 +128,7 @@ export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     //   console.log(movesArray);
 
 
-
-    const commentWindow: boolean = (movesArray.toString().replaceAll("***?***","").indexOf('*')) > 0 || initialComment.length > 1; //
+    const commentWindow: boolean = (movesArray.toString().replaceAll("***?***", "").indexOf('*')) > 0 || initialComment.length > 1; //
     //if moves array includes the ***comment*** section except for ***?*** which is used to signal masked next branch instruction, or initial comment
     //exists (but string length is more than 1), then commentWindow flag is true.
     initialComment = (initialComment.length > 0) ? `${initialComment}\n${extractComments(lineZeroComment)}` : extractComments(lineZeroComment);
@@ -148,6 +143,8 @@ export  function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
     const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
     return <Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
                   initialComment={initialComment} tesuu={tesuu || 0}
-                  flags={{commentWindow, HasBranch, showMarker, animate, flip, maskBranch,maskBranchOnce,sideComment}} kifu={kifu}
-                  senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}} id={prop.index}/>
+                  flags={{commentWindow, HasBranch, showMarker, animate, flip, maskBranch, maskBranchOnce, sideComment}}
+                  kifu={kifu}
+                  senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}}
+                  id={prop.index}/>
 }

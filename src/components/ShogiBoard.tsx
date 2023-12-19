@@ -18,6 +18,7 @@ import {ShowBranches} from "./ShowBranches";
 import {saveAs} from "file-saver";
 import {endOfMoveComment} from "./eomNote";
 import * as I from "./Icons";
+import DOMPurify from "dompurify";
 
 export const Board = (Props: {
     pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string,
@@ -28,8 +29,8 @@ export const Board = (Props: {
         animate: boolean,
         flip: boolean,
         maskBranch: boolean,
-        maskBranchOnce:boolean,
-        sideComment:boolean
+        maskBranchOnce: boolean,
+        sideComment: boolean
     }, kifu: string | undefined,
     senteName: string | undefined, goteName: string | undefined, markerAt: string,
     graphics: { koma: string, ban: string, grid: string, marker: string },
@@ -38,8 +39,8 @@ export const Board = (Props: {
 
     let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu, markerAt} = Props
     let initialHistory = [] as history
-  //  let initialAct = movesArray[0].slice(4, 6)
-    let initialAct=markerAt;
+    //  let initialAct = movesArray[0].slice(4, 6)
+    let initialAct = markerAt;
     let initialCounter = 0;
     const {commentWindow, HasBranch, showMarker, animate} = flags
     const skipToCounter = (tesuu: number, pieces: string) => {
@@ -78,9 +79,14 @@ export const Board = (Props: {
     const [moveCounter, setMoveCounter] = useState(initialCounter)
     const [previousAct, setPreviousAct] = useState(markerAt) //for very first 'move' placeholder
     const [history, setHistory] = useState(initialHistory)
-    const [maskBranch, setMaskBranch]=useState(Props.flags.maskBranch || Props.flags.maskBranchOnce)
+    const [maskBranch, setMaskBranch] = useState(Props.flags.maskBranch || Props.flags.maskBranchOnce)
 
-    useEffect(()=>{if (comment[0]=='?') { setComment(comment.slice(1)); setMaskBranch(true)}},[comment] ) //if the first character of the comment is ? then set maskBranch frag.
+    useEffect(() => {
+        if (comment[0] == '?') {
+            setComment(comment.slice(1));
+            setMaskBranch(true)
+        }
+    }, [comment]) //if the first character of the comment is ? then set maskBranch frag.
     const endOfMoves = (index: number) => {
         if (index >= movesArray.length) return true
         else
@@ -240,25 +246,39 @@ export const Board = (Props: {
         const response = window.prompt('Save kifu record. (kifu file format)', "download.kif")
         if (response) {
             const blob = new Blob([kifu!], {type: 'text/plain;charset=utf-8'})
-            saveAs(blob, addExtension(response,'.kifu'))
+            saveAs(blob, addExtension(response, '.kifu'))
         }
 
     }
 
     const [flipped, setFlipped] = useState(flags.flip);
     const flipHandler = () => setFlipped(!flipped); //flip screen action
-    const imgCapture=()=>{
-        const response =window.prompt ('save the board image (.png file format):', "board-image.png")
+    const imgCapture = () => {
+        const response = window.prompt('save the board image (.png file format):', "board-image.png")
         if (response) {
             const boardImageNode = document.getElementById('board-image' + Props.id)!
-            saveImage(boardImageNode,addExtension(response,'.png'));
+            saveImage(boardImageNode, addExtension(response, '.png'));
         }
     };
-    return <div class={Props.flags.sideComment?"row":""}>
+
+    const sanitizeComment = (comment: string) => {
+        return {__html: DOMPurify.sanitize(comment)}
+    }
+    const commentDiv = (comment: string) => {
+        if (comment.length > 0) return <span dangerouslySetInnerHTML={sanitizeComment(comment)}/>
+    }
+    const logEndOfMove = (stringArray: string[], lineCounter: number) => {
+        if (endOfMoves(lineCounter))
+            return (
+                <><br/><span
+                    style="font-size:0.75rem">{lineBreakComments(endOfMoveComment(stringArray[moveCounter])[1])}</span></>)
+    }
+
+    return <div class={Props.flags.sideComment ? "row" : ""}>
         <div class="board-container">
             {(caption!.length > 0) && <div className="caption">{caption}</div>}
             <div style="position:relative;">
-                <div id={"board-image"+Props.id} class={flipped ? "flip180 animate-move" : "animate-move"}>
+                <div id={"board-image" + Props.id} class={flipped ? "flip180 animate-move" : "animate-move"}>
                     <div class="row-on-hand">
                         {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
                             <span class={flipped ? `c${p[0]} flip180` : `c${p[0]}`}>{p.slice(1)}</span>)}
@@ -343,27 +363,26 @@ export const Board = (Props: {
                 <div class="save-flip-box">
                     <div class="flip-button-position"
                          title='Flip board'
-                         onClick={flipHandler}>{flipped?<I.rotateL/>:<I.rotateR/>}</div>
+                         onClick={flipHandler}>{flipped ? <I.rotateL/> : <I.rotateR/>}</div>
                     {!!kifu &&
                         <div title='download Kifu' class="save-button-position"
                              onClick={saveKifu}><I.SaveFile/></div>}
-                        <div title='download image capture' class="image-capture-position" onClick={imgCapture}><I.copyIcon />
-                            </div>
+                    <div title='download image capture' class="image-capture-position" onClick={imgCapture}>
+                        <I.copyIcon/>
+                    </div>
                 </div>
 
             </div>
             {commentWindow && !Props.flags.sideComment && <div class="comment">
-                {comment.length>0 && <span>{comment}<br/></span>} {endOfMoves(moveCounter) &&
-                <span>{lineBreakComments(endOfMoveComment(movesArray[moveCounter])[1])}</span>}
+                {commentDiv(comment)} {logEndOfMove(movesArray, moveCounter)}
             </div>}
         </div>
 
-            {commentWindow && Props.flags.sideComment && <div class="side-comment col">
-                {comment.length>0 && <span>{comment}<br/></span>}{endOfMoves(moveCounter) &&
-                    <span style="font-size:0.75rem">{lineBreakComments(endOfMoveComment(movesArray[moveCounter])[1])}</span>}
-
-            </div>}
+        {commentWindow && Props.flags.sideComment && <div class="side-comment col">
+            {commentDiv(comment)}{logEndOfMove(movesArray, moveCounter)}
+        </div>}
 
     </div>
+
 }
-    ;
+

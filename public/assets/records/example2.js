@@ -1,5 +1,5 @@
 initialSetup__ts81.push({
-    caption:`only first branch move is masked`,
+    caption:`example 2 first branch move is masked`,
     initialComment: '?',
 
     moves: [

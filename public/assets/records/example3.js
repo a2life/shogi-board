@@ -1,7 +1,8 @@
 if (typeof(initialSetup__ts81)==='undefined') initialSetup__ts81=[]
 initialSetup__ts81.push(
 {
-    caption: "Nine",
+    caption: "example 3",
+    initialComment:"Comment with <a href='*'>hyperlink</a> and <b>other html rich text features</b>",
         kifu:
     `# ----  Kifu for Windows V6.23 棋譜ファイル  ----
 開始日時：June 13, 2008

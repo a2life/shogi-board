@@ -72,8 +72,6 @@ export const Board = (Props: {
 
     const [piecesInfo, setPiecesInfo] = useState(pieces)
     const [markerPosition, setMarkerPosition] = useState(markerAt)
-
-
     const [comment, setComment] = useState(initialComment)
     const startComment = initialComment
     const [moveCounter, setMoveCounter] = useState(initialCounter)
@@ -87,6 +85,15 @@ export const Board = (Props: {
             setMaskBranch(true)
         }
     }, [comment]) //if the first character of the comment is ? then set maskBranch frag.
+// next section reinitialization needed to reset board for ajax dump of new kifu information on existing board
+    useEffect(()=>{
+        setPiecesInfo(pieces)
+        setMoveCounter(initialCounter)
+        setMarkerPosition(markerAt)
+        setPreviousAct(markerAt)
+        setComment(initialComment)
+        setHistory(initialHistory)
+    },[pieces])
     const endOfMoves = (index: number) => {
         if (index >= movesArray.length) return true
         else
@@ -130,14 +137,16 @@ export const Board = (Props: {
 
     }
 
-    const playOneMoveHandler = () => {
+    const playOneMoveHandler = (e:Event) => {
+        e.preventDefault();
         // console.log('analyzing move', movesArray[moveCounter])
         takeOneMoveForward(moveCounter)
 
     }
 
 
-    const skipEndHandler = () => {
+    const skipEndHandler = (e:Event) => {
+        e.preventDefault();
         let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, move = '',
             currentMove = previousAct
 
@@ -181,11 +190,10 @@ export const Board = (Props: {
         }
     }
     const reWindHandler = () => {
-        let counter = moveCounter;
+
         let pieces: { pieces: string, playedOn: string, counter: number } | undefined;
         while (history.length > 0) {
             pieces = history.pop()
-            counter = pieces!.counter
         }
 
         setPiecesInfo(pieces!.pieces);
@@ -205,7 +213,8 @@ export const Board = (Props: {
         takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action
         setMaskBranch(Props.flags.maskBranch) //reset maskBranch flag if it was temporary altered
     }
-    const skipToNextBranchHandler = () => {
+    const skipToNextBranchHandler = (e:Event) => {
+        e.preventDefault();
         let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove: string,
             currentMove = previousAct
 
@@ -223,7 +232,8 @@ export const Board = (Props: {
         while (!endOfMoves(counter) && movementNotBranch(counter, movesArray))
         updateStates(pieces, miniHistory, nextMove, counter)
     }
-    const skipToPrevBranchHandler = () => {
+    const skipToPrevBranchHandler = (e:Event) => {
+        e.preventDefault()
         let counter = moveCounter;
         let pieces: { pieces: string, playedOn: string, counter: number } | undefined;
         do {

@@ -77,11 +77,16 @@ buttonBar block is dynamically created if "moves" exists.
 commend block will be dynamically created if there is/are comment(s) in Kifu record. 
 
 ### Preparing the board
-board rendering mechanism is basically a couple of js module.
+board rendering mechanism is basically a couple of js modules and one CSS file. 
 - index.js
 - vendor.js
+- index.css
+
+When you build the project, those three files will be generated with unique hash strings added to the filename.
+
 
 Those javascript files will be served from /assets folder
+The build script also populates assets folder with all required shogi board and piece images. 
 
 to create a board, place div element with board-app class, like so
 

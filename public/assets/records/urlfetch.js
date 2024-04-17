@@ -8,3 +8,4 @@ initialSetup__ts81.push(
     {caption:"displaying kifu (S-JIS) from url",
      url:"/assets/kifu/sjistext.kif"}
 )
+

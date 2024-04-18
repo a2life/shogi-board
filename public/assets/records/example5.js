@@ -2,7 +2,7 @@ if (typeof(initialSetup__ts81)==='undefined') initialSetup__ts81=[]
 initialSetup__ts81.push(
 {
     caption: "Example 5, using kifu parameter",
-
+    showMarker:true,
         kifu:
     `
     # ----  Kifu for Windows V7 V7.44 棋譜ファイル  ----

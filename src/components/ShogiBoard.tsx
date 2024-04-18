@@ -42,7 +42,7 @@ export const Board = (Props: {
     //  let initialAct = movesArray[0].slice(4, 6)
     let initialAct = markerAt;
     let initialCounter = 0;
-    const {commentWindow, HasBranch, showMarker, animate} = flags
+    const {commentWindow, HasBranch, animate,showMarker} = flags
     const skipToCounter = (tesuu: number, pieces: string) => {
 
         let miniHistory = [] as history, counter = 0, move = "", previousMove = initialAct
@@ -71,14 +71,14 @@ export const Board = (Props: {
     }
 
     const [piecesInfo, setPiecesInfo] = useState(pieces)
-    const [markerPosition, setMarkerPosition] = useState(markerAt)
+    const [markerPosition, setMarkerPosition] = useState(Props.markerAt)
     const [comment, setComment] = useState(initialComment)
     const startComment = initialComment
     const [moveCounter, setMoveCounter] = useState(initialCounter)
     const [previousAct, setPreviousAct] = useState(markerAt) //for very first 'move' placeholder
     const [history, setHistory] = useState(initialHistory)
     const [maskBranch, setMaskBranch] = useState(Props.flags.maskBranch || Props.flags.maskBranchOnce)
-
+    const [markerVisible,setMarkerVisible] = useState(Props.flags.showMarker)
     useEffect(() => {
         if (comment[0] == '?') {
             setComment(comment.slice(1));
@@ -89,11 +89,15 @@ export const Board = (Props: {
     useEffect(()=>{
         setPiecesInfo(pieces)
         setMoveCounter(initialCounter)
-        setMarkerPosition(markerAt)
         setPreviousAct(markerAt)
         setComment(initialComment)
         setHistory(initialHistory)
     },[pieces])
+
+    useEffect(()=>{
+        setMarkerVisible(showMarker)
+        setMarkerPosition(markerAt)
+    },[markerAt])
     const endOfMoves = (index: number) => {
         if (index >= movesArray.length) return true
         else

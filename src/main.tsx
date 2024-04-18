@@ -7,7 +7,8 @@ const target=document.querySelectorAll('.board-app')
 
 
 target.forEach( (element,index)=>{
-    render(<BoardRenderer setup={initialSetup__ts81[index]} index={index}/>,element)
+    const input= (element.hasAttribute('data-input'))?element.getAttribute('data-input') as string:''
+    render(<BoardRenderer setup={initialSetup__ts81[index]} index={index} input={input} />,element)
 })
 
 

@@ -28,11 +28,26 @@ import {getUrlKifu} from "./components/fetchFile";
  * @param prop.setup.kifu - The kifu string.
  * @param prop.setup.url - The URL of the kifu file.
  * @param prop.index - The index of the board renderer.
+ * @param prop.input - element id input box that houses JSON data.
+ *
  *
  * @returns The rendered Shogi board.
  */
-export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
+export function BoardRenderer(prop: { setup: ShogiKit, index: number , input:string}) {
     const [urlData, setUrlData] = useState({})
+    const [jsonInput, setJsonInput] = useState({})
+    const getJsonInput=(elementId:string)=>{
+        if (elementId=='') return {}
+        const source=document.getElementById(elementId) as HTMLInputElement;
+        return JSON.parse(decodeURIComponent(source.value)) as ShogiKit
+    }
+    const inputHandler=(e:Event)=>{
+        e.preventDefault();
+
+        setJsonInput(getJsonInput(prop.input))
+
+    }
+    if(jsonInput)    prop.setup={...jsonInput} as ShogiKit
     let kifuDataPack = {} // stuff dataPack in case kifu is available
     let sfenData = {}
     let propTranslate: {
@@ -95,7 +110,10 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
             getUrlKifu(prop.setup.url).then((result) => setUrlData(result));
 
         }
-    }, [])
+    }, [prop.setup.url])
+
+
+    //assume json input is following setup parameter guideline
 
     //otherwise fall back to individual parameters that are available
     let {
@@ -135,16 +153,15 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number }) {
 
 
     const branchList = prepBranchPoints(movesArray)
-    //   console.log('branchList',branchList)
-
-
-    // check for existence of comments.
-    // console.log("commentWindows:",commentWindow, "index",prop.index);
+   //if data-input attributes exist in target div, additional input box will be added. the input box is hidden but can be accessed from outside
+    //of the app by usual document.getElementById(data-input-value) and fire with dispatchEvent('change');
     const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
-    return <Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
+    return<><Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
                   initialComment={initialComment} tesuu={tesuu || 0}
                   flags={{commentWindow, HasBranch, showMarker, animate, flip, maskBranch, maskBranchOnce, sideComment}}
                   kifu={kifu}
                   senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}}
                   id={prop.index}/>
+        {prop.input && <input id={prop.input} onChange={inputHandler} style="display:none"></input>}
+    </>
 }

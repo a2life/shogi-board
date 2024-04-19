@@ -47,7 +47,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number , input:str
         setJsonInput(getJsonInput(prop.input))
 
     }
-    if(jsonInput)    prop.setup={...jsonInput} as ShogiKit
+    if(Object.keys(jsonInput).length>0)    prop.setup={...jsonInput} as ShogiKit
     let kifuDataPack = {} // stuff dataPack in case kifu is available
     let sfenData = {}
     let propTranslate: {

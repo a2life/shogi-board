@@ -13,7 +13,7 @@
  */
 export const endOfMoveComment = (s: string | undefined) => {
     if (typeof (s) === "string") {
-        console.log('endofmove string:', s);
+     //   console.log('endofmove string:', s);
         const found = s.match(/[xC]:(.*?)[*=]{3}(.*)[*=]{3}|[xc]:(.*)/);
         //if long description exists, it is returned in found[1] else description is in found[0]
         //  console.log(found);

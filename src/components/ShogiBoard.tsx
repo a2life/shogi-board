@@ -42,7 +42,7 @@ export const Board = (Props: {
     //  let initialAct = movesArray[0].slice(4, 6)
     let initialAct = markerAt;
     let initialCounter = 0;
-    const {commentWindow, HasBranch, animate,showMarker} = flags
+    const {commentWindow, HasBranch, animate, showMarker} = flags
     const skipToCounter = (tesuu: number, pieces: string) => {
 
         let miniHistory = [] as history, counter = 0, move = "", previousMove = initialAct
@@ -61,14 +61,7 @@ export const Board = (Props: {
         return {pieces, miniHistory, move, counter}
 
     }
-    if (tesuu > 0) {
-        const modifiedProps = skipToCounter(tesuu, pieces)
-        pieces = modifiedProps.pieces
-        initialHistory = modifiedProps.miniHistory
-        initialAct = modifiedProps.move.slice(2, 4)
-        markerAt = initialAct;
-        initialCounter = modifiedProps.counter
-    }
+
 
     const [piecesInfo, setPiecesInfo] = useState(pieces)
     const [markerPosition, setMarkerPosition] = useState(Props.markerAt)
@@ -78,7 +71,7 @@ export const Board = (Props: {
     const [previousAct, setPreviousAct] = useState(markerAt) //for very first 'move' placeholder
     const [history, setHistory] = useState(initialHistory)
     const [maskBranch, setMaskBranch] = useState(Props.flags.maskBranch || Props.flags.maskBranchOnce)
-    const [markerVisible,setMarkerVisible] = useState(Props.flags.showMarker)
+    const [markerVisible, setMarkerVisible] = useState(Props.flags.showMarker)
     useEffect(() => {
         if (comment[0] == '?') {
             setComment(comment.slice(1));
@@ -86,18 +79,30 @@ export const Board = (Props: {
         }
     }, [comment]) //if the first character of the comment is ? then set maskBranch frag.
 // next section reinitialization needed to reset board for ajax dump of new kifu information on existing board
-    useEffect(()=>{
+
+
+    useEffect(() => {
         setPiecesInfo(pieces)
         setMoveCounter(initialCounter)
         setPreviousAct(markerAt)
         setComment(initialComment)
         setHistory(initialHistory)
-    },[pieces])
+        setMarkerPosition(markerAt)
+        if (tesuu > 0) {
+            const modifiedProps = skipToCounter(tesuu, pieces)
+            pieces = modifiedProps.pieces
+            initialHistory = modifiedProps.miniHistory
+            initialAct = modifiedProps.move.slice(2, 4)
+            markerAt = initialAct;
+            initialCounter = modifiedProps.counter
+        }
 
-    useEffect(()=>{
+    }, [pieces,movesArray])
+
+    useEffect(() => {
         setMarkerVisible(showMarker)
         setMarkerPosition(markerAt)
-    },[markerAt])
+    }, [markerAt])
     const endOfMoves = (index: number) => {
         if (index >= movesArray.length) return true
         else
@@ -141,7 +146,7 @@ export const Board = (Props: {
 
     }
 
-    const playOneMoveHandler = (e:Event) => {
+    const playOneMoveHandler = (e: Event) => {
         e.preventDefault();
         // console.log('analyzing move', movesArray[moveCounter])
         takeOneMoveForward(moveCounter)
@@ -149,7 +154,7 @@ export const Board = (Props: {
     }
 
 
-    const skipEndHandler = (e:Event) => {
+    const skipEndHandler = (e: Event) => {
         e.preventDefault();
         let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, move = '',
             currentMove = previousAct
@@ -170,8 +175,9 @@ export const Board = (Props: {
     }
     const notation = () => {
         if (history.length > 0) {
-            (history[history.length - 1].counter)
-            return getMoveNote(movesArray[history[history.length - 1].counter])
+
+          return getMoveNote(movesArray[history[history.length - 1].counter])
+
         }
     }
 
@@ -217,7 +223,7 @@ export const Board = (Props: {
         takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action
         setMaskBranch(Props.flags.maskBranch) //reset maskBranch flag if it was temporary altered
     }
-    const skipToNextBranchHandler = (e:Event) => {
+    const skipToNextBranchHandler = (e: Event) => {
         e.preventDefault();
         let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove: string,
             currentMove = previousAct
@@ -236,7 +242,7 @@ export const Board = (Props: {
         while (!endOfMoves(counter) && movementNotBranch(counter, movesArray))
         updateStates(pieces, miniHistory, nextMove, counter)
     }
-    const skipToPrevBranchHandler = (e:Event) => {
+    const skipToPrevBranchHandler = (e: Event) => {
         e.preventDefault()
         let counter = moveCounter;
         let pieces: { pieces: string, playedOn: string, counter: number } | undefined;

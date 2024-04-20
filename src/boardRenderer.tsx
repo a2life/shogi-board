@@ -33,20 +33,23 @@ import {getUrlKifu} from "./components/fetchFile";
  *
  * @returns The rendered Shogi board.
  */
-export function BoardRenderer(prop: { setup: ShogiKit, index: number , input:string}) {
+export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: string }) {
     const [urlData, setUrlData] = useState({})
     const [jsonInput, setJsonInput] = useState({})
-    const getJsonInput=(elementId:string)=>{
-        if (elementId=='') return {}
-        const source=document.getElementById(elementId) as HTMLInputElement;
+    const getJsonInput = (elementId: string) => {
+        if (elementId == '') return {}
+        const source = document.getElementById(elementId) as HTMLInputElement;
         return JSON.parse(decodeURIComponent(source.value)) as ShogiKit
     }
-    const inputHandler=(e:Event)=>{
+
+
+    const inputHandler = (e: Event) => {
         e.preventDefault();
 
         setJsonInput(getJsonInput(prop.input))
-
+        setUrlData({})
     }
+
     if(Object.keys(jsonInput).length>0)    prop.setup={...jsonInput} as ShogiKit
     let kifuDataPack = {} // stuff dataPack in case kifu is available
     let sfenData = {}
@@ -90,7 +93,8 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number , input:str
 
     if (!!prop.setup.sfen) {
         const [sob, gob, soh, goh, side, count] = parseSFEN(prop.setup.sfen);
-        sfenData = {senteOnHand: soh, goteOnHand: goh, senteOnBoard: sob, goteOnBoard: gob}
+        sfenData = {moves: [''], senteOnHand: soh, goteOnHand: goh, senteOnBoard: sob, goteOnBoard: gob}
+        // setDatapack(sfenData)
     }
 
     if (!!prop.setup.kifu) {
@@ -105,16 +109,25 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number , input:str
      */
 
     useEffect(() => {
-        if (!!prop.setup.url) {
-            // if url is set, fetch kifu after component is mounted and force rerender.
-            getUrlKifu(prop.setup.url).then((result) => setUrlData(result));
-
-        }
+        // if url is set, fetch kifu after component is mounted and force rerender.
+        sfenData = {}    //remove existing data if exists
+        kifuDataPack = {} //remove previous data if exists
+        if (!!prop.setup.url){ //check if url is set to null. in this case, skip the fetch
+        getUrlKifu(prop.setup.url!).then((result) =>
+            setUrlData(result))}
     }, [prop.setup.url])
 
+    /*
+    calculated and manupulated entities with this modules are below. rest is path thru
+    senteOnBoard, goteOnBoard,senteOnHand,goteOnHand, tesuu,kifu,sentename,gotename,flip
 
-    //assume json input is following setup parameter guideline
+    url param will alter all of the above.
+    kifu param will alter all of the above
+    sfen param will alter first four
 
+    The params that are not affected are
+    markerAt, caption,initialComment, showMarker, animate,maskbranch,maskbranchonce,sidecomment
+     */
     //otherwise fall back to individual parameters that are available
     let {
         senteOnBoard,
@@ -136,7 +149,15 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number , input:str
         maskBranchOnce,
         sideComment
     }
-        = {...defaultParams, ...propTranslate, ...sfenData, ...kifuDataPack, ...urlData, ...prop.setup,} //each array set will override if variable exists.
+        = {
+        ...defaultParams,
+        ...propTranslate,
+        ...kifuDataPack,
+        ...urlData,
+        ...sfenData,
+        ...prop.setup,
+    } //each array set will override if variable exists.
+
 
     const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand);
     moves = moves || ``;
@@ -153,15 +174,24 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number , input:str
 
 
     const branchList = prepBranchPoints(movesArray)
-   //if data-input attributes exist in target div, additional input box will be added. the input box is hidden but can be accessed from outside
+    //if data-input attributes exist in target div, additional input box will be added. the input box is hidden but can be accessed from outside
     //of the app by usual document.getElementById(data-input-value) and fire with dispatchEvent('change');
     const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
-    return<><Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
-                  initialComment={initialComment} tesuu={tesuu || 0}
-                  flags={{commentWindow, HasBranch, showMarker, animate, flip, maskBranch, maskBranchOnce, sideComment}}
-                  kifu={kifu}
-                  senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}}
-                  id={prop.index}/>
+    return <><Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
+                    initialComment={initialComment} tesuu={tesuu || 0}
+                    flags={{
+                        commentWindow,
+                        HasBranch,
+                        showMarker,
+                        animate,
+                        flip,
+                        maskBranch,
+                        maskBranchOnce,
+                        sideComment
+                    }}
+                    kifu={kifu}
+                    senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}}
+                    id={prop.index}/>
         {prop.input && <input id={prop.input} onChange={inputHandler} style="display:none"></input>}
     </>
 }

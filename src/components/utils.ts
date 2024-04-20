@@ -145,14 +145,18 @@ export const prepBranchPoints = (movesArray: string[]) => {
 
 }
 
-export const getMoveNote = (movement: string) => {
-    let moveElements = movement.match(rePattern) as RegExpMatchArray
-    if (moveElements.groups!.move === undefined) {
-        return symbolizeSide(moveElements.groups!.pre)+ moveElements.groups!.Note
-    } //if readable move is not included in move string then return nothing
-    else return moveElements.groups!.move + '.' + symbolizeSide(moveElements.groups!.pre) + moveElements.groups!.Note
+export const getMoveNote = (movement: string|null) => {
+    if (!movement) return null
+     let moveElements = movement.match(rePattern) as RegExpMatchArray
+    if(!moveElements) return null
+    if (typeof(moveElements.groups)!='undefined') {
+        if (moveElements.groups.move === undefined) {
+            return symbolizeSide(moveElements.groups.pre) + moveElements.groups.Note
+        } //if readable move is not included in move string then return nothing
+        else return moveElements.groups!.move + '.' + symbolizeSide(moveElements.groups!.pre) + moveElements.groups!.Note
+    }
+    else return
 }
-
 export const displayWithSideSymbol = (side: 's' | 'g', name: string) => symbolizeSide(side) + name
 
 export const extractComments = (moveLine: string) => {

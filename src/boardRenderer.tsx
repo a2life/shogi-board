@@ -44,10 +44,11 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
 
 
     const inputHandler = (e: Event) => {
+        setUrlData({}) //remove urlData if exists
+        sfenData={} //remove sfenData if exists
         e.preventDefault();
-
         setJsonInput(getJsonInput(prop.input))
-        setUrlData({})
+
     }
 
     if(Object.keys(jsonInput).length>0)    prop.setup={...jsonInput} as ShogiKit
@@ -94,7 +95,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
     if (!!prop.setup.sfen) {
         const [sob, gob, soh, goh, side, count] = parseSFEN(prop.setup.sfen);
         sfenData = {moves: [''], senteOnHand: soh, goteOnHand: goh, senteOnBoard: sob, goteOnBoard: gob}
-        // setDatapack(sfenData)
+
     }
 
     if (!!prop.setup.kifu) {

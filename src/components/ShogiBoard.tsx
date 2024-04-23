@@ -79,7 +79,7 @@ export const Board = (Props: {
         }
     }, [comment]) //if the first character of the comment is ? then set maskBranch frag.
 
-    if ((tesuu > 0) && !!movesArray[tesuu])  {
+    if ((tesuu > 0) && !!movesArray[tesuu-1])  {
         const modifiedProps = skipToCounter(tesuu, pieces)
         pieces = modifiedProps.pieces
         initialHistory = modifiedProps.miniHistory

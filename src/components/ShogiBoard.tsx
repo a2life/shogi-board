@@ -78,9 +78,17 @@ export const Board = (Props: {
             setMaskBranch(true)
         }
     }, [comment]) //if the first character of the comment is ? then set maskBranch frag.
-// next section reinitialization needed to reset board for ajax dump of new kifu information on existing board
 
+    if ((tesuu > 0) && !!movesArray[tesuu])  {
+        const modifiedProps = skipToCounter(tesuu, pieces)
+        pieces = modifiedProps.pieces
+        initialHistory = modifiedProps.miniHistory
+        initialAct = modifiedProps.move.slice(2, 4)
+        markerAt = initialAct;
+        initialCounter = modifiedProps.counter
+    }
 
+    // next section reinitialization needed to reset board for ajax dump of new kifu information on existing board
     useEffect(() => {
         setPiecesInfo(pieces)
         setMoveCounter(initialCounter)
@@ -88,14 +96,7 @@ export const Board = (Props: {
         setComment(initialComment)
         setHistory(initialHistory)
         setMarkerPosition(markerAt)
-        if (tesuu > 0) {
-            const modifiedProps = skipToCounter(tesuu, pieces)
-            pieces = modifiedProps.pieces
-            initialHistory = modifiedProps.miniHistory
-            initialAct = modifiedProps.move.slice(2, 4)
-            markerAt = initialAct;
-            initialCounter = modifiedProps.counter
-        }
+
 
     }, [pieces,movesArray])
 

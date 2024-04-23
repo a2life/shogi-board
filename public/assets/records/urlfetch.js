@@ -6,6 +6,9 @@ initialSetup__ts81.push(
 
 initialSetup__ts81.push(
     {caption:"displaying kifu (S-JIS) from url",
+        showMarker:true,
+        startAt:3,
+
      url:"/assets/kifu/sjistext.kif"}
 )
 

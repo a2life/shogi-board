@@ -13,7 +13,8 @@ const rest_of_setup = [
             "g-8232***Rook escapes to the side***",
             "s+2223***Silver captures Bishop***",
             "g-2282***and then, Rook takes Silver******Looking at the value table, Sente lost Silver(-5 points) and gained Bishop(+8), so you gained total of 3 ponts and Gote lost 3 points.******in Another word, there are 6 points gap created among players with this exchange***",
-            "x"]
+            "x"],
+        tesuu:3
 
     },
      {  caption:"Another kifu based render",

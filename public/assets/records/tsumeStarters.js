@@ -253,7 +253,7 @@ const boardDataSet = [
     },
 ]
 
-const selectElementId='data_select'
+const selectElementId='tsumeSet'
 
 window.addEventListener('load', function () {
 const select = document.getElementById(selectElementId);

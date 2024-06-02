@@ -1,4 +1,5 @@
 import {saveImage} from "./imagecopy";
+import {createSFEN} from "./createSFEN";
 
 type history = { pieces: string, playedOn: string, counter: number }[]
 
@@ -397,6 +398,7 @@ export const Board = (Props: {
             {commentWindow && !Props.flags.sideComment && <div class="comment">
                 {commentDiv(comment)} {logEndOfMove(movesArray, moveCounter)}
             </div>}
+            <div id={"sfen_"+Props.id} class="sfen_data" hidden={true}>{createSFEN(piecesInfo,moveCounter)}</div>
         </div>
 
         {commentWindow && Props.flags.sideComment && <div class="side-comment col">

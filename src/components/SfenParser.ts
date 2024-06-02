@@ -55,6 +55,7 @@
  * The SFEN for the position above is:
  *
  * 8l/1l+R2P3/p2pBG1pp/kps1p4/Nn1P2G2/P1P1P2PP/1PS6/1KSG3+r1/LN2+p3L w Sbgn3p 124
+ *
  */
 
 /**
@@ -64,7 +65,7 @@
  */
 export const parseSFEN = (sfen: string) => {
 
-    const [boardState, sideToMove, piecesOnHand, moveCount] = sfen.split(' ');
+    const [boardState, sideToMove, piecesOnHand, moveCount] = sfen.split(' ').filter((e)=>e!="");
     // parse board State
     const rows = boardState.split('/');
     if (rows.length !== 9) Error('SFEN malformed. can not detect 9 rows');
@@ -99,6 +100,7 @@ const processOnBoard = (rows: string[], rowNumber: number, arraySob: string[], a
                 break;
             case (t === '+'):
                 promoted = true;
+                colNum=colNum+1;
                 break;
             case /[plngskrb]/.test(t):
                 arrayGob.push(colNum.toString() + (rowNumber + 1).toString() + (promoted ? t.toUpperCase() : t));

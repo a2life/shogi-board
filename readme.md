@@ -56,6 +56,7 @@ This application is not intended to be used to play shogi. The purpose of this a
 <li>Multiple shogi boards on single web page.  put placeholder as div element with class name of 'board-app'. If you place two such divs on the page, then the app will render two shogi boards.  You need to provide rendering data array in Javascript. Each board is managed as an element of data array. There is no iframe tags involved.
 </li>
 <li>If Kifu is applied, then download icon is available. Clicking on it will download the kifu file as 'download.kif'</li>
+<li>Click on the copy icon will download the board's image capture. Also, as of May 2024,  right-clicking the copy icon will copy the board data in SFEN string format in the clipboard.</li>
 </ol>
 
 ### Theory of board rendering.

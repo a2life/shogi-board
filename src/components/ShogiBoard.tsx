@@ -283,6 +283,15 @@ export const Board = (Props: {
         }
     };
 
+    const copyToClipHandler=  (e:Event)=>{
+        e.preventDefault();
+
+         navigator.clipboard.writeText(createSFEN(piecesInfo,moveCounter)).then(
+             ()=>window.alert('SFEN string copied to clipboard')
+         ).catch((reason)=>window.alert(reason));
+
+    }
+
     const sanitizeComment = (comment: string) => {
         return {__html: DOMPurify.sanitize(comment)}
     }
@@ -385,11 +394,12 @@ export const Board = (Props: {
                 <div class="save-flip-box">
                     <div class="flip-button-position"
                          title='Flip board'
-                         onClick={flipHandler}>{flipped ? <I.rotateL/> : <I.rotateR/>}</div>
+                         onClick={flipHandler} >{flipped ? <I.rotateL/> : <I.rotateR/>}</div>
                     {!!kifu &&
                         <div title='download Kifu' class="save-button-position"
                              onClick={saveKifu}><I.SaveFile/></div>}
-                    <div title='download image capture' class="image-capture-position" onClick={imgCapture}>
+                    <div title='download image capture' class="image-capture-position" onClick={imgCapture}
+                         onContextMenu={copyToClipHandler}>
                         <I.copyIcon/>
                     </div>
                 </div>

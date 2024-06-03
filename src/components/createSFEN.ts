@@ -9,8 +9,8 @@ export const createSFEN = (pieces: string, moveCounter: number) => {
     const board = new Array(9).fill(undefined).map(() => new Array(9).fill(undefined));
     // this is row, column indexing -1
     const onHands: any = {};
-    const onBoardPattern = /([s|g])(\d)(\d)(\D)/;
-    const onHandPattern = /[s|g][r|b|g|s|n|l|p][S|G]\D/;
+    const onBoardPattern = /([sg])(\d)(\d)(\D)/;
+  //  const onHandPattern = /[sg][rbgsnlp][SG]\D/;  //this test is not necessary as if string does not match onBoardPattern, it is assumed the string is onHandPattern
     const onHandPieces = ['R', 'B', 'G', 'S', 'N', 'L', 'P', 'r', 'b', 'g', 's', 'n', 'l', 'p'];
     //initialize onHands object
     onHandPieces.forEach(el => {
@@ -56,19 +56,10 @@ export const createSFEN = (pieces: string, moveCounter: number) => {
     }
     const boardString = boardStringArr.join('/')
     // console.log('boardString: ', boardString);
-/*    let onHandString = '';
-    onHandPieces.forEach(piece => {
-        switch (onHands[piece]) {
-            case 0:
-                break;
-            case 1:
-                onHandString += piece;
-                break;
-            default:
-                onHandString += (onHands[piece].toString() + piece)
-        }
-    })*/
-
+    /**
+     * The code below will go through onHands object with item key. if value is 0, do nothing.
+     * if value is one, just add key. if value is more than one, then add key value(number) and key
+     */
     let onHandString=onHandPieces.reduce((carry,item)=>{
         switch (onHands[item]){
             case 0: return carry;

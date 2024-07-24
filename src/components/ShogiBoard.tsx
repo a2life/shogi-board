@@ -398,8 +398,8 @@ export const Board = (Props: {
                     {!!kifu &&
                         <div title='download Kifu' class="save-button-position"
                              onClick={saveKifu}><I.SaveFile/></div>}
-                    <div title='download image capture' class="image-capture-position" onClick={imgCapture}
-                         onContextMenu={copyToClipHandler}>
+                    <div title='SFEN to clipboard' class="image-capture-position" onContextMenu={imgCapture}
+                         onClick={copyToClipHandler}>
                         <I.copyIcon/>
                     </div>
                 </div>

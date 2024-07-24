@@ -175,12 +175,19 @@ export const Board = (Props: {
         updateStates(pieces, miniHistory, move, counter)
 
     }
+
     const notation = () => {
         if (history.length > 0) {
 
           return getMoveNote(movesArray[history[history.length - 1].counter])
 
         }
+    }
+
+    const tesu =() =>{
+        if (history.length>0){
+            return parseInt(movesArray[history[history.length - 1].counter])
+        } return 0
     }
 
     const moveBackHandler = (e: Event) => {
@@ -408,7 +415,7 @@ export const Board = (Props: {
             {commentWindow && !Props.flags.sideComment && <div class="comment">
                 {commentDiv(comment)} {logEndOfMove(movesArray, moveCounter)}
             </div>}
-            <div id={"sfen_"+Props.id} class="sfen_data" hidden={true}>{createSFEN(piecesInfo,moveCounter)}</div>
+            <div id={"sfen_"+Props.id} class="sfen_data" hidden={true}>{createSFEN(piecesInfo, history.length)}</div>
         </div>
 
         {commentWindow && Props.flags.sideComment && <div class="side-comment col">

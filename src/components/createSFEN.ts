@@ -69,6 +69,6 @@ export const createSFEN = (pieces: string, moveCounter: number) => {
         }
     },"")
     if (onHandString == "") onHandString = '-'
-    const turn = moveCounter + 1, side = (turn % 2 == 0) ? 'w' : 'b';
-    return `${boardString} ${side} ${onHandString} ${turn}`;
+    const side = (moveCounter % 2 == 0) ? 'b' : 'w';
+    return `${boardString} ${side} ${onHandString} ${moveCounter+1}`;
 }

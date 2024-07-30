@@ -184,11 +184,6 @@ export const Board = (Props: {
         }
     }
 
-    const tesu =() =>{
-        if (history.length>0){
-            return parseInt(movesArray[history[history.length - 1].counter])
-        } return 0
-    }
 
     const moveBackHandler = (e: Event) => {
         e.preventDefault();
@@ -293,7 +288,7 @@ export const Board = (Props: {
     const copyToClipHandler=  (e:Event)=>{
         e.preventDefault();
 
-         navigator.clipboard.writeText(createSFEN(piecesInfo,moveCounter)).then(
+         navigator.clipboard.writeText(createSFEN(piecesInfo,history.length)).then(
              ()=>window.alert('SFEN string copied to clipboard')
          ).catch((reason)=>window.alert(reason));
 

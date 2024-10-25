@@ -178,7 +178,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
     //if data-input attributes exist in target div, additional input box will be added. the input box is hidden but can be accessed from outside
     //of the app by usual document.getElementById(data-input-value) and fire with dispatchEvent('change');
     const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
-    return <><Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
+    return <div class="app-container"><Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
                     initialComment={initialComment} tesuu={tesuu || 0}
                     flags={{
                         commentWindow,
@@ -194,5 +194,5 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
                     senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}}
                     id={prop.index}/>
         {prop.input && <input id={prop.input} onChange={inputHandler} style="display:none"></input>}
-    </>
+    </div>
 }

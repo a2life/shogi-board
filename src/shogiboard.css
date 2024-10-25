@@ -23,18 +23,36 @@ This will use 60% scaling.
 
 
 .board-app {
+  /*  container-type:inline-size;
+    container-name:appBoard;*/
+    min-width:309px;
 
-    padding: 0 5px 0 ;
+   flex:0 0 auto;
+
 }
+.board-app >* {
+    width:100%;
+}
+.app-container {
+    display:flex;
+    padding: 0 5px 0 ;
+ }
 .board-container {
-    display: grid;
     width: 309px;
-    grid-template-columns: 309px;
-    grid-auto-rows: auto;
+
+}
+.board-container-exp {
+    min-width: 309px;
+    display:grid;
+
 }
 .large .board-container {
     width:433px;
     grid-template-columns: 433px;
+}
+.large .board-container-exp {
+    min-width:433px;
+
 }
 
 .row-on-hand {
@@ -223,6 +241,7 @@ This will use 60% scaling.
     top: 9px;
     width: 286px;
     height: 312px;
+    box-shadow:1px 1px 6px rgba(0,0,0,0.3);
 }
 
 .large .board {
@@ -269,11 +288,12 @@ This will use 60% scaling.
     box-sizing: border-box;
 }
 .side-comment {
-    width:100%;
+    min-width:100px;
     white-space:pre-wrap;
     font-size:1.1rem;
     margin-left:2rem;
     margin-top:2rem;
+
 
 }
 
@@ -536,3 +556,23 @@ This will use 60% scaling.
 .small .r9 {
     top: 247px;
 }
+
+
+
+
+@media (max-width: 576px) {
+    .app-container { flex-direction:column; align-items:center; width:100%; }
+ .board-app {width:100%;}
+ .side-comment {margin-left:0; margin-top:0; padding:20px;}
+}
+/*
+
+.board-app >* {
+    width: 100%; height: 100%;
+}
+@container appBoard (max-width:576px){
+ .app-container { flex-direction:column; align-items:center; width:100%; }
+ .board-app {width:100%;}
+ .side-comment {margin-left:0; margin-top:0; padding:20px;}
+}
+*/

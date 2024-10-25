@@ -21,20 +21,20 @@
         readme for available options.</p>
 </div>
 <div class=" container ">
-    <button id="cycleThrough"  class="btn btn-outline-secondary mt-3" >Cycle the board data below</button>
+    <button id="cycleThrough" class="btn btn-outline-secondary mt-3">Cycle the board data below</button>
 
     <div class="board-app" data-input="aInput"></div>
 
 
     <div class="row my-1">
 
-            <button class="btn btn-outline-secondary col-3" id="prevButton">Previous</button>
+        <button class="btn btn-outline-secondary col-3" id="prevButton">Previous</button>
 
         <div class="col-6">
-          <select id="tsumeSet"  class="form-select"></select>
+            <select id="tsumeSet" class="form-select"></select>
         </div>
 
-            <button class="btn btn-outline-secondary col-3" id="nextButton">Next</button>
+        <button class="btn btn-outline-secondary col-3" id="nextButton">Next</button>
 
     </div>
 
@@ -62,9 +62,9 @@
         </div>
         <h3>Next 6 boards wrapped with d-flex flex-wrap div</h3>
         <div class="h5">(has some issue with board with side comment option turned on)</div>
-        <div class="d-flex flex-wrap">
-            <div class="board-app "></div>
-            <div class="board-app "></div>
+        <div class="d-flex flex-wrap justify-content-around">
+            <div class="board-app"></div>
+            <div class="board-app"></div>
             <div class="board-app "></div>
             <div class="board-app "></div>
             <div class="board-app "></div>
@@ -136,9 +136,8 @@
     const maxIndex = initialSetup__ts81.length;
 
 
-
-    const cycleButton=document.getElementById('cycleThrough')
-    cycleButton.addEventListener('click', (e)=>{
+    const cycleButton = document.getElementById('cycleThrough')
+    cycleButton.addEventListener('click', (e) => {
         e.preventDefault()
         if (index >= maxIndex) index = 0
         if (index === 1) index = 2

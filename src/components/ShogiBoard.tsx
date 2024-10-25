@@ -307,7 +307,7 @@ export const Board = (Props: {
                     style="font-size:0.75rem">{lineBreakComments(endOfMoveComment(stringArray[moveCounter])[1])}</span></>)
     }
 
-    return <div class={Props.flags.sideComment ? "row" : ""}>
+    return <>
         <div class="board-container">
             {(caption!.length > 0) && <div className="caption">{caption}</div>}
             <div style="position:relative;">
@@ -413,11 +413,11 @@ export const Board = (Props: {
             <div id={"sfen_"+Props.id} class="sfen_data" hidden={true}>{createSFEN(piecesInfo, history.length)}</div>
         </div>
 
-        {commentWindow && Props.flags.sideComment && <div class="side-comment col">
+        {commentWindow && Props.flags.sideComment && <div class="side-comment">
             {commentDiv(comment)}{logEndOfMove(movesArray, moveCounter)}
         </div>}
 
-    </div>
+    </>
 
 }
 

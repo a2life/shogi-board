@@ -310,7 +310,7 @@ export const Board = (Props: {
     return <>
         <div class="board-container">
             {(caption!.length > 0) && <div className="caption">{caption}</div>}
-            <div style="position:relative;">
+            <div class="coordinate-base">
                 <div id={"board-image" + Props.id} class={flipped ? "flip180 animate-move" : "animate-move"}>
                     <div class="row-on-hand">
                         {scoreArray('g', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
@@ -410,7 +410,7 @@ export const Board = (Props: {
             {commentWindow && !Props.flags.sideComment && <div class="comment">
                 {commentDiv(comment)} {logEndOfMove(movesArray, moveCounter)}
             </div>}
-            <div id={"sfen_"+Props.id} class="sfen_data" hidden={true}>{createSFEN(piecesInfo, history.length)}</div>
+            <div id={"sfen_"+Props.id} class="sfen_data visually-hidden" >{createSFEN(piecesInfo, history.length)}</div>
         </div>
 
         {commentWindow && Props.flags.sideComment && <div class="side-comment">

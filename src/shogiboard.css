@@ -21,38 +21,76 @@ This will use 60% scaling.
 * board-width and height with this scaling will be 246 x 272
 */
 
+:root {
 
+    --normal-width: 309px;
+    --large-width: 433px;
+    --small-width: 433px;
+
+    --original-koma-width: 43px;
+    --original-koma-height: 48px;
+    --original-board-width: 410px;
+    --original-board-height: 454px;
+
+    --koma-width: calc(var(--original-koma-width) * 0.7);
+    --koma-height: calc(var(--original-koma-height) * 0.7);
+    --board-width: calc(var(--original-board-width) * 0.7);
+    --board-height: calc(var(--original-board-height) * 0.7);
+    --out-of-sight: -2000px;
+
+    --col-postion-base: 288px;
+    --row-position-offset: -16px;
+}
+
+.visually-hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
 .board-app {
-  /*  container-type:inline-size;
-    container-name:appBoard;*/
-    min-width:309px;
-
-   flex:0 0 auto;
+    /*  container-type:inline-size;
+      container-name:appBoard;*/
+    min-width: var(--normal-width);
+    container: board-app/inline-size;
 
 }
-.board-app >* {
-    width:100%;
+
+.board-app > * {
+    width: 100%;
 }
+
 .app-container {
-    display:flex;
-    padding: 0 5px 0 ;
- }
+    display: flex;
+    padding: 0 5px 0;
+}
+
 .board-container {
-    width: 309px;
+    width: var(--normal-width);
 
 }
+
 .board-container-exp {
-    min-width: 309px;
-    display:grid;
+    min-width: var(--normal-width);
+    display: grid;
 
 }
+
+.coordinate-base {
+    position: relative;
+}
+
 .large .board-container {
-    width:433px;
-    grid-template-columns: 433px;
-}
-.large .board-container-exp {
-    min-width:433px;
+    width: 433px;
 
+}
+
+.large .board-container-exp {
+    min-width: 433px;
+    grid-template-columns: 433px;
 }
 
 .row-on-hand {
@@ -62,8 +100,9 @@ This will use 60% scaling.
 
 
 }
+
 .large .row-on-hand {
-    height:48px;
+    height: 48px;
 }
 
 .koma, .marker {
@@ -72,24 +111,26 @@ This will use 60% scaling.
 
 
 .koma, .marker, .komadai img {
-    width: 30px;
-    height: 33px;
+    width: var(--koma-width);
+    height: var(--koma-height);
 }
 
 .rS {
     top: 328px;
     z-index: 500
 }
+
 .large .rS {
-    top:464px;
+    top: 464px;
 }
 
 .rG {
     top: -32px;
     z-index: 500
 }
+
 .large .rG {
-    top:-43px;
+    top: calc(0px - var(--original-koma-height));
 }
 
 .flip180 {
@@ -100,12 +141,18 @@ This will use 60% scaling.
 .animate-move {
     transition: 0.4s;
 }
-.flip-button{
+
+.flip-button {
     animation: fadein 0.5s;
 }
+
 @keyframes fadein {
-    from {opacity:0;}
-    to {opacity:1;}
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .playerName {
@@ -113,25 +160,29 @@ This will use 60% scaling.
     left: 180px;
     width: 120px;
     font-size: x-small;
+    text-overflow:clip;
 }
+
 .large .playerName {
-    left:240px;
-    width:188px;
-    font-size:small;
+    left: 240px;
+    width: 188px;
+    font-size: small;
 }
+
 .playerName-gote {
     top: 25px;
 }
 
 .large .playerName-gote {
-   top:35px;
+    top: 35px;
 }
 
 .playerName-sente {
     top: -5px;
 }
+
 .large .playerName-sente {
-    top:0;
+    top: 0;
 }
 
 .text-align-normal {
@@ -157,7 +208,7 @@ This will use 60% scaling.
 
 
 .large .save-button-position {
-    left:420px;
+    left: 420px;
 }
 
 .flip-button-position {
@@ -168,20 +219,25 @@ This will use 60% scaling.
 }
 
 .image-capture-position {
-    position:absolute;
-    top:5px;
+    position: absolute;
+    top: 5px;
     cursor: pointer;
-    left:284px;
-}
-.text-highlight {
-    color:white;
-    background:darkgray;
-}
-.tsume .rG {
-    top: -1000px;
-    z-index: 500;
+    left: 284px;
 }
 
+.large .image-capture-position {
+    left: 399px;
+}
+
+.text-highlight {
+    color: white;
+    background: darkgray;
+}
+
+.tsume .rG {
+    top: var(--out-of-sight);
+    z-index: 500;
+}
 
 
 .row-on-hand span {
@@ -199,7 +255,7 @@ This will use 60% scaling.
 }
 
 .large .row-on-hand span {
-    font-size:x-small;
+    font-size: x-small;
 }
 
 .button-bar-grid {
@@ -213,35 +269,40 @@ This will use 60% scaling.
 }
 
 .lostworld {
-    left: -20000px;
-    top: -20000px;
+    left: var(--out-of-sight);
+    top: var(--out-of-sight);
 }
 
 .caption {
     text-align: center;
-    font-size:0.9rem;
-    padding-top:3px;
-    margin-top:20px;
+    font-size: 0.9rem;
+    padding-top: 3px;
+    margin-top: 20px;
 }
+
 .large .caption {
-    font-size:1.2rem;
-    padding-top:5px;
+    font-size: 1.2rem;
+    padding-top: 5px;
 }
+
 /*move elements out of the way */
 .c0 {
-    left: -20000px
+    left: var(--out-of-sight);
 }
+
 .r0 {
-    top: -20000px
+    top: var(--out-of-sight);
 }
 
 .board {
     position: absolute;
     left: 10px;
     top: 9px;
-    width: 286px;
-    height: 312px;
-    box-shadow:1px 1px 6px rgba(0,0,0,0.3);
+    /*width: 286px;*/
+    width:var(--board-width);
+    /*height: 318px;*/
+    height:var(--board-height);
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
 }
 
 .large .board {
@@ -251,28 +312,24 @@ This will use 60% scaling.
 
 .boardbase-grid {
     position: relative;
-    width: 309px;
-    min-width: 309px;
-    height: 326px;
+    width: var(--normal-width);
+    min-width: var(--normal-width);
+    height: calc(var(--board-height) + 18px);
 }
 
 .large .boardbase-grid {
-    width:433px;
-    min-width:433px;
-    height:464px;
+    width: 433px;
+    min-width: 433px;
+    height: 464px;
 
 }
 
 
 .large .koma, .large .marker, .large .komadai img {
-    width: 43px;
-    height: 48px;
+    width: var(--original-koma-width);
+    height: var(--original-koma-height);
 }
 
-.small .koma, .small .marker, .small .komadai img {
-    width: 26px;
-    height: 29px;
-}
 
 .comment {
     width: inherit;
@@ -287,12 +344,13 @@ This will use 60% scaling.
     border-radius: 5px;
     box-sizing: border-box;
 }
+
 .side-comment {
-    min-width:100px;
-    white-space:pre-wrap;
-    font-size:1.1rem;
-    margin-left:2rem;
-    margin-top:2rem;
+    min-width: 100px;
+    white-space: pre-wrap;
+    font-size: 1.1rem;
+    margin-left: 2rem;
+    margin-top: 2rem;
 
 
 }
@@ -310,7 +368,7 @@ This will use 60% scaling.
     border-radius: .25rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     appearance: none;
-    max-width:108px;
+    max-width: 108px;
 }
 
 .note-window {
@@ -321,250 +379,331 @@ This will use 60% scaling.
     width: 100px;
 
 }
+
 .large .note-window {
-    font-size:1rem;
-    top:18px;
-    left:283px;
-    width:140px;
+    font-size: 1rem;
+    top: 18px;
+    left: 283px;
+    width: 140px;
 }
+
 .endOfMove {
     font-size: 0.75rem;
-    position:absolute;
-    top:390px;
-    left:200px;
-    text-align:right;
-    width:100px;
+    position: absolute;
+   /* top: 394px;*/
+    top: calc(var(--board-height) * 1.24);
+    left: calc(var(--col-postion-base) - 90px);
+    text-align: right;
+    width: 100px;
 }
+
 .large .comment {
     height: 120px;
 }
 
 .c1 {
-    left: 258px;
+    left:calc(var(--col-postion-base) - var(--koma-width) * 1);
+    /*left: 258px;*/
 }
 
 .c2 {
-    left: 228px;
+    left:calc(var(--col-postion-base) - var(--koma-width) * 2);
+    /*left: 228px;*/
 }
 
 .c3, .c-r, .cr {
-    left: 198px;
+    left:calc(var(--col-postion-base) - var(--koma-width) * 3);
+    /*left: 198px;*/
 }
 
 .c4, .c-b, .cb {
-    left: 168px;
+    left:calc(var(--col-postion-base) - var(--koma-width) * 4);
+    /*left: 168px;*/
 }
 
 .c5, .c-g, .cg {
-    left: 138px;
+    left:calc(var(--col-postion-base) - var(--koma-width) * 5);
+    /*left: 138px;*/
 }
 
 .c6, .c-s, .cs {
-    left: 108px;
+    left:calc(var(--col-postion-base) - var(--koma-width) * 6);
+    /*left: 108px;*/
 }
 
 .c7, .c-n, .cn {
-    left: 78px;
+    left:calc(var(--col-postion-base) - var(--koma-width) * 7);
+    /*left: 78px;*/
 }
 
 .c8, .c-l, .cl {
-    left: 48px;
+    left:calc(var(--col-postion-base) - var(--koma-width) * 8);
+    /*left: 48px;*/
 }
 
 .c9, .c-p, .cp {
-    left: 18px;
+    left:calc(var(--col-postion-base) - var(--koma-width) * 9);
+    /*left: 18px;*/
 }
 
 .r1 {
-    top: 17px;
+    top:calc(var(--row-position-offset) + var(--koma-height) * 1);
+    /*top: 17px;*/
 }
 
 .r2 {
-    top: 50px;
+    top:calc(var(--row-position-offset) + var(--koma-height) * 2);
+    /*top: 50px;*/
 }
 
 .r3 {
-    top: 83px;
+    top:calc(var(--row-position-offset) + var(--koma-height) * 3);
+    /*top: 83px;*/
 }
 
 .r4 {
-    top: 116px;
+    top:calc(var(--row-position-offset) + var(--koma-height) * 4);
+    /*top: 116px;*/
 }
 
 .r5 {
-    top: 149px;
+    top:calc(var(--row-position-offset) + var(--koma-height) * 5);
+    /*top: 149px;*/
 }
 
 .r6 {
-    top: 182px;
+    top:calc(var(--row-position-offset) + var(--koma-height) * 6);
+    /*top: 182px;*/
 }
 
 .r7 {
-    top: 215px;
+    top:calc(var(--row-position-offset) + var(--koma-height) * 7);
+    /*top: 215px;*/
 }
 
 .r8 {
-    top: 248px;
+    top:calc(var(--row-position-offset) + var(--koma-height) * 8);
+    /*top: 248px;*/
 }
 
 .r9 {
-    top: 281px;
+    top:calc(var(--row-position-offset) + var(--koma-height) * 9);
+    /*top: 281px;*/
 }
 
+.large {
+        --col-postion-base: 408px;
+        --board-height: var(--original-board-height);
+    .endOfMove{
+        font-size: 1rem;
+    }
+    .c1 {
+        /* left: 365px; */
+        /*left: calc(var(--large-koma-width) * 8.5);*/
+        left: calc(var(--col-postion-base) - var(--original-koma-width) * 1);
+    }
 
-.large .c1 {
-    left: 365px;
+    .c2 {
+        /*left: 322px; */
+
+        /*left: calc(var(--original-koma-width) * 7.5);*/
+        left: calc(var(--col-postion-base) - var(--original-koma-width) * 2);
+    }
+
+    .c3, .c-r, .cr {
+        /*left: 279px;*/
+       /* left: calc(var(--original-koma-width) * 6.5);*/
+        left: calc(var(--col-postion-base) - var(--original-koma-width) * 3);
+    }
+
+    .c4, .c-b, .cb {
+        /*left: calc(var(--original-koma-width) * 5.5);*/
+        left: calc(var(--col-postion-base) - var(--original-koma-width) * 4)
+        /*left: 236px;*/
+    }
+
+    .c5, .c-g, .cg {
+        /*left: 193px;*/
+        left: calc(var(--col-postion-base) - var(--original-koma-width) * 5);
+        /*left: calc(var(--original-koma-width) * 4.5);*/
+    }
+
+    .c6, .c-s, .cs {
+        /*        left: 150px;*/
+        left: calc(var(--col-postion-base) - var(--original-koma-width) * 6);
+        /*left: calc(var(--original-koma-width) * 3.5);*/
+    }
+
+    .c7, .c-n, .cn {
+        /*left: 107px;*/
+        left: calc(var(--col-postion-base) - var(--original-koma-width) * 7);
+        /*left: calc(var(--original-koma-width) * 2.5);*/
+    }
+
+    .c8, .c-l, .cl {
+        /*left: 64px;*/
+        left: calc(var(--col-postion-base) - var(--original-koma-width) * 8);
+        /*left: calc(var(--original-koma-width) * 1.5);*/
+    }
+
+    .c9, .c-p, .cp {
+        left: calc(var(--col-postion-base) - var(--original-koma-width) * 9);
+        /*left: calc(var(--original-koma-width) * 0.5);*/
+    }
+
+    .r1 {
+        top: calc(var(--original-koma-height) - 28px);
+        /*top: 20px;*/
+    }
+
+    .r2 {
+        /*top: 68px;*/
+        top: calc(var(--original-koma-height) * 2 - 28px);
+    }
+
+    .r3 {
+        /*top: 116px;*/
+        top: calc(var(--original-koma-height) * 3 - 28px);
+    }
+
+    .r4 {
+        /*top: 164px;*/
+        top: calc(var(--original-koma-height) * 4 - 28px);
+    }
+
+    .r5 {
+        /*top: 212px;*/
+        top: calc(var(--original-koma-height) * 5 - 28px);
+    }
+
+    .r6 {
+        /*top: 260px;*/
+        top: calc(var(--original-koma-height) * 6 - 28px);
+    }
+
+    .r7 {
+        /*top: 308px;*/
+        top: calc(var(--original-koma-height) * 7 - 28px);
+    }
+
+    .r8 {
+        /*top: 356px;*/
+        top: calc(var(--original-koma-height) * 8 - 28px);
+    }
+
+    .r9 {
+        /*top: 404px;*/
+        top: calc(var(--original-koma-height) * 9 - 28px);
+    }
 }
 
-.large .c2 {
-    left: 322px;
+.small {
+    .board {
+        width: 246px;
+        height: 273px;
+    }
+
+    .boardbase {
+        width: 266px;
+        min-width: 266px;
+        height: 292px;
+    }
+
+    .koma, .small .marker, .small .komadai img {
+        width: 26px;
+        height: 29px;
+    }
+
+
+    .c1 {
+        left: 224px;
+    }
+
+    .c2 {
+        left: 198px;
+    }
+
+    .c3 {
+        left: 172px;
+    }
+
+    .c4 {
+        left: 146px;
+    }
+
+    .c5 {
+        left: 120px;
+    }
+
+    .c6 {
+        left: 94px;
+    }
+
+    .c7 {
+        left: 68px;
+    }
+
+    .c8 {
+        left: 42px;
+    }
+
+    .c9 {
+        left: 16px;
+    }
+
+    .r1 {
+        top: 15px;
+    }
+
+    .r2 {
+        top: 44px;
+    }
+
+    .r3 {
+        top: 73px;
+    }
+
+    .r4 {
+        top: 102px;
+    }
+
+    .r5 {
+        top: 131px;
+    }
+
+    .r6 {
+        top: 160px;
+    }
+
+    .r7 {
+        top: 189px;
+    }
+
+    .r8 {
+        top: 218px;
+    }
+
+    .r9 {
+        top: 247px;
+    }
+
 }
 
-.large .c3, .large .c-r, .large .cr {
-    left: 279px;
+/* container query to collapse side comment vertically at 576px;*/
+@container board-app (max-width: 576px) {
+    .app-container {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .side-comment {
+        margin-left: 0;
+        margin-top: 0;
+        padding: 20px;
+    }
 }
 
-.large .c4,.large .c-b,.large .cb {
-    left: 236px;
-}
-
-.large .c5, .large .c-g,.large .cg {
-    left: 193px;
-}
-
-.large .c6, .large .c-s, .large .cs {
-    left: 150px;
-}
-
-.large .c7, .large .c-n, .large .cn {
-    left: 107px;
-}
-
-.large .c8, .large .c-l, .large .cl {
-    left: 64px;
-}
-
-.large .c9, .large .c-p, .large .cp {
-    left: 21px;
-}
-
-.large .r1 {
-    top: 20px;
-}
-
-.large .r2 {
-    top: 68px;
-}
-
-.large .r3 {
-    top: 116px;
-}
-
-.large .r4 {
-    top: 164px;
-}
-
-.large .r5 {
-    top: 212px;
-}
-
-.large .r6 {
-    top: 260px;
-}
-
-.large .r7 {
-    top: 308px;
-}
-
-.large .r8 {
-    top: 356px;
-}
-
-.large .r9 {
-    top: 404px;
-}
-
-
-.small .c1 {
-    left: 224px;
-}
-
-.small .c2 {
-    left: 198px;
-}
-
-.small .c3 {
-    left: 172px;
-}
-
-.small .c4 {
-    left: 146px;
-}
-
-.small .c5 {
-    left: 120px;
-}
-
-.small .c6 {
-    left: 94px;
-}
-
-.small .c7 {
-    left: 68px;
-}
-
-.small .c8 {
-    left: 42px;
-}
-
-.small .c9 {
-    left: 16px;
-}
-
-.small .r1 {
-    top: 15px;
-}
-
-.small .r2 {
-    top: 44px;
-}
-
-.small .r3 {
-    top: 73px;
-}
-
-.small .r4 {
-    top: 102px;
-}
-
-.small .r5 {
-    top: 131px;
-}
-
-.small .r6 {
-    top: 160px;
-}
-
-.small .r7 {
-    top: 189px;
-}
-
-.small .r8 {
-    top: 218px;
-}
-
-.small .r9 {
-    top: 247px;
-}
-
-
-
-
-@media (max-width: 576px) {
-    .app-container { flex-direction:column; align-items:center; width:100%; }
- .board-app {width:100%;}
- .side-comment {margin-left:0; margin-top:0; padding:20px;}
-}
 /*
 
 .board-app >* {

@@ -1,0 +1,13 @@
+.wrapper {
+    container: flex-container/inline-size;
+}
+
+.flex-box {
+    display: flex;
+}
+
+@container flex-container (max-width: 576px){
+    .flex-box {
+        flex-direction: column;
+    }
+}

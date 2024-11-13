@@ -6,11 +6,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
+    <link rel="stylesheet" href="/public/assets/css/flex.css">
     <title>Vite BoardRenderer</title>
 </head>
 <body>
-<div class="p-5">
+<div class="p-5 mb-3">
 
 
     <div class="display-5">Shogi board with Vite+PreAct. BootStrap optional</div>
@@ -21,77 +21,88 @@
         readme for available options.</p>
 </div>
 <div class=" container ">
-    <button id="cycleThrough" class="btn btn-outline-secondary mt-3">Cycle the board data below</button>
+    <div class="card ">
+        <h2 class="card-header">
+            Cycling through data set
+        </h2>
+        <div class="card-body">
+            <button id="cycleThrough" class="btn btn-outline-secondary mt-3">Cycle the board data below</button>
 
-    <div class="board-app" data-input="aInput"></div>
-
-
-    <div class="row my-1">
-
-        <button class="btn btn-outline-secondary col-3" id="prevButton">Previous</button>
-
-        <div class="col-6">
-            <select id="tsumeSet" class="form-select"></select>
+            <div class="board-app" data-input="aInput" id="app-1"></div>
         </div>
-
-        <button class="btn btn-outline-secondary col-3" id="nextButton">Next</button>
-
     </div>
 
-    <div class="board-app" data-input="bInput"></div>
+    <div class="card mt-3 ">
+        <h2 class="card-header">Event triggered prepared data loading </h2>
+        <div class="card-body">
+            <section class="d-flex gap-3">
+                <button class="btn btn-outline-secondary col-3" id="prevButton">Previous</button>
+                <label for="tsumeSet" style="display:none">Problem Number</label>
+                <select id="tsumeSet" class="form-select"></select>
+                <button class="btn btn-outline-secondary col-3" id="nextButton">Next</button>
+            </section>
 
-    <div class="row ">
+            <div class="board-app" data-input="bInput" id="app-2"></div>
+        </div>
+    </div>
+    <div class="wrapper">
+    <div class="flex-box">
 
-        <div class="board-app col-12  col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12"></div>
-        <div class="col-12 col-xxl-9 col-xl-8 col-lg-8 col-md-6 col-sm-12 col-xs-12 mt-5"><p>Using Bootstrap columns to
+        <div class="board-app " id="app-3"></div>
+        <div class="mt-5"><p>Using plain vanilla display: flex property
+            to
             arrange two columns per row, the Shogiboard on left side and some verbiage text on the right side. First
             Shogiboard data should appear to
-            the left of this text or above, depending on the screen size</p></div>
-        <div class="row">
-            <div class="board-app  col-12  col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12"></div>
-
-            <div class="col-12 col-xxl-9 col-xl-8 col-lg-8 col-md-6 col-sm-12 col-xs-12 mt-5">Another column settings
-                What's up? what's up Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit. Cumque dolores est facilis impedit magnam reprehenderit sapiente sequi. A, dolore
-                dolorem
-                dolores dolorum error magnam mollitia nesciunt nulla obcaecati possimus sequi?
-            </div>
+            the left of this text or above, depending on the screen size</p>
         </div>
-        <div class="board-app">
+    </div>
+       </div>
+    <div class="row">
+        <div class="board-app large col-12   col-lg-5" id="app-4"></div>
 
-        </div>
-        <h3>Next 6 boards wrapped with d-flex flex-wrap div</h3>
-        <div class="h5">(has some issue with board with side comment option turned on)</div>
-        <div class="d-flex flex-wrap justify-content-around">
-            <div class="board-app"></div>
-            <div class="board-app"></div>
-            <div class="board-app "></div>
-            <div class="board-app "></div>
-            <div class="board-app "></div>
-            <div class="board-app "></div>
-        </div>
+        <p class="col col-lg-6 mt-5">Boot strap row-column setting is used for displaying
+            board and article side by side. Using class="large" to display larger board. Lorem ipsum dolor sit amet,
+            consectetur
+            adipisicing elit. Cumque dolores est facilis impedit magnam reprehenderit sapiente sequi. A, dolore
+            dolorem
+            dolores dolorum error magnam mollitia nesciunt nulla obcaecati possimus sequi?
+        </p>
+    </div>
+    <div class="board-app small" id="app-5">
 
-        <h3>Without any column control below</h3>
-
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-        <div class="board-app "></div>
-
+    </div>
+    <h3>Next 6 boards wrapped with d-flex flex-wrap div</h3>
+    <div class="h5">(has some issue with board with side comment option turned on)</div>
+    <div class="d-flex flex-wrap justify-content-around">
+        <div class="board-app" id="app-6"></div>
+        <div class="board-app" id="app-7"></div>
+        <div class="board-app" id="app-8"></div>
+        <div class="board-app" id="app-9"></div>
+        <div class="board-app" id="app-10"></div>
+        <div class="board-app" id="app-11"></div>
 
     </div>
 
+    <h3>Without any column control below</h3>
+    <div class="board-app" id="app-12"></div>
+    <div class="board-app" id="app-13"></div>
+    <div class="board-app" id="app-14"></div>
+    <div class="board-app" id="app-15"></div>
+    <div class="board-app" id="app-16"></div>
+    <div class="board-app" id="app-17"></div>
+    <div class="board-app" id="app-18"></div>
+    <div class="board-app" id="app-19"></div>
+    <div class="board-app" id="app-20"></div>
+    <div class="board-app" id="app-21"></div>
+    <div class="board-app" id="app-22"></div>
+    <div class="board-app" id="app-23"></div>
+    <div class="board-app" id="app-24"></div>
+    <div class="board-app" id="app-25"></div>
+
+
 </div>
+
+
 
 
 <script>

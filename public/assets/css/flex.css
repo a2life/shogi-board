@@ -4,6 +4,7 @@
 
 .flex-box {
     display: flex;
+    gap: 2rem;
 }
 
 @container flex-container (max-width: 576px){

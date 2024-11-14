@@ -1,12 +1,10 @@
 /*
-This is CSS for shogiboard.
-all ID selectors(start with #) are for backward compatibility only. the latest code will only use
-class selectors
+
 Idea of this CSS is to position each piece  according to classes (C-column and r-row) assigned to a image file.
-(Also, part of shogiboard, position of note-window etc., is positioned absolutely by CSS)
+(Also, as part of shogiboard, position of note-window etc., is positioned absolutely by CSS)
 
 the equation is as follows (each image file size is 43 x 48. offsets are after trial and error)
-Original images sizes used for "large" class
+Original images sizes are used for "large" class
                                        x=43x(9-c)+11+12
 y=48x(r-1)+10+10
 size of board and grid image is : 410 x 454. offset (margin) put a 0,0 cordinate to (11,10)
@@ -23,11 +21,6 @@ This will use 60% scaling.
 */
 
 :root {
-
-    --normal-width: 309px;
-    --large-width: 433px;
-    --small-width: 433px;
-
     --original-koma-width: 43px;
     --original-koma-height: 48px;
     --original-board-width: 410px;
@@ -41,6 +34,9 @@ This will use 60% scaling.
 
     --col-postion-base: 288px;
     --row-position-offset: -16px;
+    --board-padding: 11px;
+    --board-paddingx2: 22px;
+    --note-width: 100px;
 }
 
 .visually-hidden {
@@ -55,7 +51,7 @@ This will use 60% scaling.
 .board-app {
     /*  container-type:inline-size;
       container-name:appBoard;*/
-    min-width: calc(var(--board-width) + 22px);
+    min-width: calc(var(--board-width) + var(--board-padding) * 2);
     container: board-app/inline-size;
 
 }
@@ -70,19 +66,14 @@ This will use 60% scaling.
 }
 
 .board-container {
-    width: var(--normal-width);
+    width: calc(var(--board-width) + var(--board-paddingx2));
 
 }
 
-.board-container-exp {
-    min-width: var(--normal-width);
-    display: grid;
-
-}
 
 .coordinate-base {
     position: relative;
-    width: calc(var(--board-width) + 22px);
+    width: calc(var(--board-width) + var(--board-paddingx2));
 }
 
 .large .board-container {
@@ -90,22 +81,11 @@ This will use 60% scaling.
 
 }
 
-.large .board-container-exp {
-    min-width: 433px;
-    grid-template-columns: 433px;
-}
 
 .row-on-hand {
     position: relative;
-    height: 32px;
-
+    height: var(--koma-height);
     padding: 5px;
-
-
-}
-
-.large .row-on-hand {
-    height: 48px;
 }
 
 .koma, .marker {
@@ -161,7 +141,7 @@ This will use 60% scaling.
 
 .playerName {
     position: absolute;
-    left: calc(var(--board-width) - 100px) ;
+    left: calc(var(--board-width) - var(--note-width)) ;
     width: 120px;
     font-size: x-small;
     text-overflow:clip;
@@ -280,10 +260,6 @@ This will use 60% scaling.
 
 }
 
-.outOfSite {
-    left: var(--out-of-sight);
-    top: var(--out-of-sight);
-}
 
 .caption {
     text-align: center;
@@ -318,34 +294,25 @@ This will use 60% scaling.
     box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
 }
 
-.large .board {
-    width: 410px;
-    height: 454px;
-}
 
 .boardbase-grid {
     position: relative;
-    width: calc(var(--board-width) + 22px);
-    min-width: calc(var(--board-width) + 22px);
+    width: calc(var(--board-width) + var(--board-paddingx2));
+    min-width: calc(var(--board-width) + var(--board-paddingx2));
     height: calc(var(--board-height) + 18px);
 }
 
-/*.large .boardbase-grid {
-    width: 433px;
-    min-width: 433px;
-    height: 464px;
 
-}*/
 .boardbase-right {
     position:absolute;
-    top:0;
+    top:var(--koma-height);
     left: calc(var(--board-width) / 2 );
-    width: calc(var(--board-width) / 2 + 22px);
+    width: calc(var(--board-width) / 2 + var(--board-paddingx2));
     height: calc(var(--board-height) + 18px);
 }
 .boardbase-left {
     position:absolute;
-    top:0;
+    top:var(--koma-height);
     left:0;
     width: calc(var(--board-width) / 2);
     height: calc(var(--board-height) + 18px);
@@ -368,7 +335,7 @@ This will use 60% scaling.
 }
 
 .side-comment {
-    min-width: 100px;
+   /* min-width: 100px;*/
     white-space: pre-wrap;
     font-size: 1.1rem;
     margin-left: 2rem;
@@ -396,9 +363,9 @@ This will use 60% scaling.
 .note-window {
     font-size: 0.75rem;
     position: absolute;
-    top: 12px;
-    left: calc(var(--board-width) - 100px);
-    width: 100px;
+    top: 1em;
+    left: calc(var(--board-width) + var(--board-paddingx2) - var(--note-width));
+    width: var(--note-width);
 
 }
 
@@ -407,11 +374,10 @@ This will use 60% scaling.
 .endOfMove {
     font-size: 0.75rem;
     position: absolute;
-   /* top: 394px;*/
-    top: calc(var(--board-height) + 20px +  var(--koma-height) * 2);
-    left: calc(var(--board-width) - 90px);
+    top: calc(var(--board-height) + var(--board-paddingx2) +  var(--koma-height) * 2);
+    left: calc(var(--board-width)  + var(--board-paddingx2) - var(--note-width));
     text-align: right;
-    width: 100px;
+    width: var(--note-width);
 }
 
 
@@ -512,6 +478,8 @@ This will use 60% scaling.
         --board-width: var(--original-board-width);
         --koma-width: var(--original-koma-width);
         --koma-height: var(--original-koma-height);
+        --note-width: 140px;
+
     .endOfMove{
         font-size: 1rem;
     }
@@ -521,9 +489,7 @@ This will use 60% scaling.
 
     .note-window {
         font-size: 1rem;
-        top: 18px;
-        left: 283px;
-        width: 140px;
+
     }
 
 }

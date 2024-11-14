@@ -11,7 +11,8 @@ Original images sizes used for "large" class
 y=48x(r-1)+10+10
 size of board and grid image is : 410 x 454. offset (margin) put a 0,0 cordinate to (11,10)
 .board= size of board itself =410x454
-Default size uses the following parameters.
+Default size uses the 70% scaling.
+.
 small size uses the following calculations
 This will use 60% scaling.
 * x-width=26, y-height=29
@@ -54,7 +55,7 @@ This will use 60% scaling.
 .board-app {
     /*  container-type:inline-size;
       container-name:appBoard;*/
-    min-width: var(--normal-width);
+    min-width: calc(var(--board-width) + 22px);
     container: board-app/inline-size;
 
 }
@@ -81,6 +82,7 @@ This will use 60% scaling.
 
 .coordinate-base {
     position: relative;
+    width: calc(var(--board-width) + 22px);
 }
 
 .large .board-container {
@@ -96,6 +98,7 @@ This will use 60% scaling.
 .row-on-hand {
     position: relative;
     height: 32px;
+
     padding: 5px;
 
 
@@ -124,14 +127,15 @@ This will use 60% scaling.
     top: 464px;
 }
 
-.rG {
-    top: -32px;
-    z-index: 500
+.small .rS {
+    top: 285px;
 }
 
-.large .rG {
-    top: calc(0px - var(--original-koma-height));
+ .rG {
+    top: calc(0px - var(--koma-height) * 0.8);
 }
+
+
 
 .flip180 {
     transform: rotate(180deg);
@@ -157,7 +161,7 @@ This will use 60% scaling.
 
 .playerName {
     position: absolute;
-    left: 180px;
+    left: calc(var(--board-width) - 100px) ;
     width: 120px;
     font-size: x-small;
     text-overflow:clip;
@@ -211,6 +215,10 @@ This will use 60% scaling.
     left: 420px;
 }
 
+.small .save-button-position {
+    left: 255px;
+}
+
 .flip-button-position {
     position: absolute;
     top: 5px;
@@ -227,6 +235,10 @@ This will use 60% scaling.
 
 .large .image-capture-position {
     left: 399px;
+}
+
+.small .image-capture-position {
+    left:242px;
 }
 
 .text-highlight {
@@ -268,7 +280,7 @@ This will use 60% scaling.
 
 }
 
-.lostworld {
+.outOfSite {
     left: var(--out-of-sight);
     top: var(--out-of-sight);
 }
@@ -296,8 +308,9 @@ This will use 60% scaling.
 
 .board {
     position: absolute;
-    left: 10px;
-    top: 9px;
+    /*left: 10px;
+    top: 9px;*/
+    margin: 10px;
     /*width: 286px;*/
     width:var(--board-width);
     /*height: 318px;*/
@@ -312,22 +325,30 @@ This will use 60% scaling.
 
 .boardbase-grid {
     position: relative;
-    width: var(--normal-width);
-    min-width: var(--normal-width);
+    width: calc(var(--board-width) + 22px);
+    min-width: calc(var(--board-width) + 22px);
     height: calc(var(--board-height) + 18px);
 }
 
-.large .boardbase-grid {
+/*.large .boardbase-grid {
     width: 433px;
     min-width: 433px;
     height: 464px;
 
+}*/
+.boardbase-right {
+    position:absolute;
+    top:0;
+    left: calc(var(--board-width) / 2 );
+    width: calc(var(--board-width) / 2 + 22px);
+    height: calc(var(--board-height) + 18px);
 }
-
-
-.large .koma, .large .marker, .large .komadai img {
-    width: var(--original-koma-width);
-    height: var(--original-koma-height);
+.boardbase-left {
+    position:absolute;
+    top:0;
+    left:0;
+    width: calc(var(--board-width) / 2);
+    height: calc(var(--board-height) + 18px);
 }
 
 
@@ -341,6 +362,7 @@ This will use 60% scaling.
     border-style: solid;
     border-color: lightgray;
     border-width: 1px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     box-sizing: border-box;
 }
@@ -375,31 +397,23 @@ This will use 60% scaling.
     font-size: 0.75rem;
     position: absolute;
     top: 12px;
-    left: 200px;
+    left: calc(var(--board-width) - 100px);
     width: 100px;
 
 }
 
-.large .note-window {
-    font-size: 1rem;
-    top: 18px;
-    left: 283px;
-    width: 140px;
-}
+
 
 .endOfMove {
     font-size: 0.75rem;
     position: absolute;
    /* top: 394px;*/
-    top: calc(var(--board-height) * 1.24);
-    left: calc(var(--col-postion-base) - 90px);
+    top: calc(var(--board-height) + 20px +  var(--koma-height) * 2);
+    left: calc(var(--board-width) - 90px);
     text-align: right;
     width: 100px;
 }
 
-.large .comment {
-    height: 120px;
-}
 
 .c1 {
     left:calc(var(--col-postion-base) - var(--koma-width) * 1);
@@ -493,199 +507,34 @@ This will use 60% scaling.
 
 .large {
         --col-postion-base: 408px;
+        --row-position-offset: -28px;
         --board-height: var(--original-board-height);
+        --board-width: var(--original-board-width);
+        --koma-width: var(--original-koma-width);
+        --koma-height: var(--original-koma-height);
     .endOfMove{
         font-size: 1rem;
     }
-    .c1 {
-        /* left: 365px; */
-        /*left: calc(var(--large-koma-width) * 8.5);*/
-        left: calc(var(--col-postion-base) - var(--original-koma-width) * 1);
+    .comment {
+        height: 120px;
     }
 
-    .c2 {
-        /*left: 322px; */
-
-        /*left: calc(var(--original-koma-width) * 7.5);*/
-        left: calc(var(--col-postion-base) - var(--original-koma-width) * 2);
+    .note-window {
+        font-size: 1rem;
+        top: 18px;
+        left: 283px;
+        width: 140px;
     }
 
-    .c3, .c-r, .cr {
-        /*left: 279px;*/
-       /* left: calc(var(--original-koma-width) * 6.5);*/
-        left: calc(var(--col-postion-base) - var(--original-koma-width) * 3);
-    }
-
-    .c4, .c-b, .cb {
-        /*left: calc(var(--original-koma-width) * 5.5);*/
-        left: calc(var(--col-postion-base) - var(--original-koma-width) * 4)
-        /*left: 236px;*/
-    }
-
-    .c5, .c-g, .cg {
-        /*left: 193px;*/
-        left: calc(var(--col-postion-base) - var(--original-koma-width) * 5);
-        /*left: calc(var(--original-koma-width) * 4.5);*/
-    }
-
-    .c6, .c-s, .cs {
-        /*        left: 150px;*/
-        left: calc(var(--col-postion-base) - var(--original-koma-width) * 6);
-        /*left: calc(var(--original-koma-width) * 3.5);*/
-    }
-
-    .c7, .c-n, .cn {
-        /*left: 107px;*/
-        left: calc(var(--col-postion-base) - var(--original-koma-width) * 7);
-        /*left: calc(var(--original-koma-width) * 2.5);*/
-    }
-
-    .c8, .c-l, .cl {
-        /*left: 64px;*/
-        left: calc(var(--col-postion-base) - var(--original-koma-width) * 8);
-        /*left: calc(var(--original-koma-width) * 1.5);*/
-    }
-
-    .c9, .c-p, .cp {
-        left: calc(var(--col-postion-base) - var(--original-koma-width) * 9);
-        /*left: calc(var(--original-koma-width) * 0.5);*/
-    }
-
-    .r1 {
-        top: calc(var(--original-koma-height) - 28px);
-        /*top: 20px;*/
-    }
-
-    .r2 {
-        /*top: 68px;*/
-        top: calc(var(--original-koma-height) * 2 - 28px);
-    }
-
-    .r3 {
-        /*top: 116px;*/
-        top: calc(var(--original-koma-height) * 3 - 28px);
-    }
-
-    .r4 {
-        /*top: 164px;*/
-        top: calc(var(--original-koma-height) * 4 - 28px);
-    }
-
-    .r5 {
-        /*top: 212px;*/
-        top: calc(var(--original-koma-height) * 5 - 28px);
-    }
-
-    .r6 {
-        /*top: 260px;*/
-        top: calc(var(--original-koma-height) * 6 - 28px);
-    }
-
-    .r7 {
-        /*top: 308px;*/
-        top: calc(var(--original-koma-height) * 7 - 28px);
-    }
-
-    .r8 {
-        /*top: 356px;*/
-        top: calc(var(--original-koma-height) * 8 - 28px);
-    }
-
-    .r9 {
-        /*top: 404px;*/
-        top: calc(var(--original-koma-height) * 9 - 28px);
-    }
 }
 
 .small {
-    .board {
-        width: 246px;
-        height: 273px;
-    }
-
-    .boardbase {
-        width: 266px;
-        min-width: 266px;
-        height: 292px;
-    }
-
-    .koma, .small .marker, .small .komadai img {
-        width: 26px;
-        height: 29px;
-    }
-
-
-    .c1 {
-        left: 224px;
-    }
-
-    .c2 {
-        left: 198px;
-    }
-
-    .c3 {
-        left: 172px;
-    }
-
-    .c4 {
-        left: 146px;
-    }
-
-    .c5 {
-        left: 120px;
-    }
-
-    .c6 {
-        left: 94px;
-    }
-
-    .c7 {
-        left: 68px;
-    }
-
-    .c8 {
-        left: 42px;
-    }
-
-    .c9 {
-        left: 16px;
-    }
-
-    .r1 {
-        top: 15px;
-    }
-
-    .r2 {
-        top: 44px;
-    }
-
-    .r3 {
-        top: 73px;
-    }
-
-    .r4 {
-        top: 102px;
-    }
-
-    .r5 {
-        top: 131px;
-    }
-
-    .r6 {
-        top: 160px;
-    }
-
-    .r7 {
-        top: 189px;
-    }
-
-    .r8 {
-        top: 218px;
-    }
-
-    .r9 {
-        top: 247px;
-    }
+    --col-postion-base: 249px;
+    --row-position-offset: -13px;
+    --board-height: calc(var(--original-board-height) * 0.6);
+    --board-width: calc(var(--original-board-width) * 0.6);
+    --koma-width: calc(var(--original-koma-width) * 0.6);
+    --koma-height: calc(var(--original-koma-height) * 0.6);
 
 }
 
@@ -704,14 +553,3 @@ This will use 60% scaling.
     }
 }
 
-/*
-
-.board-app >* {
-    width: 100%; height: 100%;
-}
-@container appBoard (max-width:576px){
- .app-container { flex-direction:column; align-items:center; width:100%; }
- .board-app {width:100%;}
- .side-comment {margin-left:0; margin-top:0; padding:20px;}
-}
-*/

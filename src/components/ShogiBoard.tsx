@@ -325,9 +325,8 @@ export const Board = (Props: {
 
                     </div>
 
-                    <div class=" boardbase-grid"
-                         onClick={(!!Props.branchList[moveCounter] && maskBranch) ? () => {
-                         } : playOneMoveHandler} onContextMenu={moveBackHandler}>
+                    <div class=" boardbase-grid">
+
                         <RenderBoard ban={Props.graphics.ban} grid={Props.graphics.grid}/>
                         {showMarker &&
                             <MarkerAt c={markerPosition[0]} r={markerPosition[1]} marker={Props.graphics.marker}/>}
@@ -335,6 +334,9 @@ export const Board = (Props: {
                         {piecesInfo.split(',').map((p) => (
                             <RenderPiece piece={p} mover={previousAct} animate={animate} koma={Props.graphics.koma}/>))}
                     </div>
+                    <div class="boardbase-right" onClick={(!!Props.branchList[moveCounter] && maskBranch) ? () => {
+                    } : playOneMoveHandler} onContextMenu={moveBackHandler}></div>
+                    <div class="boardbase-left" onClick={moveBackHandler}></div>
                     <div class="row-on-hand">
                         {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
                             <span class={flipped ? `c${p[0]} flip180` : `c${p[0]}`}>{p.slice(1)}</span>)}

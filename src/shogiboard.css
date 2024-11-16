@@ -48,60 +48,65 @@ This will use 60% scaling.
     white-space: nowrap;
     width: 1px;
 }
+
 .custom-context-menu {
 
     z-index: 20000;
+
     a {
         text-decoration: none;
     }
 
     ul {
-        list-style:none;
-        padding:0px;
-        margin:0;
-        width:100%;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
     }
 
     .header {
-        background:black;
-        color:white;
-        padding:5px;
-        margin-top:0;
-        width:100%;
+        background: black;
+        color: white;
+        padding: 5px;
+        margin-top: 0;
+        width: 100%;
     }
+
     .icon {
-        width:1.5rem;
-        height:1.5rem;
-        padding-right:10px;
+        width: 1.5rem;
+        height: 1.5rem;
+        padding-right: 10px;
     }
 
 
-        display:flex;
-        flex-direction: column;
-        align-content:flex-start;
-        align-items: flex-start;
-        justify-content: space-between;
-        border:solid 1px darkgray;
-        box-shadow: 0 2px 2px rgba(0,0,0,0.4);
-        border-radius: 5px;
-        margin: 10px auto;
-        padding:0;
-        line-height:1.6;
-        min-width:240px;
-        background-color: rgba(250,250,250,.9);
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: flex-start;
+    justify-content: space-between;
+    border: solid 1px darkgray;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    margin: 10px auto;
+    padding: 0;
+    line-height: 1.6;
+    min-width: 240px;
+    background-color: rgba(250, 250, 250, .9);
 
-        cursor:cell;
+    cursor: cell;
+
     li {
-    padding:0 15px;
-}
+        padding: 0 15px;
+    }
 
-     li:hover {
-        background-color:black;
-        border-radius:4px;
-        color:white;
+    li:hover {
+        background-color: black;
+        border-radius: 4px;
+        color: white;
 
     }
-    animation:fadein 1s;
+
+    animation: fadein 1s;
 
 
 }
@@ -124,6 +129,7 @@ This will use 60% scaling.
 
 .board-container {
     width: calc(var(--board-width) + var(--board-paddingx2));
+    position: relative;
 
 }
 
@@ -217,6 +223,7 @@ This will use 60% scaling.
 .text-align-flipped {
     text-align: left;
 }
+/*
 
 .save-flip-box {
     position: absolute;
@@ -261,6 +268,7 @@ This will use 60% scaling.
 .small .image-capture-position {
     left: 242px;
 }
+*/
 
 .text-highlight {
     color: white;
@@ -333,7 +341,6 @@ This will use 60% scaling.
     min-width: calc(var(--board-width) + var(--board-paddingx2));
     height: calc(var(--board-height) + 18px);
 }
-
 
 
 .comment {
@@ -533,7 +540,8 @@ This will use 60% scaling.
     --board-width: calc(var(--original-board-width) * 0.6);
     --koma-width: calc(var(--original-koma-width) * 0.6);
     --koma-height: calc(var(--original-koma-height) * 0.6);
-    .custom-context-menu{
+
+    .custom-context-menu {
         min-width: 180px;
     }
 }

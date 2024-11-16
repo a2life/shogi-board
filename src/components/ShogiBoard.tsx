@@ -312,7 +312,8 @@ export const Board = (Props: {
     }
     const boardClickHandler = (e: MouseEvent) => {
         e.preventDefault();
-        if (e.offsetX >= ((e.currentTarget as HTMLElement).offsetWidth) * 0.5) {
+        const bounds=(e.currentTarget as HTMLElement).getBoundingClientRect();
+        if ((e.clientX - bounds.left)> (bounds.width) * 0.5) {
             /*move forward */
             (!!Props.branchList[moveCounter] && maskBranch) ? () => {
             } : playOneMoveHandler(e)
@@ -325,8 +326,9 @@ export const Board = (Props: {
     }
     const showContextMenu = (e: MouseEvent) => {
         e.preventDefault();
-        console.log(e.currentTarget)
-        const x = e.offsetX, y = e.offsetY
+        const bounds=(e.currentTarget as HTMLElement).getBoundingClientRect()
+
+        const x = e.clientX - bounds.left, y = e.clientY - bounds.top
         setContextMenuStatus({visible: true, x: x, y: y});
 
         document.addEventListener('click', function (e) {
@@ -343,7 +345,7 @@ export const Board = (Props: {
     if (!!kifu) topics.push({title: 'Save Kifu', fn: () => saveKifu(), icon: <I.SaveFile/>});
 
     return <>
-        <div class="board-container">
+        <div class="board-container" onContextMenu={showContextMenu}>
             {(caption!.length > 0) && <div className="caption">{caption}</div>}
             <div class="coordinate-base">
                 <div id={"board-image" + Props.id} class={flipped ? "flip180 animate-move" : "animate-move"}>
@@ -360,7 +362,7 @@ export const Board = (Props: {
 
                     </div>
 
-                    <div class=" boardbase-grid" onClick={boardClickHandler} onContextMenu={showContextMenu}>
+                    <div class=" boardbase-grid" onClick={boardClickHandler} >
 
                         <RenderBoard ban={Props.graphics.ban} grid={Props.graphics.grid}/>
                         {showMarker &&

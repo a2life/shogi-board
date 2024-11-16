@@ -48,21 +48,78 @@ This will use 60% scaling.
     white-space: nowrap;
     width: 1px;
 }
+.custom-context-menu {
+
+    z-index: 20000;
+    a {
+        text-decoration: none;
+    }
+
+    ul {
+        list-style:none;
+        padding:0px;
+        margin:0;
+        width:100%;
+    }
+
+    .header {
+        background:black;
+        color:white;
+        padding:5px;
+        margin-top:0;
+        width:100%;
+    }
+    .icon {
+        width:1.5rem;
+        height:1.5rem;
+        padding-right:10px;
+    }
+
+
+        display:flex;
+        flex-direction: column;
+        align-content:flex-start;
+        align-items: flex-start;
+        justify-content: space-between;
+        border:solid 1px darkgray;
+        box-shadow: 0 2px 2px rgba(0,0,0,0.4);
+        border-radius: 5px;
+        margin: 10px auto;
+        padding:0;
+        line-height:1.6;
+        min-width:240px;
+        background-color: rgba(250,250,250,.9);
+
+        cursor:cell;
+    li {
+    padding:0 15px;
+}
+
+     li:hover {
+        background-color:black;
+        border-radius:4px;
+        color:white;
+
+    }
+    animation:fadein 1s;
+
+
+}
+
 .board-app {
     /*  container-type:inline-size;
       container-name:appBoard;*/
     min-width: calc(var(--board-width) + var(--board-padding) * 2);
     container: board-app/inline-size;
+    flex-grow: 1;
 
 }
 
-.board-app > * {
-    width: 100%;
-}
 
 .app-container {
     display: flex;
     padding: 0 5px 0;
+    width: 100%;
 }
 
 .board-container {
@@ -74,11 +131,6 @@ This will use 60% scaling.
 .coordinate-base {
     position: relative;
     width: calc(var(--board-width) + var(--board-paddingx2));
-}
-
-.large .board-container {
-    width: 433px;
-
 }
 
 
@@ -99,22 +151,15 @@ This will use 60% scaling.
 }
 
 .rS {
-    top: 328px;
+    top: calc(var(--board-height) + var(--board-padding));
+    /* top: 328px;*/
     z-index: 500
 }
 
-.large .rS {
-    top: 464px;
-}
 
-.small .rS {
-    top: 285px;
-}
-
- .rG {
+.rG {
     top: calc(0px - var(--koma-height) * 0.8);
 }
-
 
 
 .flip180 {
@@ -140,18 +185,14 @@ This will use 60% scaling.
 }
 
 .playerName {
+    --name-width: 120px;
     position: absolute;
-    left: calc(var(--board-width) - var(--note-width)) ;
-    width: 120px;
+    left: calc(var(--board-width) - var(--name-width) + var(--board-padding));;
+    width: var(--name-width);
     font-size: x-small;
-    text-overflow:clip;
+    text-overflow: clip;
 }
 
-.large .playerName {
-    left: 240px;
-    width: 188px;
-    font-size: small;
-}
 
 .playerName-gote {
     top: 25px;
@@ -218,7 +259,7 @@ This will use 60% scaling.
 }
 
 .small .image-capture-position {
-    left:242px;
+    left: 242px;
 }
 
 .text-highlight {
@@ -246,10 +287,6 @@ This will use 60% scaling.
     z-index: 700
 }
 
-.large .row-on-hand span {
-    font-size: x-small;
-}
-
 .button-bar-grid {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -268,10 +305,6 @@ This will use 60% scaling.
     margin-top: 20px;
 }
 
-.large .caption {
-    font-size: 1.2rem;
-    padding-top: 5px;
-}
 
 /*move elements out of the way */
 .c0 {
@@ -284,13 +317,12 @@ This will use 60% scaling.
 
 .board {
     position: absolute;
-    /*left: 10px;
-    top: 9px;*/
-    margin: 10px;
+
+    margin: 11px;
     /*width: 286px;*/
-    width:var(--board-width);
+    width: var(--board-width);
     /*height: 318px;*/
-    height:var(--board-height);
+    height: var(--board-height);
     box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -302,21 +334,6 @@ This will use 60% scaling.
     height: calc(var(--board-height) + 18px);
 }
 
-
-.boardbase-right {
-    position:absolute;
-    top:var(--koma-height);
-    left: calc(var(--board-width) / 2 );
-    width: calc(var(--board-width) / 2 + var(--board-paddingx2));
-    height: calc(var(--board-height) + 18px);
-}
-.boardbase-left {
-    position:absolute;
-    top:var(--koma-height);
-    left:0;
-    width: calc(var(--board-width) / 2);
-    height: calc(var(--board-height) + 18px);
-}
 
 
 .comment {
@@ -335,7 +352,7 @@ This will use 60% scaling.
 }
 
 .side-comment {
-   /* min-width: 100px;*/
+    /* min-width: 100px;*/
     white-space: pre-wrap;
     font-size: 1.1rem;
     margin-left: 2rem;
@@ -370,119 +387,124 @@ This will use 60% scaling.
 }
 
 
-
 .endOfMove {
     font-size: 0.75rem;
     position: absolute;
-    top: calc(var(--board-height) + var(--board-paddingx2) +  var(--koma-height) * 2);
-    left: calc(var(--board-width)  + var(--board-paddingx2) - var(--note-width));
+    top: calc(var(--board-height) + var(--board-paddingx2) + var(--koma-height) * 2);
+    left: calc(var(--board-width) + var(--board-paddingx2) - var(--note-width));
     text-align: right;
     width: var(--note-width);
 }
 
 
 .c1 {
-    left:calc(var(--col-postion-base) - var(--koma-width) * 1);
+    left: calc(var(--col-postion-base) - var(--koma-width) * 1);
     /*left: 258px;*/
 }
 
 .c2 {
-    left:calc(var(--col-postion-base) - var(--koma-width) * 2);
+    left: calc(var(--col-postion-base) - var(--koma-width) * 2);
     /*left: 228px;*/
 }
 
 .c3, .c-r, .cr {
-    left:calc(var(--col-postion-base) - var(--koma-width) * 3);
+    left: calc(var(--col-postion-base) - var(--koma-width) * 3);
     /*left: 198px;*/
 }
 
 .c4, .c-b, .cb {
-    left:calc(var(--col-postion-base) - var(--koma-width) * 4);
+    left: calc(var(--col-postion-base) - var(--koma-width) * 4);
     /*left: 168px;*/
 }
 
 .c5, .c-g, .cg {
-    left:calc(var(--col-postion-base) - var(--koma-width) * 5);
+    left: calc(var(--col-postion-base) - var(--koma-width) * 5);
     /*left: 138px;*/
 }
 
 .c6, .c-s, .cs {
-    left:calc(var(--col-postion-base) - var(--koma-width) * 6);
+    left: calc(var(--col-postion-base) - var(--koma-width) * 6);
     /*left: 108px;*/
 }
 
 .c7, .c-n, .cn {
-    left:calc(var(--col-postion-base) - var(--koma-width) * 7);
+    left: calc(var(--col-postion-base) - var(--koma-width) * 7);
     /*left: 78px;*/
 }
 
 .c8, .c-l, .cl {
-    left:calc(var(--col-postion-base) - var(--koma-width) * 8);
+    left: calc(var(--col-postion-base) - var(--koma-width) * 8);
     /*left: 48px;*/
 }
 
 .c9, .c-p, .cp {
-    left:calc(var(--col-postion-base) - var(--koma-width) * 9);
+    left: calc(var(--col-postion-base) - var(--koma-width) * 9);
     /*left: 18px;*/
 }
 
 .r1 {
-    top:calc(var(--row-position-offset) + var(--koma-height) * 1);
+    top: calc(var(--row-position-offset) + var(--koma-height) * 1);
     /*top: 17px;*/
 }
 
 .r2 {
-    top:calc(var(--row-position-offset) + var(--koma-height) * 2);
+    top: calc(var(--row-position-offset) + var(--koma-height) * 2);
     /*top: 50px;*/
 }
 
 .r3 {
-    top:calc(var(--row-position-offset) + var(--koma-height) * 3);
+    top: calc(var(--row-position-offset) + var(--koma-height) * 3);
     /*top: 83px;*/
 }
 
 .r4 {
-    top:calc(var(--row-position-offset) + var(--koma-height) * 4);
+    top: calc(var(--row-position-offset) + var(--koma-height) * 4);
     /*top: 116px;*/
 }
 
 .r5 {
-    top:calc(var(--row-position-offset) + var(--koma-height) * 5);
+    top: calc(var(--row-position-offset) + var(--koma-height) * 5);
     /*top: 149px;*/
 }
 
 .r6 {
-    top:calc(var(--row-position-offset) + var(--koma-height) * 6);
+    top: calc(var(--row-position-offset) + var(--koma-height) * 6);
     /*top: 182px;*/
 }
 
 .r7 {
-    top:calc(var(--row-position-offset) + var(--koma-height) * 7);
+    top: calc(var(--row-position-offset) + var(--koma-height) * 7);
     /*top: 215px;*/
 }
 
 .r8 {
-    top:calc(var(--row-position-offset) + var(--koma-height) * 8);
+    top: calc(var(--row-position-offset) + var(--koma-height) * 8);
     /*top: 248px;*/
 }
 
 .r9 {
-    top:calc(var(--row-position-offset) + var(--koma-height) * 9);
+    top: calc(var(--row-position-offset) + var(--koma-height) * 9);
     /*top: 281px;*/
 }
 
 .large {
-        --col-postion-base: 408px;
-        --row-position-offset: -28px;
-        --board-height: var(--original-board-height);
-        --board-width: var(--original-board-width);
-        --koma-width: var(--original-koma-width);
-        --koma-height: var(--original-koma-height);
-        --note-width: 140px;
+    --col-postion-base: 408px;
+    --row-position-offset: -28px;
+    --board-height: var(--original-board-height);
+    --board-width: var(--original-board-width);
+    --koma-width: var(--original-koma-width);
+    --koma-height: var(--original-koma-height);
+    --note-width: 140px;
 
-    .endOfMove{
+    .caption {
+        font-size: 1.2rem;
+        padding-top: 5px;
+    }
+
+    .endOfMove {
         font-size: 1rem;
     }
+
     .comment {
         height: 120px;
     }
@@ -491,6 +513,16 @@ This will use 60% scaling.
         font-size: 1rem;
 
     }
+
+    .playerName {
+        --name-width: 188px;
+        font-size: small;
+    }
+
+    .row-on-hand span {
+        font-size: x-small;
+    }
+
 
 }
 
@@ -501,7 +533,9 @@ This will use 60% scaling.
     --board-width: calc(var(--original-board-width) * 0.6);
     --koma-width: calc(var(--original-koma-width) * 0.6);
     --koma-height: calc(var(--original-koma-height) * 0.6);
-
+    .custom-context-menu{
+        min-width: 180px;
+    }
 }
 
 /* container query to collapse side comment vertically at 576px;*/

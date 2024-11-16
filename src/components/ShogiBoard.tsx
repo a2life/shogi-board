@@ -20,6 +20,7 @@ import {saveAs} from "file-saver";
 import {endOfMoveComment} from "./eomNote";
 import * as I from "./Icons";
 import DOMPurify from "dompurify";
+import {CustomContextMenu} from "./CustomContextMenu";
 
 export const Board = (Props: {
     pieces: string, moves: string[], branchList: any, caption: string, tesuu: number, initialComment: string,
@@ -73,6 +74,9 @@ export const Board = (Props: {
     const [history, setHistory] = useState(initialHistory)
     const [maskBranch, setMaskBranch] = useState(Props.flags.maskBranch || Props.flags.maskBranchOnce)
     const [markerVisible, setMarkerVisible] = useState(Props.flags.showMarker)
+    const [contextMenuStatus, setContextMenuStatus] = useState({visible: false, x: 0, y: 0});
+
+
     useEffect(() => {
         if (comment[0] == '?') {
             setComment(comment.slice(1));
@@ -80,7 +84,7 @@ export const Board = (Props: {
         }
     }, [comment]) //if the first character of the comment is ? then set maskBranch frag.
 
-    if ((tesuu > 0) && !!movesArray[tesuu-1])  {
+    if ((tesuu > 0) && !!movesArray[tesuu - 1]) {
         const modifiedProps = skipToCounter(tesuu, pieces)
         pieces = modifiedProps.pieces
         initialHistory = modifiedProps.miniHistory
@@ -99,7 +103,7 @@ export const Board = (Props: {
         setMarkerPosition(markerAt)
 
 
-    }, [pieces,movesArray])
+    }, [pieces, movesArray])
 
     useEffect(() => {
         setMarkerVisible(showMarker)
@@ -179,7 +183,7 @@ export const Board = (Props: {
     const notation = () => {
         if (history.length > 0) {
 
-          return getMoveNote(movesArray[history[history.length - 1].counter])
+            return getMoveNote(movesArray[history[history.length - 1].counter])
 
         }
     }
@@ -285,12 +289,12 @@ export const Board = (Props: {
         }
     };
 
-    const copyToClipHandler=  (e:Event)=>{
+    const copyToClipHandler = (e: Event) => {
         e.preventDefault();
 
-         navigator.clipboard.writeText(createSFEN(piecesInfo,history.length)).then(
-             ()=>window.alert('SFEN string copied to clipboard')
-         ).catch((reason)=>window.alert(reason));
+        navigator.clipboard.writeText(createSFEN(piecesInfo, history.length)).then(
+            () => window.alert('SFEN string copied to clipboard')
+        ).catch((reason) => window.alert(reason));
 
     }
 
@@ -306,6 +310,37 @@ export const Board = (Props: {
                 <><br/><span
                     style="font-size:0.75rem">{lineBreakComments(endOfMoveComment(stringArray[moveCounter])[1])}</span></>)
     }
+    const boardClickHandler = (e: MouseEvent) => {
+        e.preventDefault();
+        if (e.offsetX >= ((e.currentTarget as HTMLElement).offsetWidth) * 0.5) {
+            /*move forward */
+            (!!Props.branchList[moveCounter] && maskBranch) ? () => {
+            } : playOneMoveHandler(e)
+
+        } else {
+            /*move backwards */
+            moveBackHandler(e)
+        }
+
+    }
+    const showContextMenu = (e: MouseEvent) => {
+        e.preventDefault();
+        console.log(e.currentTarget)
+        const x = e.offsetX, y = e.offsetY
+        setContextMenuStatus({visible: true, x: x, y: y});
+
+        document.addEventListener('click', function (e) {
+            setContextMenuStatus({visible: false, x: 0, y: 0});
+        }, {once: true});
+
+    }
+    const flipIcon = flipped ? <I.rotateL/> : <I.rotateR/>
+    let topics = [
+        {title: "Rotate the Board", fn: () => flipHandler(), icon: flipIcon},
+        {title: "SFEN to Clipboard", fn: (e: Event) => copyToClipHandler(e), icon: <I.copyIcon/>},
+        {title: "Save PNG board image", fn: () => imgCapture(), icon: <I.camera/>},
+    ]
+    if (!!kifu) topics.push({title: 'Save Kifu', fn: () => saveKifu(), icon: <I.SaveFile/>});
 
     return <>
         <div class="board-container">
@@ -325,7 +360,7 @@ export const Board = (Props: {
 
                     </div>
 
-                    <div class=" boardbase-grid">
+                    <div class=" boardbase-grid" onClick={boardClickHandler} onContextMenu={showContextMenu}>
 
                         <RenderBoard ban={Props.graphics.ban} grid={Props.graphics.grid}/>
                         {showMarker &&
@@ -333,10 +368,9 @@ export const Board = (Props: {
 
                         {piecesInfo.split(',').map((p) => (
                             <RenderPiece piece={p} mover={previousAct} animate={animate} koma={Props.graphics.koma}/>))}
+
                     </div>
-                    <div class="boardbase-right" onClick={(!!Props.branchList[moveCounter] && maskBranch) ? () => {
-                    } : playOneMoveHandler} onContextMenu={moveBackHandler}></div>
-                    <div class="boardbase-left" onClick={moveBackHandler}></div>
+
                     <div class="row-on-hand">
                         {scoreArray('s', piecesInfo).map((p) => (parseInt(p.slice(1)) > 1) &&
                             <span class={flipped ? `c${p[0]} flip180` : `c${p[0]}`}>{p.slice(1)}</span>)}
@@ -395,10 +429,10 @@ export const Board = (Props: {
                     </>
                 }
 
-                <div class="save-flip-box">
+                {/*<div class="save-flip-box">
                     <div class="flip-button-position"
                          title='Flip board'
-                         onClick={flipHandler} >{flipped ? <I.rotateL/> : <I.rotateR/>}</div>
+                         onClick={flipHandler}>{flipped ? <I.rotateL/> : <I.rotateR/>}</div>
                     {!!kifu &&
                         <div title='download Kifu' class="save-button-position"
                              onClick={saveKifu}><I.SaveFile/></div>}
@@ -406,13 +440,21 @@ export const Board = (Props: {
                          onClick={copyToClipHandler}>
                         <I.copyIcon/>
                     </div>
-                </div>
+                </div>*/}
 
             </div>
             {commentWindow && !Props.flags.sideComment && <div class="comment">
                 {commentDiv(comment)} {logEndOfMove(movesArray, moveCounter)}
             </div>}
-            <div id={"sfen_"+Props.id} class="sfen_data visually-hidden" >{createSFEN(piecesInfo, history.length)}</div>
+            {contextMenuStatus.visible &&
+                <CustomContextMenu
+                    x={contextMenuStatus.x}
+                    y={contextMenuStatus.y}
+                    topics={topics}
+
+                />}
+            <div id={"sfen_" + Props.id}
+                 class="sfen_data visually-hidden">{createSFEN(piecesInfo, history.length)}</div>
         </div>
 
         {commentWindow && Props.flags.sideComment && <div class="side-comment">

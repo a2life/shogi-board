@@ -106,9 +106,17 @@ This will use 60% scaling.
 
     }
 
-    animation: fadein 1s;
+  /*  animation: fadein 1s;*/
+    transition: opacity 1s ease;
 
 
+
+}
+.context-menu-visible {
+    opacity: 1;
+}
+.context-menu-not-visible {
+    opacity:0;
 }
 
 .board-app {

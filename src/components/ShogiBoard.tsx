@@ -75,7 +75,7 @@ export const Board = (Props: {
     const [maskBranch, setMaskBranch] = useState(Props.flags.maskBranch || Props.flags.maskBranchOnce)
     const [markerVisible, setMarkerVisible] = useState(Props.flags.showMarker)
     const [contextMenuStatus, setContextMenuStatus] = useState({visible: false, x: 0, y: 0});
-
+    const [clsName, setClsName] = useState('context-menu-not-visible')
 
     useEffect(() => {
         if (comment[0] == '?') {
@@ -312,8 +312,8 @@ export const Board = (Props: {
     }
     const boardClickHandler = (e: MouseEvent) => {
         e.preventDefault();
-        const bounds=(e.currentTarget as HTMLElement).getBoundingClientRect();
-        if ((e.clientX - bounds.left)> (bounds.width) * 0.5) {
+        const bounds = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        if ((e.clientX - bounds.left) > (bounds.width) * 0.5) {
             /*move forward */
             (!!Props.branchList[moveCounter] && maskBranch) ? () => {
             } : playOneMoveHandler(e)
@@ -326,16 +326,44 @@ export const Board = (Props: {
     }
     const showContextMenu = (e: MouseEvent) => {
         e.preventDefault();
-        const bounds=(e.currentTarget as HTMLElement).getBoundingClientRect()
+        const bounds = (e.currentTarget as HTMLElement).getBoundingClientRect()
 
         const x = e.clientX - bounds.left, y = e.clientY - bounds.top
         setContextMenuStatus({visible: true, x: x, y: y});
 
+
         document.addEventListener('click', function (e) {
-            setContextMenuStatus({visible: false, x: 0, y: 0});
+            /*  setContextMenuStatus({visible: false, x: 0, y: 0});*/
+            setClsName('context-menu-not-visible')
+
         }, {once: true});
 
     }
+    useEffect( () => {
+            if (contextMenuStatus.visible == true) { /*set contextmenustatus first, let the dom load it, then check*/
+                setClsName('context-menu-visible')
+            }
+        }
+        , [contextMenuStatus])
+
+    const transitionEventHandler = (e: Event) => {
+      /*
+        Trap transitionEnd event and determine if class is set to not-visible. In this case, remove DOM.
+       */
+        /*  console.log((e.target as HTMLElement).classList)
+        console.log((e.target as HTMLElement).classList.contains('context-menu-not-visible'))*/
+        /* remove element after fade out */
+        if ((e.target as HTMLElement).classList.contains('context-menu-not-visible')) {
+            setContextMenuStatus({visible: false, x: 0, y: 0});
+        }
+
+    }
+    /*
+     in order to utilize fade-in fade-out effect of context menu box , the class has to be set to 'visible' after the custom menu element is added to the dom
+     then when it is time to close it,  class has to be set to 'invisible' first to make it invisible, then preact remove it from dom.
+     The first will be handled with useEffect hook. The second will be handled with first change the class, then using
+     transition event notification to detect a class change, then element will be removed.
+     */
     const flipIcon = flipped ? <I.rotateL/> : <I.rotateR/>
     let topics = [
         {title: "Rotate the Board", fn: () => flipHandler(), icon: flipIcon},
@@ -343,7 +371,7 @@ export const Board = (Props: {
         {title: "Save PNG board image", fn: () => imgCapture(), icon: <I.camera/>},
     ]
     if (!!kifu) topics.push({title: 'Save Kifu', fn: () => saveKifu(), icon: <I.SaveFile/>});
-
+    let classStatus = "starting"
     return <>
         <div class="board-container" onContextMenu={showContextMenu}>
             {(caption!.length > 0) && <div className="caption">{caption}</div>}
@@ -362,7 +390,7 @@ export const Board = (Props: {
 
                     </div>
 
-                    <div class=" boardbase-grid" onClick={boardClickHandler} >
+                    <div class=" boardbase-grid" onClick={boardClickHandler}>
 
                         <RenderBoard ban={Props.graphics.ban} grid={Props.graphics.grid}/>
                         {showMarker &&
@@ -453,6 +481,8 @@ export const Board = (Props: {
                     x={contextMenuStatus.x}
                     y={contextMenuStatus.y}
                     topics={topics}
+                    eventHandler={transitionEventHandler}
+                    cls={clsName}
 
                 />}
             <div id={"sfen_" + Props.id}

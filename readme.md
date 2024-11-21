@@ -21,7 +21,7 @@ then
 <code>npm run dev</code>  to run dev server
  - This will run the project with demo page on local server. index.html file has enough data to show multiple shogi-boards with different parameter settings. 
  - Data to render those boards are in JavaScript section of index.html,  contained in object array with globally declared variable name of 'initialSetup_ts81'.
- - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project will be without any JQuery. Modern TypeScript/JavaScript features will be sufficient and finally kifu parser is also written in JavaScript(TypeScript), not that I am avoiding PHP, rather I am much more comfortable with concept of client side processing.
+ - Behavior and parameters are almost identical to those described in web-shogi-board project from 8 years ago. The project 8 years ago was written with PHP and JavaScript with liberal use of JQuery library functions. This project does not use JQuery. Modern TypeScript/JavaScript features are sufficient. Kifu parser is now written in JavaScript(TypeScript), meaning it is processed in client side.  It is not that I am avoiding PHP and server side processing. Rather I am much more comfortable with concept of client side processing.
  - The previous project relied on modx CMS as a framework. This new setup does not rely on specific CMS. The only thing required will be for the hosting side to provide shogi data in Javascript array.
 
 
@@ -47,16 +47,22 @@ This application is not intended to be used to play shogi. The purpose of this a
 
 ### Highlight of the project
 <ol>
-<li>The program can take standard Kakinoki(柿木) style Kifu format as one of Initial setup parameter and parse them into playable shogi board display.</li>
-<li>Own instruction set in JavaScript Object format for piece movement and placement. Kifu is first translated to this internal instructions and executed.</li>
+<li>The program can take standard Kakinoki(柿木) style Kifu format as one of Initial setup parameters and parse them into playable shogi board display.</li>
+<li>Own instruction set in JavaScript Object format for piece movement and placement is used. Kifu is first translated to this internal instructions and executed.</li>
 <li>Branching is supported</li>
-<li>Play forward, backward or jump to branch point with play buttons.  mouse clicking on the board will also move pieces forward or backwards</li>
+<li>Play forward, backward or jump to branch point with play buttons.  mouse clicking on the right half of the board will also move pieces forward. Clicking on the left half of the board will move pieces backwards</li>
 
-<li>CSS based board and piece placement. Change CSS to modify board and piece appearance.</li>
-<li>Multiple shogi boards on single web page.  put placeholder as div element with class name of 'board-app'. If you place two such divs on the page, then the app will render two shogi boards.  You need to provide rendering data array in Javascript. Each board is managed as an element of data array. There is no iframe tags involved.
+<li>Piece placement and movement of them are controlled by CSS. One can change CSS to modify board and piece appearance.</li>
+<li>Rendering of multiple shogi boards on single web page is supported.  Simply put placeholders as div elements with class name of 'board-app'. If you place two such divs on the page, then the app will render two shogi boards.  You need to provide a rendering data array with corresponding number of elements in Javascript. Each board is managed as an element of data array. There is no iframe tags involved.
 </li>
-<li>If Kifu is applied, then download icon is available. Clicking on it will download the kifu file as 'download.kif'</li>
-<li>Click on the copy icon will download the board's image capture. Also, as of May 2024,  right-clicking the copy icon will copy the board data in SFEN string format in the clipboard.</li>
+<li>Right clicking on the board will display context menu with the following action items</li>
+<ol>
+  <li>Rotate board 180 degree</li>
+ <li>Copy SFEN data to clipboard</li>
+ <li>Download board's graphic image in PNG format</li>
+ <li>Download Kifu. This option is only available if Kifu is used as a source of data</li>
+</ol>
+
 </ol>
 
 ### Theory of board rendering.

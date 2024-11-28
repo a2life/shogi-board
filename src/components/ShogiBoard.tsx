@@ -4,6 +4,7 @@ import {createSFEN} from "./createSFEN";
 type history = { pieces: string, playedOn: string, counter: number }[]
 
 import '../shogiboard.css'
+import '../button-bar.css'
 import {useEffect, useState} from "preact/hooks";
 import {moveParser, moveAndRemember} from "./MoveHandlers";
 import {RenderPiece, RenderBoard, MarkerAt} from "./renderPiece";
@@ -424,27 +425,27 @@ export const Board = (Props: {
 
                         <div class="button-bar-grid">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-secondary" value="ReWind" onClick={reWindHandler}
+                                <button class="" value="ReWind" onClick={reWindHandler}
                                         disabled={moveCounter === 0}>
                                     <I.SkipStart/></button>
                                 {HasBranch &&
-                                    <button class="btn btn-sm btn-outline-secondary" value="Skip-Backward"
+                                    <button value="Skip-Backward"
                                             onClick={skipToPrevBranchHandler}
                                             disabled={moveCounter === 0}>
                                         <I.SkipBack/></button>}
-                                <button class="btn btn-sm btn-outline-secondary" value="Back" onClick={moveBackHandler}
+                                <button  value="Back" onClick={moveBackHandler}
                                         disabled={moveCounter === 0}>
                                     <I.Back/></button>
-                                <button class="btn btn-sm btn-outline-secondary" value="Play"
+                                <button  value="Play"
                                         onClick={playOneMoveHandler}
                                         disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && maskBranch}>
                                     <I.Play/></button>
                                 {HasBranch &&
-                                    <button class="btn btn-sm btn-outline-secondary" value="Skip-Forward"
+                                    <button  value="Skip-Forward"
                                             onClick={skipToNextBranchHandler}
                                             disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && maskBranch}>
                                         <I.SkipForward/></button>}
-                                <button class="btn btn-sm btn-outline-secondary" value="Skip-to-End"
+                                <button value="Skip-to-End"
                                         onClick={skipEndHandler}
                                         disabled={endOfMoves(moveCounter)}>
                                     <I.SkipEnd/></button>

@@ -38,7 +38,10 @@ This will use 60% scaling.
     --board-paddingx2: 22px;
     --note-width: 100px;
 }
-
+body {
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+}
 .visually-hidden {
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
@@ -106,17 +109,18 @@ This will use 60% scaling.
 
     }
 
-  /*  animation: fadein 1s;*/
+    /*  animation: fadein 1s;*/
     transition: opacity 1s ease;
 
 
-
 }
+
 .context-menu-visible {
     opacity: 1;
 }
+
 .context-menu-not-visible {
-    opacity:0;
+    opacity: 0;
 }
 
 .board-app {
@@ -136,7 +140,7 @@ This will use 60% scaling.
 }
 
 .board-container {
-    width: calc(var(--board-width) + var(--board-paddingx2));
+    width: calc(var(--board-width) + var(--board-paddingx2) + 4px);
     position: relative;
 
 }
@@ -231,6 +235,7 @@ This will use 60% scaling.
 .text-align-flipped {
     text-align: left;
 }
+
 /*
 
 .save-flip-box {
@@ -304,9 +309,12 @@ This will use 60% scaling.
 }
 
 .button-bar-grid {
+
     margin-top: 10px;
     margin-bottom: 10px;
+
 }
+
 
 .onMove {
     z-index: 1000 !important;

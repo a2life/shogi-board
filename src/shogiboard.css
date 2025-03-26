@@ -342,7 +342,7 @@ body {
 .board {
     position: absolute;
 
-    margin: 11px;
+    margin: 9.5px;
     /*width: 286px;*/
     width: var(--board-width);
     /*height: 318px;*/

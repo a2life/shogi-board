@@ -27,6 +27,7 @@
     "@types/file-saver": "^2.0.3",
     "bootstrap": "^5.0.2",
     "typescript": "^4.3.2",
-    "vite": "2.9.16"
+    "vite": "^7.0.4"
+
   }
 }

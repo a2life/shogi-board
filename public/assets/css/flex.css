@@ -12,3 +12,32 @@
         flex-direction: column;
     }
 }
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0, .125);
+    border-radius: 0.25rem;
+}
+.card_title {
+
+}
+.card_content {
+
+}
+.card-body {
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+.card-footer {}
+.card-header {
+    padding: .5rem 1rem;
+    margin-top:0;
+    margin-bottom: 0;
+    background-color: rgba(0,0,0, .125);
+    border-bottom: 1px solid rgba(0,0,0, .125);
+}

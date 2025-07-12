@@ -290,7 +290,7 @@ export class KifuParser {
                     const note = (!!found![4]) ? found![4] : "=" // note is "J" or "="
                     const comment = (!!found![5]) ? found![5].trim() : ''
                     const name = line.match(moveName)![1].split('*')[0] // get original notation for display window. Remove anything trailing comment separator
-                    if (to === 'x') { // in case of 投了、中断、etc., give different treatment
+                    if (to.toLowerCase() === 'x') { // in case of 投了、中断、etc., give different treatment
                         parsed = to + ':' + name + comment
                     } else { //otherwise, parse movement further
                         parsed = side + '-' + to + from + note + count + ':' + name + comment

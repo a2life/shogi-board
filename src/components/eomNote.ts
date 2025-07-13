@@ -11,7 +11,7 @@
  * "x:中断===まで8手で中断==="
  * in case of "C:#"  return "Branch # - not sure if this gives any info, but this is a starter
  */
-export const endOfMoveComment = (s: string | undefined) => {
+export const endOfMoveComment = (s: string | MovesObject |undefined) => {
     if (typeof (s) === "string") {
      //   console.log('endofmove string:', s);
         const found = s.match(/[xC]:(.*?)[*=]{3}(.*)[*=]{3}|[xc]:(.*)/);
@@ -25,11 +25,19 @@ export const endOfMoveComment = (s: string | undefined) => {
             const f2=(typeof(found[2])==='string')?found[2]:'';
             return [f1+f3,f2];
 
-        } else return []
+        }  else return []
 
 
-    } else return []
+    }
+    else  if (typeof s === 'object') {
+        const postText = (( s as MovesObject).move).match(/[xCc]:(.*)/)
+        if (Array.isArray(postText)) {
+            const f1=(typeof(postText[1])==='string')?postText[1]:'';
+            return [f1, s.comment]
+        }
+    }
 
+    return []
 
 }
 

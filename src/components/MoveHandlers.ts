@@ -77,13 +77,17 @@ export const moveParser = (kifString:string, pieceSet:string) => {
  * @param move
  * @param counter
  */
-export const moveAndRemember=(pieces:string,movedFrom:string, move:string,counter:number)=>{
+export const moveAndRemember=(pieces:string,movedFrom:string, move:string|MovesObject,counter:number)=>{
 
     const miniHistory={pieces: pieces, playedOn: movedFrom, counter: counter}
     //let  nextMove = movesArray[counter]
-    if (move.slice(2, 4) === '00') move = move.replace('00', movedFrom)
-    pieces = moveParser(move, pieces) //get updated pieces
-    movedFrom = move.slice(2, 4)
+    let thisMove;
+    if (typeof(move)=='object'){
+        thisMove=move.move
+    } else thisMove=move
+    if (thisMove.slice(2, 4) === '00') thisMove = thisMove.replace('00', movedFrom)
+    pieces = moveParser(thisMove, pieces) //get updated pieces
+    movedFrom = thisMove.slice(2, 4)
     counter++
     return {miniHistory,pieces,move,movedFrom,counter}
 

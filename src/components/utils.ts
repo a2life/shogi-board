@@ -1,3 +1,4 @@
+
 const counter = (search: string, source: string) => {
     let re = new RegExp(search, 'g');
     return (source.match(re) || []).length;
@@ -40,7 +41,7 @@ const rePattern = new RegExp('^(?<pre>[sgCxX])[\\-+0-9a-z]+((?<branch>[J=])(?<mo
 // (?<name>regex expression) => Named captured group
 
 
-export const preProcessMoves = ((moves: string[] | string) => {
+export const preProcessMoves = (moves: string[] | string) => {
     let movesArray: string[];
     let lineZeroComment = '';
     if (typeof moves === "string") {
@@ -71,7 +72,7 @@ export const preProcessMoves = ((moves: string[] | string) => {
     }
 
     return {movesArray, lineZeroComment}
-})
+}
 
 
 const getBranchArray = (movesArray: string[]) => movesArray.map((e, index) => ({
@@ -86,10 +87,22 @@ const getBranchArray = (movesArray: string[]) => movesArray.map((e, index) => ({
  * @param index --move index
  * @param movementArray -- array of moves
  */
-export const movementNotBranch = (index: number, movementArray: string[]) => {
+export const movementNotBranch = (index: number, movementArray: string[]|MovesObject[]) => {
     const thisMovement = movementArray[index];
-    const isNotBranchHead = (index == 0) ? true : (movementArray[index - 1][0] !== 'C')
-    const param = thisMovement.match(rePattern)
+    const previousLine =movementArray[index-1];
+    let branchHeadCheck=false
+    let param
+    if (typeof previousLine==='string') {
+        branchHeadCheck=(previousLine.slice(0,1)!=='C')
+         param = (thisMovement as string).match(rePattern)
+    } else
+        if (typeof previousLine === 'object') {
+            branchHeadCheck=(previousLine.move.slice(0,1)!=='C')
+            param = ((thisMovement as MovesObject).move).match(rePattern)
+        }
+
+    const isNotBranchHead = (index == 0) ? true : branchHeadCheck
+
 
     return (param?.groups?.branch !== 'J') && isNotBranchHead
 }
@@ -146,9 +159,12 @@ export const prepBranchPoints = (movesArray: string[]) => {
 
 }
 
-export const getMoveNote = (movement: string|null) => {
+export const getMoveNote = (movement: string|MovesObject) => {
     if (!movement) return null
-     let moveElements = movement.match(rePattern) as RegExpMatchArray
+    let thisMovement=''
+    if(typeof movement === 'string') { thisMovement = movement }
+    else  if (typeof movement === 'object') { thisMovement = movement.move }
+     let moveElements = thisMovement.match(rePattern) as RegExpMatchArray
     if(!moveElements) return null
     if (typeof(moveElements.groups)!='undefined') {
         if (moveElements.groups.move === undefined) {
@@ -160,14 +176,22 @@ export const getMoveNote = (movement: string|null) => {
 }
 export const displayWithSideSymbol = (side: 's' | 'g', name: string) => symbolizeSide(side) + name
 
-export const extractComments = (moveLine: string) => {
-    const commentArray = moveLine.match(/\*\*\*(.*)\*\*\*/);
-    if (commentArray) {
-        const trimmedCommentArray = commentArray.map(i => i.slice(3, -3))
-        return lineBreakComments(trimmedCommentArray[0])
+export const extractComments = (moveLine: string|MovesObject) => {
+    let comment = ''
+
+    if (typeof moveLine === 'string') {
+        const commentArray = moveLine.match(/\*\*\*(.*)\*\*\*/);
+        if (commentArray) {
+            const trimmedCommentArray = commentArray.map(i => i.slice(3, -3))
+            comment = lineBreakComments(trimmedCommentArray[0])
+        }
+    }
+    else if (typeof moveLine === 'object') {
+        comment =moveLine.comment!
     }
 
-    return '';
+
+    return comment;
     /* const index = (moveLine.indexOf('***'));
      const comment = (index >= 0) ? moveLine.slice(index + 1) : ''
      return comment.replaceAll('*', '<br>')*/

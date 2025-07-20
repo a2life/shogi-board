@@ -50,15 +50,7 @@ export const preProcessMoves = ((moves: string[] | string) => {
     if (movesArray.length>1) {
         movesArray = movesArray.map((e, index) => {
             let t = e.trim()
-            if (t[2] && t[2].toLowerCase() === 'x') return 'x'
-            if (t.slice(2, 4) == '00') {
-                const prevMove = movesArray[index - 1];
-                if (prevMove[0] === 'C') {
-                    // handling for branch head is to be implemented.
-                } else {
-                    t.replace('00', prevMove.slice(2, 4))
-                }
-            }
+
             return t
         })
         if (movesArray[0][0] === '*') { //if the first line is comment then,

@@ -24,7 +24,7 @@ import DOMPurify from "dompurify";
 import {CustomContextMenu} from "./CustomContextMenu";
 
 export const Board = (Props: {
-    pieces: string, moves: string[]|MovesObject[], branchList: any, caption: string, tesuu: number, initialComment: string,
+    pieces: string, moves: string[]|MoveObject[], branchList: any, caption: string, tesuu: number, initialComment: string,
     flags: {
         commentWindow: boolean,
         HasBranch: boolean,
@@ -82,7 +82,7 @@ export const Board = (Props: {
     const [clsName, setClsName] = useState('context-menu-not-visible')
 
     useEffect(() => {
-        if (comment[0] == '?') {
+        if (comment!=='' && comment[0] == '?') {
             setComment(comment.slice(1));
             setMaskBranch(true)
         }
@@ -118,7 +118,7 @@ export const Board = (Props: {
         if (index >= movesArray.length) return true
         else
             if (typeof(movesArray[index]) === 'object'){
-                const object=movesArray[index] as MovesObject
+                const object=movesArray[index] as MoveObject
                 target=object.move
             } else
                 if (typeof(movesArray[index]==='string')) {
@@ -136,8 +136,8 @@ export const Board = (Props: {
             }
     }
 
-    const updateStates = (pieces: any, miniHistory: history, nextMove: string|MovesObject|null, index: number) => {
-        if (nextMove === null) return false
+    const updateStates = (pieces: any, miniHistory: history, nextMove: string|MoveObject|null, index: number) => {
+        if (nextMove===null) return false
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
         if (typeof nextMove === 'string') {
@@ -176,8 +176,11 @@ export const Board = (Props: {
 
     const playOneMoveHandler = (e: Event) => {
         e.preventDefault();
+
+            takeOneMoveForward(moveCounter)
+
         // console.log('analyzing move', movesArray[moveCounter])
-        takeOneMoveForward(moveCounter)
+
 
     }
 
@@ -202,13 +205,14 @@ export const Board = (Props: {
 
     }
 
-    const notation = () => {
+    const notation = ():string => {
 
         if (history.length > 0) {
 
-            return getMoveNote(movesArray[history[history.length - 1].counter])
+            return getMoveNote(movesArray[history[history.length - 1].counter])||''
 
         }
+        else return ''
     }
 
 
@@ -256,7 +260,7 @@ export const Board = (Props: {
     }
     const skipToNextBranchHandler = (e: Event) => {
         e.preventDefault();
-        let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove: string|MovesObject,
+        let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove: string|MoveObject,
             currentMove = previousAct
 
         if (endOfMoves(counter)) return
@@ -327,7 +331,7 @@ export const Board = (Props: {
     const commentDiv = (comment: string) => {
         if (comment.length > 0) return <span dangerouslySetInnerHTML={sanitizeComment(comment)}/>
     }
-    const logEndOfMove = (movesArray: string[]|MovesObject[], lineCounter: number) => {
+    const logEndOfMove = (movesArray: string[]|MoveObject[], lineCounter: number) => {
         if (endOfMoves(lineCounter))
             return (
                 <><br/><span

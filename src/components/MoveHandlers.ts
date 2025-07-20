@@ -77,7 +77,7 @@ export const moveParser = (kifString:string, pieceSet:string) => {
  * @param move
  * @param counter
  */
-export const moveAndRemember=(pieces:string,movedFrom:string, move:string|MovesObject,counter:number)=>{
+export const moveAndRemember=(pieces:string, movedFrom:string, move:string|MoveObject, counter:number)=>{
 
     const miniHistory={pieces: pieces, playedOn: movedFrom, counter: counter}
     //let  nextMove = movesArray[counter]

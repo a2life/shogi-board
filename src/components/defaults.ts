@@ -55,7 +55,7 @@ export const defaultParams: ShogiKit = {
     focusImageSelection: 'focus/focus_trpt_g.png',
     caption: '',
     initialComment: '',
-    moves: [''],
+    moves: [],
     tesuu: 0,
     showMarker:false,
     animate:true,

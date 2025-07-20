@@ -127,13 +127,13 @@ export class KifuParser {
     sOnBoard = "19l,29n,39s,49g,59k,69g,79s,89n,99l,28r,88b,17p,27p,37p,47p,57p,67p,77p,87p,97p"; //default for 平手
     gOnBoard = "11l,21n,31s,41g,51k,61g,71s,81n,91l,22b,82r,13p,23p,33p,43p,53p,63p,73p,83p,93p";
     goteban = 0;
-    private movesObject: MovesObject[];
+    private moveObject: MovesObject[];
 
 
     constructor(kifu: string) {
         this.kifu = kifu
         this.moves = []
-        this.movesObject = []
+        this.moveObject = []
 
         if (kifu.includes(movesHeaderPattern)) { //header part exists, so
             const headerPart = kifu.slice(0, kifu.search(movesHeaderPattern) + 1) //limit header part up to headerPattern
@@ -259,15 +259,15 @@ export class KifuParser {
             // new approach
 
             const movesOArray =(kifu.slice(kifu.search(movesHeaderPattern),kifu.length).trim().split('\n')).slice(1)
-             const movesObjectArray:MovesObject[]=[{move:''}]; //initialize movesObjectArray with first element of empty move
+             const moveObjectArray:MovesObject[]=[{move:''}]; //initialize moveObjectArray with first element of empty move
 
 
             for (const moveArray of movesOArray) { //go down the moves list and assign move, comments and book mark to array object
-                const moveElement= movesObjectArray[movesObjectArray.length - 1];
+                const moveElement= moveObjectArray[moveObjectArray.length - 1];
                 let moveInfo=true;
                 if (commentPattern.test(moveArray)) {
                     moveInfo=false;
-                    moveElement.comment = moveArray.match(commentPattern)![1]+'<br>';
+                    moveElement.comment =((!!moveElement.comment)?moveElement.comment:'')+ moveArray.match(commentPattern)![1]+'\n';
                 }
                 if (bookmarkPattern.test(moveArray)) {
                    moveInfo=false;
@@ -277,12 +277,12 @@ export class KifuParser {
                     moveInfo= false;
                     moveElement.endOfGame=moveArray.match(endOfGamePattern)![0];
                 }
-                if (moveInfo && (moveArray.trim())!='') { movesObjectArray.push({move:moveArray})}
+                if (moveInfo && (moveArray.trim())!='') { moveObjectArray.push({move:moveArray})}
             }
 
-         //    console.log('moves object array', movesObjectArray)
+         //    console.log('moves object array', moveObjectArray)
 
-            this.movesObject = movesObjectArray.map((line:MovesObject)=>{
+            this.moveObject = moveObjectArray.map((line:MovesObject)=>{
                 line.move=line.move.trim()
              //   console.log(line.move)
                 let movePart = line.move
@@ -334,7 +334,7 @@ export class KifuParser {
 
             })
 
-            console.log(this.movesObject)
+          //  console.log(this.moveObject)
 
 
           // new approach end
@@ -409,7 +409,7 @@ export class KifuParser {
             })
    //         console.log(this.moves)
             if (comment.length > 0) this.moves = [comment, ...this.moves]
-        } else this.moves = ['']
+        } else this.moves = []
     }
 
     findLine(target: string, scrArray: string[]) {
@@ -455,8 +455,9 @@ export class KifuParser {
 
 
         }
-        if (this.moves.length > 0) returnObject = {...returnObject, ...{moves: this.moves}}
-        if (this.movesObject.length > 0) returnObject = {...returnObject, ...{movesObject: this.movesObject}}
+        if (this.moves.length > 0) returnObject = {...returnObject, ...{movesString: this.moves}}
+        if (this.moveObject.length > 0) returnObject = {...returnObject, ...{moves: this.moveObject}}
+        console.log(returnObject)
         return returnObject
     }
 }

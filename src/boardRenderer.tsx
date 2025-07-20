@@ -94,7 +94,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
 
     if (!!prop.setup.sfen) {
         const [sob, gob, soh, goh, side, count] = parseSFEN(prop.setup.sfen);
-        sfenData = {moves: [''], senteOnHand: soh, goteOnHand: goh, senteOnBoard: sob, goteOnBoard: gob}
+        sfenData = {moves: [], senteOnHand: soh, goteOnHand: goh, senteOnBoard: sob, goteOnBoard: gob}
 
     }
 
@@ -103,6 +103,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
         kifuDataPack = data.parse();
 
     }
+
     /**
      *
      * @param url :string url path to the kifu. assumes the file pointed to by url is a text file in kifu format
@@ -161,11 +162,10 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
 
 
     const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand);
-    moves = moves || ``;
-    initialComment = initialComment || '';
 
-    let {movesArray, lineZeroComment} = preProcessMoves(moves);
-    //   console.log(movesArray);
+    initialComment = initialComment || '';
+    let {movesArray, lineZeroComment} = preProcessMoves(moves!);
+
 
 
     const commentWindow: boolean = (movesArray.toString().replaceAll("***?***", "").indexOf('*')) > 0 || initialComment.length > 1; //
@@ -175,9 +175,11 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
 
 
     const branchList = prepBranchPoints(movesArray)
+    console.log('branchList', branchList)
     //if data-input attributes exist in target div, additional input box will be added. the input box is hidden but can be accessed from outside
     //of the app by usual document.getElementById(data-input-value) and fire with dispatchEvent('change');
-    const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
+ //   const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
+    const HasBranch=branchList && Object.keys(branchList).length > 0
     return <div class="app-container"><Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
                     initialComment={initialComment} tesuu={tesuu || 0}
                     flags={{

@@ -175,7 +175,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
 
 
     const branchList = prepBranchPoints(movesArray)
-    console.log('branchList', branchList)
+    //console.log('branchList', branchList)
     //if data-input attributes exist in target div, additional input box will be added. the input box is hidden but can be accessed from outside
     //of the app by usual document.getElementById(data-input-value) and fire with dispatchEvent('change');
  //   const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction

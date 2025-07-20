@@ -22,6 +22,7 @@ import {endOfMoveComment} from "./eomNote";
 import * as I from "./Icons";
 import DOMPurify from "dompurify";
 import {CustomContextMenu} from "./CustomContextMenu";
+import {isStringArray,isMoveObjectArray} from "./utils";
 
 export const Board = (Props: {
     pieces: string, moves: string[]|MoveObject[], branchList: any, caption: string, tesuu: number, initialComment: string,
@@ -255,6 +256,7 @@ export const Board = (Props: {
         // console.log('selected', newTarget)
         //    setMoveCounter(parseInt(newTarget))
         const moveCounter = parseInt(newTarget)
+        console.log('moveCounter', moveCounter)
         takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action
         setMaskBranch(Props.flags.maskBranch) //reset maskBranch flag if it was temporary altered
     }
@@ -266,7 +268,13 @@ export const Board = (Props: {
         if (endOfMoves(counter)) return
 
         do { //read past to the end
-            nextMove = movesArray[counter]
+            if (isStringArray(movesArray)){
+                nextMove = movesArray[counter]
+            } else {
+                nextMove = movesArray[counter].move
+            }
+
+
             const response = moveAndRemember(pieces, currentMove, nextMove, counter)
             miniHistory.push(response.miniHistory);
             pieces = response.pieces;

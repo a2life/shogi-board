@@ -455,9 +455,9 @@ export class KifuParser {
 
 
         }
-        if (this.moves.length > 0) returnObject = {...returnObject, ...{movesString: this.moves}}
+       // if (this.moves.length > 0) returnObject = {...returnObject, ...{movesString: this.moves}}
         if (this.moveObject.length > 0) returnObject = {...returnObject, ...{moves: this.moveObject}}
-        console.log(returnObject)
+        //console.log(returnObject)
         return returnObject
     }
 }

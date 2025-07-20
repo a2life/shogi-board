@@ -81,13 +81,16 @@ export const moveAndRemember=(pieces:string, movedFrom:string, move:string|MoveO
 
     const miniHistory={pieces: pieces, playedOn: movedFrom, counter: counter}
     //let  nextMove = movesArray[counter]
-    let thisMove;
-    if (typeof(move)=='object'){
-        thisMove=move.move
-    } else thisMove=move
-    if (thisMove.slice(2, 4) === '00') thisMove = thisMove.replace('00', movedFrom)
-    pieces = moveParser(thisMove, pieces) //get updated pieces
-    movedFrom = thisMove.slice(2, 4)
+    if (typeof move==='string') {
+        if (move.slice(2, 4) === '00') move = move.replace('00', movedFrom)
+        pieces = moveParser(move, pieces) //get updated pieces
+        movedFrom = move.slice(2, 4)
+    }
+    else { //move is MoveObject
+        if (move.move.slice(2,4) === '00') move.move=move.move.replace('00', movedFrom)
+        pieces = moveParser(move.move, pieces)
+        movedFrom = move.move.slice(2,4)
+    }
     counter++
     return {miniHistory,pieces,move,movedFrom,counter}
 

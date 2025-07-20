@@ -41,9 +41,9 @@ const rePattern = new RegExp('^(?<pre>[sgCxX])[\\-+0-9a-z]+((?<branch>[J=])(?<mo
 
 export const isMoveObject=(obj:unknown):obj is MoveObject=> (obj as MoveObject).move !== undefined
 
-const isStringArray=(array: unknown[]): array is string[]=>  array.every((element) => typeof element === 'string');
+export const isStringArray=(array: unknown[]): array is string[]=>  array.every((element) => typeof element === 'string');
 
-const isMoveObjectArray=(array: unknown[]): array is MoveObject[]=> array.every((element) => isMoveObject(element));
+export const isMoveObjectArray=(array: unknown[]): array is MoveObject[]=> array.every((element) => isMoveObject(element));
 
 
 
@@ -175,7 +175,7 @@ export const prepBranchPoints = (movesArray: string[] | MoveObject[]) => {
     // go through movesArray
 
     const branches = getBranchArray(movesArray)
-        console.log('branches:',branches)
+        //console.log('branches:',branches)
     // if j is found and index-1 does not start with 'branchHead'(ie., 'C'),
     const resultArray = movesArray.map((e, i) => {
 
@@ -192,7 +192,7 @@ export const prepBranchPoints = (movesArray: string[] | MoveObject[]) => {
         }
 
     })
-    console.log(resultArray)
+    //console.log('resultArray',resultArray)
     // call nexMoveNote, store the returned value with index.
     const NotesArray = resultArray.map(e => {
         const Note = [] as any
@@ -226,6 +226,7 @@ export const prepBranchPoints = (movesArray: string[] | MoveObject[]) => {
         } while (moveElements.groups!.branch === 'J')
         return Note
     })
+
     //  set up branch node with index, so if counter is at index, looking up this array will return branch options.
     //  like { index: [{index:index, movement:movement}, , ,]}
     let branchIndicators = {} as any

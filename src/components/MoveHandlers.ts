@@ -13,15 +13,18 @@
  */
 
 
+import {isMoveObject} from "./utils";
+
 /**
  * take pieceSet, analyze move and then reflect on pieceSet and return new pieceSet
  * @param {String} kifString  like s-5216,   side(s), move(-), to(52), from(16)
  * @param {String} pieceSet  like "s53s,s16b,g41s,g51k,g61s,ssSs,grGr,grGr,gpGp,gpGp,gpGp,glGl,ggGg"
  *
   */
-export const moveParser = (kifString:string, pieceSet:string) => {
+export const moveParser = (kifString:string|MoveObject, pieceSet:string) => {
 
     /// do things here and...
+    if (isMoveObject(kifString)) kifString = kifString.move
     let modifiedPieceSet=pieceSet
     const player=kifString[0]
     const side=(player==='s')?"g":"s"

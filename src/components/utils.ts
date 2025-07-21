@@ -124,7 +124,6 @@ export const preProcessMoves = (moves: string[] | string | MoveObject[]) => {
         }
 
     }
-
     return {movesArray, lineZeroComment}
 }
 
@@ -266,6 +265,7 @@ export const displayWithSideSymbol = (side: 's' | 'g', name: string) => symboliz
  */
 export const extractComments = (moveLine: string | MoveObject):string => {
     let comment = ''
+    //console.log('moveLine', moveLine)
 
     if (typeof moveLine === 'string') {
         const commentArray = moveLine.match(/\*\*\*(.*)\*\*\*/);
@@ -273,8 +273,8 @@ export const extractComments = (moveLine: string | MoveObject):string => {
             const trimmedCommentArray = commentArray.map(i => i.slice(3, -3))
             comment = lineBreakComments(trimmedCommentArray[0])
         }
-    } else if (isMoveObject(moveLine)) {
-        comment = moveLine.comment??''
+    } else {
+        comment = moveLine.comment??comment
     }
 
 

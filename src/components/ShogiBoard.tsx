@@ -42,6 +42,7 @@ export const Board = (Props: {
 }) => {
 
     let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu, markerAt} = Props
+    //console.log('movesArray given',movesArray)
     let initialHistory = [] as history
     //  let initialAct = movesArray[0].slice(4, 6)
     let initialAct = markerAt;
@@ -60,7 +61,7 @@ export const Board = (Props: {
             previousMove = response.movedFrom
             if (typeof(response.move)=='string'){
             move = response.move
-            } else if (typeof(response.move)=='object'){move=response.move.move}
+            } else if (typeof(response.move)=='object'){ move=response.move.move}
 
 
 
@@ -161,8 +162,9 @@ export const Board = (Props: {
         if (!endOfMoves(moveCounter)) {
 
             let move = movesArray[moveCounter]
-            if (typeof(move)=='object') {move=move.move}
-            if (move.slice(2, 4) === '00') move = move.replace('00', previousAct)
+            if (typeof(move)=='string')
+            {if (move.slice(2, 4) === '00') move = move.replace('00', previousAct)}
+            else {if (move.move.slice(2,4) === '00') move.move = move.move.replace('00', previousAct)}
             //       console.log('next move is', nextMove)
             const pieces = moveParser(move, piecesInfo)
             updateStates(pieces, [{
@@ -256,7 +258,7 @@ export const Board = (Props: {
         // console.log('selected', newTarget)
         //    setMoveCounter(parseInt(newTarget))
         const moveCounter = parseInt(newTarget)
-        console.log('moveCounter', moveCounter)
+       //   console.log('moveCounter', moveCounter)
         takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action
         setMaskBranch(Props.flags.maskBranch) //reset maskBranch flag if it was temporary altered
     }
@@ -452,7 +454,7 @@ export const Board = (Props: {
 
                     </div>
                 </div>
-                {movesArray.toString().length > 0 &&
+                {movesArray.length > 0 &&
                     <>
                         {endOfMoves(moveCounter) &&
                             <aside class="endOfMove">{endOfMoveComment(movesArray[moveCounter])[0]}</aside>}

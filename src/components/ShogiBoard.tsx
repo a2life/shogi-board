@@ -48,24 +48,18 @@ export const Board = (Props: {
     let initialAct = markerAt;
     let initialCounter = 0;
     const {commentWindow, HasBranch, animate, showMarker} = flags
-    const skipToCounter = (tesuu: number, pieces: string) => {
+    const skipToCounter = (tesuu: number, pieces: string, moves:MoveObject[]) => {
 
         let miniHistory = [] as history, counter = 0, move = "", previousMove = initialAct
 
         while (counter < tesuu) { //read past to the end
 
-            const response = moveAndRemember(pieces, previousMove, movesArray[counter], counter)
+            const response = moveAndRemember(pieces, previousMove, moves[counter], counter)
             miniHistory.push(response.miniHistory);
             pieces = response.pieces;
             counter = response.counter;
             previousMove = response.movedFrom
-            if (typeof (response.move) == 'string') {
-                move = response.move
-            } else if (typeof (response.move) == 'object') {
-                move = response.move.move
-            }
-
-
+            move = response.move.move
         }
         return {pieces, miniHistory, move, counter}
 
@@ -92,7 +86,7 @@ export const Board = (Props: {
     }, [comment]) //if the first character of the comment is ? then set maskBranch frag.
 
     if ((tesuu > 0) && !!movesArray[tesuu - 1]) {
-        const modifiedProps = skipToCounter(tesuu, pieces)
+        const modifiedProps = skipToCounter(tesuu, pieces,movesArray)
         pieces = modifiedProps.pieces
         initialHistory = modifiedProps.miniHistory
         initialAct = modifiedProps.move.slice(2, 4)
@@ -270,7 +264,7 @@ export const Board = (Props: {
         if (endOfMoves(counter)) return
 
         do { //read past to the end
-                nextMove = movesArray[counter]
+            nextMove = movesArray[counter]
             const response = moveAndRemember(pieces, currentMove, nextMove, counter)
             miniHistory.push(response.miniHistory);
             pieces = response.pieces;
@@ -363,7 +357,7 @@ export const Board = (Props: {
         setContextMenuStatus({visible: true, x: x, y: y});
 
 
-        document.addEventListener('click', function (){
+        document.addEventListener('click', function () {
             /*  setContextMenuStatus({visible: false, x: 0, y: 0});*/
             setClsName('context-menu-not-visible')
 

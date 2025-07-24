@@ -17,7 +17,7 @@ export const endOfMoveComment = (s: string | MoveObject |undefined):string[] => 
     if (typeof (s) === "string") {
 
      //   console.log('endOfMove string:', s);
-        const found = s.match(/[xC]:?<note1>(.*?)[*=]{3}?<note2>(.*)[*=]{3}|[xc]:?<note3>(.*)/);
+        const found = s.match(/[xC]:(.*?)[*=]{3}?(.*)[*=]{3}|[xc]:(.*)/);
         //if long description exists, it is returned in found[1] else description is in found[0]
         //  console.log(found);
         // first * or = match is lazy match
@@ -30,11 +30,11 @@ export const endOfMoveComment = (s: string | MoveObject |undefined):string[] => 
 
     }
     else  if (typeof s === 'object' && isMoveObject(s)) {
-        const postText = ( s .move).match(/[xCc]:(.*)/)
+        const postText = ( s .move).match(/[x]:(?<note>.*)/)
+        // console.log(postText);
         if (Array.isArray(postText)) {
-            const f1=(typeof(postText[1])==='string')?postText[1]:'';
-            const f3=s.endOfGame??''
-            endOfMoveComment= [f1+f3, s.comment??'']
+
+             endOfMoveComment= [s.endOfGame??((postText.groups)?postText.groups.note:''), s.comment??'']
           //  console.log(endOfMoveComment);
         }
 

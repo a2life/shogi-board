@@ -22,10 +22,10 @@ import {endOfMoveComment} from "./eomNote";
 import * as I from "./Icons";
 import DOMPurify from "dompurify";
 import {CustomContextMenu} from "./CustomContextMenu";
-import {isStringArray,isMoveObjectArray} from "./utils";
+
 
 export const Board = (Props: {
-    pieces: string, moves: string[]|MoveObject[], branchList: any, caption: string, tesuu: number, initialComment: string,
+    pieces: string, moves: MoveObject[], branchList: any, caption: string, tesuu: number, initialComment: string,
     flags: {
         commentWindow: boolean,
         HasBranch: boolean,
@@ -42,7 +42,7 @@ export const Board = (Props: {
 }) => {
 
     let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu, markerAt} = Props
-    //console.log('movesArray given',movesArray)
+    // console.log('movesArray given',movesArray)
     let initialHistory = [] as history
     //  let initialAct = movesArray[0].slice(4, 6)
     let initialAct = markerAt;
@@ -59,10 +59,11 @@ export const Board = (Props: {
             pieces = response.pieces;
             counter = response.counter;
             previousMove = response.movedFrom
-            if (typeof(response.move)=='string'){
-            move = response.move
-            } else if (typeof(response.move)=='object'){ move=response.move.move}
-
+            if (typeof (response.move) == 'string') {
+                move = response.move
+            } else if (typeof (response.move) == 'object') {
+                move = response.move.move
+            }
 
 
         }
@@ -84,7 +85,7 @@ export const Board = (Props: {
     const [clsName, setClsName] = useState('context-menu-not-visible')
 
     useEffect(() => {
-        if (comment!=='' && comment[0] == '?') {
+        if (comment !== '' && comment[0] == '?') {
             setComment(comment.slice(1));
             setMaskBranch(true)
         }
@@ -116,39 +117,36 @@ export const Board = (Props: {
         setMarkerPosition(markerAt)
     }, [markerAt])
     const endOfMoves = (index: number) => {
-        let target=''
+        let target = ''
         if (index >= movesArray.length) return true
-        else
-            if (typeof(movesArray[index]) === 'object'){
-                const object=movesArray[index] as MoveObject
-                target=object.move
-            } else
-                if (typeof(movesArray[index]==='string')) {
-                    target=movesArray[index] as string
-                }
+        else if (typeof (movesArray[index]) === 'object') {
+            const object = movesArray[index] as MoveObject
+            target = object.move
+        }
 
-            switch (target.slice(0,1)) {
-                case 'x':  // end of move
-                case 'C':  // start of branch
-                case undefined:
-                    return true;
+        switch (target.slice(0, 1)) {
+            case 'x':  // end of move
+            case 'C':  // start of branch
+            case undefined:
+                return true;
 
-                default:
-                    return false
-            }
+            default:
+                return false
+        }
     }
 
-    const updateStates = (pieces: any, miniHistory: history, nextMove: string|MoveObject|null, index: number) => {
-        if (nextMove===null) return false
+    const updateStates = (pieces: any, miniHistory: history, nextMove: MoveObject, index: number) => {
+        if (nextMove === null) return false
         setHistory([...history, ...miniHistory])
         setPiecesInfo(pieces)
-        if (typeof nextMove === 'string') {
-            setPreviousAct(nextMove.slice(2, 4))
-            setMarkerPosition(nextMove.slice(2, 4))
-        }
-        else if (typeof nextMove === 'object'){
-            setPreviousAct(nextMove.move.slice(2,4))
-            setMarkerPosition(nextMove.move.slice(2,4))
+        /* if (typeof nextMove === 'string') {
+             setPreviousAct(nextMove.slice(2, 4))
+             setMarkerPosition(nextMove.slice(2, 4))
+         }
+         else*/
+        if (typeof nextMove === 'object') {
+            setPreviousAct(nextMove.move.slice(2, 4))
+            setMarkerPosition(nextMove.move.slice(2, 4))
 
         }
         if (commentWindow) {
@@ -162,9 +160,12 @@ export const Board = (Props: {
         if (!endOfMoves(moveCounter)) {
 
             let move = movesArray[moveCounter]
-            if (typeof(move)=='string')
-            {if (move.slice(2, 4) === '00') move = move.replace('00', previousAct)}
-            else {if (move.move.slice(2,4) === '00') move.move = move.move.replace('00', previousAct)}
+            /*  if (typeof(move)=='string')
+              {if (move.slice(2, 4) === '00') move = move.replace('00', previousAct)}
+              else */
+            /* {*/
+            if (move.move.slice(2, 4) === '00') move.move = move.move.replace('00', previousAct)
+            /*}*/
             //       console.log('next move is', nextMove)
             const pieces = moveParser(move, piecesInfo)
             updateStates(pieces, [{
@@ -180,7 +181,7 @@ export const Board = (Props: {
     const playOneMoveHandler = (e: Event) => {
         e.preventDefault();
 
-            takeOneMoveForward(moveCounter)
+        takeOneMoveForward(moveCounter)
 
         // console.log('analyzing move', movesArray[moveCounter])
 
@@ -190,7 +191,7 @@ export const Board = (Props: {
 
     const skipEndHandler = (e: Event) => {
         e.preventDefault();
-        let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, move = null,
+        let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, move = {} as MoveObject,
             currentMove = previousAct
 
         while (!endOfMoves(counter)) { //read past to the end
@@ -208,14 +209,13 @@ export const Board = (Props: {
 
     }
 
-    const notation = ():string => {
+    const notation = (): string => {
 
         if (history.length > 0) {
 
-            return getMoveNote(movesArray[history[history.length - 1].counter])||''
+            return getMoveNote(movesArray[history[history.length - 1].counter]) || ''
 
-        }
-        else return ''
+        } else return ''
     }
 
 
@@ -258,25 +258,19 @@ export const Board = (Props: {
         // console.log('selected', newTarget)
         //    setMoveCounter(parseInt(newTarget))
         const moveCounter = parseInt(newTarget)
-       //   console.log('moveCounter', moveCounter)
+        //   console.log('moveCounter', moveCounter)
         takeOneMoveForward(moveCounter)  //OnSelect action will also trigger move forward action
         setMaskBranch(Props.flags.maskBranch) //reset maskBranch flag if it was temporary altered
     }
     const skipToNextBranchHandler = (e: Event) => {
         e.preventDefault();
-        let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove: string|MoveObject,
+        let miniHistory = [] as history, pieces = piecesInfo, counter = moveCounter, nextMove: string | MoveObject,
             currentMove = previousAct
 
         if (endOfMoves(counter)) return
 
         do { //read past to the end
-            if (isStringArray(movesArray)){
                 nextMove = movesArray[counter]
-            } else {
-                nextMove = movesArray[counter].move
-            }
-
-
             const response = moveAndRemember(pieces, currentMove, nextMove, counter)
             miniHistory.push(response.miniHistory);
             pieces = response.pieces;
@@ -341,7 +335,7 @@ export const Board = (Props: {
     const commentDiv = (comment: string) => {
         if (comment.length > 0) return <span dangerouslySetInnerHTML={sanitizeComment(comment)}/>
     }
-    const logEndOfMove = (movesArray: string[]|MoveObject[], lineCounter: number) => {
+    const logEndOfMove = (movesArray: string[] | MoveObject[], lineCounter: number) => {
         if (endOfMoves(lineCounter))
             return (
                 <><br/><span
@@ -369,14 +363,14 @@ export const Board = (Props: {
         setContextMenuStatus({visible: true, x: x, y: y});
 
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function (){
             /*  setContextMenuStatus({visible: false, x: 0, y: 0});*/
             setClsName('context-menu-not-visible')
 
         }, {once: true});
 
     }
-    useEffect( () => {
+    useEffect(() => {
             if (contextMenuStatus.visible == true) { /*set contextmenustatus first, let the dom load it, then check*/
                 setClsName('context-menu-visible')
             }
@@ -384,9 +378,9 @@ export const Board = (Props: {
         , [contextMenuStatus])
 
     const transitionEventHandler = (e: Event) => {
-      /*
-        Trap transitionEnd event and determine if class is set to not-visible. In this case, remove DOM.
-       */
+        /*
+          Trap transitionEnd event and determine if class is set to not-visible. In this case, remove DOM.
+         */
         /*  console.log((e.target as HTMLElement).classList)
         console.log((e.target as HTMLElement).classList.contains('context-menu-not-visible'))*/
         /* remove element after fade out */
@@ -396,8 +390,9 @@ export const Board = (Props: {
 
     }
     /*
-     in order to utilize fade-in fade-out effect of context menu box , the class has to be set to 'visible' after the custom menu element is added to the dom
-     then when it is time to close it,  class has to be set to 'invisible' first to make it invisible, then preact remove it from dom.
+     For utilize fade-in fade-out effect of context menu box ,
+     the class has to be set to 'visible' after the custom menu element is added to the dom.
+     When it is time to close it,  class has to be set to 'invisible' first to make it invisible, then preact remove it from dom.
      The first will be handled with useEffect hook. The second will be handled with first change the class, then using
      transition event notification to detect a class change, then element will be removed.
      */
@@ -408,7 +403,7 @@ export const Board = (Props: {
         {title: "Save PNG board image", fn: () => imgCapture(), icon: <I.camera/>},
     ]
     if (!!kifu) topics.push({title: 'Save Kifu', fn: () => saveKifu(), icon: <I.SaveFile/>});
-    let classStatus = "starting"
+    //let classStatus = "starting"
     return <>
         <div class="board-container" onContextMenu={showContextMenu}>
             {(caption!.length > 0) && <div className="caption">{caption}</div>}
@@ -469,15 +464,15 @@ export const Board = (Props: {
                                             onClick={skipToPrevBranchHandler}
                                             disabled={moveCounter === 0}>
                                         <I.SkipBack/></button>}
-                                <button  value="Back" onClick={moveBackHandler}
+                                <button value="Back" onClick={moveBackHandler}
                                         disabled={moveCounter === 0}>
                                     <I.Back/></button>
-                                <button  value="Play"
+                                <button value="Play"
                                         onClick={playOneMoveHandler}
                                         disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && maskBranch}>
                                     <I.Play/></button>
                                 {HasBranch &&
-                                    <button  value="Skip-Forward"
+                                    <button value="Skip-Forward"
                                             onClick={skipToNextBranchHandler}
                                             disabled={endOfMoves(moveCounter) || !!Props.branchList[moveCounter] && maskBranch}>
                                         <I.SkipForward/></button>}

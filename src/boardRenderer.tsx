@@ -6,6 +6,7 @@ import {buildGraphicPaths, DataSet} from "./components/SetImageSelection";
 import {parseSFEN} from "./components/SfenParser";
 import {useState, useEffect} from "preact/hooks";
 import {getUrlKifu} from "./components/fetchFile";
+import {findBookMarks, findPathToBookMark, getBookMarkPaths} from "./components/bookmarks";
 
 /**
  * Renders a Shogi board with the given setup.
@@ -167,6 +168,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
     initialComment = initialComment || '';
     let {movesArray, lineZeroComment} = preProcessMoves(moves!);
 
+    // console.log(getBookMarkPaths(movesArray))
 
     //if moves array includes the ***comment*** section except for ***?*** which is used to signal masked next branch instruction, or initial comment
     //exists (but string length is more than 1), then commentWindow flag is true.
@@ -176,6 +178,9 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
     }
     initialComment = (initialComment.length > 0) ? `${initialComment}\n${lineZeroComment}` : lineZeroComment;
 
+    //console.log(movesArray)
+   // const bookmarks=findBookMarks(movesArray); console.log(bookmarks)
+   // console.log(findPathToBookMark(21,movesArray))
 
     const branchList = prepBranchPoints(movesArray)
     //console.log('branchList', branchList)

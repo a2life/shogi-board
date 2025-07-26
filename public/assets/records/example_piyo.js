@@ -2,6 +2,7 @@ if (typeof(initialSetup__ts81)==='undefined'){initialSetup__ts81=[]}
 initialSetup__ts81.push(
     {   caption:'kifu download from piyoshogi',
         sideComment: true,
+        initialComment:'Using kifu saved by piyoshogi app. Using the parameter "sideComment:true" so the comments are placed on the side and not below',
         kifu:`
         # ----  ぴよ将棋 棋譜ファイル  ----
 棋戦：ぴよ将棋

@@ -1,1 +1,2 @@
-type MoveObject ={move:string, comment?:string, bookmark?:string, endOfGame?:string}
+
+type MoveObject ={move:string, hand?:string, comment?:string, bookmark?:string, endOfGame?:string, step?:number}

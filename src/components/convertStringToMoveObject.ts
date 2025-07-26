@@ -3,6 +3,7 @@ export const convertStringToMoveObject=(stringArray:string[]) => {
     const commentPattern = /^\*(.*)/
     const bookmarkPattern = /^&(.*)/
     const endOfGamePattern = /^(まで.*)/
+    const moveName = /\d+\s+([\S　]*)/
 
     const moveObjectArray: MoveObject[] = [{move: ''}]; //initialize moveObjectArray with a first element of empty move
 
@@ -23,10 +24,13 @@ export const convertStringToMoveObject=(stringArray:string[]) => {
             moveElement.endOfGame = moveArray.match(endOfGamePattern)![0];
         }
         if (moveInfo && (moveArray.trim()) != '') {
-            moveObjectArray.push({move: moveArray})
+            const hand =!!(moveArray.match(moveName))?moveArray.match(moveName)![1]:'';
+            moveObjectArray.push({move: moveArray, hand: hand});
         }
 
     }
 
-        return moveObjectArray
+    return moveObjectArray.map((moveObject, index) => {
+           return {...moveObject, step: index}
+       });
 }

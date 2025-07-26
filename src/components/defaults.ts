@@ -16,7 +16,7 @@ export interface ShogiKit {
     focusImageSelection?: string
     caption?: string
     initialComment?: string;
-    comment?:string // legacy, will be interpreted as initialComment
+    comment?:string // Legacy. Will be interpreted as initialComment
     moves?: string[]|string;
     tesuu?: number;
     startAt?:number;
@@ -60,9 +60,9 @@ export const defaultParams: ShogiKit = {
     showMarker:false,
     animate:true,
     flip:false,
-    maskBranch:false, //hide branch valid option at the start of dropdown
+    maskBranch:false, //hide branch. valid option at the start of dropdown
     maskBranchOnce:false,
-    sideComment:false //false means comment window will be at the bottom
+    sideComment:false //false means the comment window will be at the bottom
 
 
 

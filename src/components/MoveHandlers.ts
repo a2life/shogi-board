@@ -81,20 +81,14 @@ export const moveParser = (moveObject:MoveObject, pieceSet:string) => {
  * @param counter
  */
 export const moveAndRemember=(pieces:string, movedFrom:string, move:MoveObject, counter:number)=>{
+   // console.log('move and remember', move)
+    const miniHistory={pieces: pieces, playedOn: movedFrom, counter: move.step??counter}
 
-    const miniHistory={pieces: pieces, playedOn: movedFrom, counter: counter}
-    //let  nextMove = movesArray[counter]
- /*   if (typeof move==='string') {
-        if (move.slice(2, 4) === '00') move = move.replace('00', movedFrom)
-        pieces = moveParser(move, pieces) //get updated pieces
-        movedFrom = move.slice(2, 4)
-    }
-    else { *///move is MoveObject
         if (move.move.slice(2,4) === '00') move.move=move.move.replace('00', movedFrom)
         pieces = moveParser(move, pieces)
         movedFrom = move.move.slice(2,4)
-   /* }*/
     counter++
+
     return {miniHistory,pieces,move,movedFrom,counter}
 
 }

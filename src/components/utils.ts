@@ -66,7 +66,7 @@ export const preProcessMoves = (moves: string | string[] | MoveObject[]) => {
         moves.splice(0, 1) //rem
     }
 
-    return {movesArray: moves, lineZeroComment: lineZeroComment};
+    return {movesArray: moves.map((e,i)=>{return {...e,step:i}}), lineZeroComment: lineZeroComment};
 }
 
 
@@ -180,19 +180,11 @@ export const extractComments = (moveLine: MoveObject): string => moveLine.commen
 
 export const lineBreakComments = (comment: string): string => {
     if (comment)
-        return comment.replace(/[=*]{6}/g, '\n')
+      //  return comment.replace(/[=*]{6}/g, '\n')
+        return comment.replace('\n','<br>')
     else return "";
 }
 
-export const extractBookMark = (moveLine: string) => {
-    const bookMarkArray = moveLine.match(/&&&(.*)&&&/);
-    if (bookMarkArray) {
-        const trimmedCommentArray = bookMarkArray.map(i => i.slice(3, -3))
-        return trimmedCommentArray[0] + '\n'
-    }
-
-    return ''
-}
 
 export const addExtension = (target: string, extension: string) => {
     if (target.slice(-extension.length) == extension) {

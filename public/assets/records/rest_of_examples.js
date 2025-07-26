@@ -697,6 +697,7 @@ const rest_of_setup = [
 下手：
 上手：
 手数----指手---------消費時間--
+*(MaskBranch is on so all branches are masked)
    1 ３三歩打     ( 0:04/00:00:04)
 *Single strike on gold\'s head
    2 同　金(32)   ( 0:27/00:00:27)+
@@ -1127,6 +1128,7 @@ const rest_of_setup = [
         ban:4,
         koma:7,
         grid:4,
+        initialComment: 'Using Hidetch pieces (koma:7)',
         kifu: `
       # --- Kifu for Windows V6.54 棋譜ファイル ---
 開始日時：2008/06/02(月) 22:06:10
@@ -1175,7 +1177,7 @@ const rest_of_setup = [
     },
     {
         caption: "smooth move option turned off",
-        initialComment: 'pawn pawn',
+        initialComment: 'Using parameter smooth:false',
         smooth: false,
         kifu: `#KIF version=2.0 encoding=UTF-8,
 

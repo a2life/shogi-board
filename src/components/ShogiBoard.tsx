@@ -14,7 +14,7 @@ import {
     getMoveNote,
     displayWithSideSymbol,
     extractComments,
-    extractBookMark, addExtension, lineBreakComments
+    addExtension, lineBreakComments
 } from "./utils";
 import {ShowBranches} from "./ShowBranches";
 import {saveAs} from "file-saver";
@@ -22,6 +22,8 @@ import {endOfMoveComment} from "./eomNote";
 import * as I from "./Icons";
 import DOMPurify from "dompurify";
 import {CustomContextMenu} from "./CustomContextMenu";
+import {findBookMarks, findPathToBookMark} from "./bookmarks";
+import {bookmark} from "./Icons";
 
 
 export const Board = (Props: {
@@ -42,24 +44,24 @@ export const Board = (Props: {
 }) => {
 
     let {pieces, moves: movesArray, caption, tesuu, initialComment, flags, senteName, goteName, kifu, markerAt} = Props
-    // console.log('movesArray given',movesArray)
     let initialHistory = [] as history
     //  let initialAct = movesArray[0].slice(4, 6)
     let initialAct = markerAt;
     let initialCounter = 0;
     const {commentWindow, HasBranch, animate, showMarker} = flags
-    const skipToCounter = (tesuu: number, pieces: string, moves:MoveObject[]) => {
+    const skipToStep = (step: number, pieces: string, moves: MoveObject[]) => {
 
-        let miniHistory = [] as history, counter = 0, move = "", previousMove = initialAct
+        let miniHistory = [] as history, counter = 0, move:MoveObject = {} as MoveObject, previousMove = initialAct
 
-        while (counter < tesuu) { //read past to the end
+        while (counter < step) { //read past to the end
 
+            // counter = moves[counter].index??counter //If Move has index information, use this instead
             const response = moveAndRemember(pieces, previousMove, moves[counter], counter)
             miniHistory.push(response.miniHistory);
             pieces = response.pieces;
             counter = response.counter;
             previousMove = response.movedFrom
-            move = response.move.move
+            move = response.move
         }
         return {pieces, miniHistory, move, counter}
 
@@ -86,10 +88,10 @@ export const Board = (Props: {
     }, [comment]) //if the first character of the comment is ? then set maskBranch frag.
 
     if ((tesuu > 0) && !!movesArray[tesuu - 1]) {
-        const modifiedProps = skipToCounter(tesuu, pieces,movesArray)
+        const modifiedProps = skipToStep(tesuu, pieces, movesArray)
         pieces = modifiedProps.pieces
         initialHistory = modifiedProps.miniHistory
-        initialAct = modifiedProps.move.slice(2, 4)
+        initialAct = modifiedProps.move.move.slice(2, 4)
         markerAt = initialAct;
         initialCounter = modifiedProps.counter
     }
@@ -132,6 +134,7 @@ export const Board = (Props: {
     const updateStates = (pieces: any, miniHistory: history, nextMove: MoveObject, index: number) => {
         if (nextMove === null) return false
         setHistory([...history, ...miniHistory])
+        //console.log('history', history)
         setPiecesInfo(pieces)
         /* if (typeof nextMove === 'string') {
              setPreviousAct(nextMove.slice(2, 4))
@@ -383,6 +386,16 @@ export const Board = (Props: {
         }
 
     }
+    const bookMarkHandler = (index:number) => {
+        //console.log('bookmark handler for ',index, findPathToBookMark(index,movesArray));
+        if (moveCounter>0) reWindHandler()
+        const bookMarkMoves=findPathToBookMark(index,movesArray)
+
+        const {pieces:modPieces,miniHistory,move} = skipToStep(bookMarkMoves.length,pieces,bookMarkMoves)
+        updateStates(modPieces,miniHistory,move,index+1)
+        setHistory(miniHistory)
+
+    }
     /*
      For utilize fade-in fade-out effect of context menu box ,
      the class has to be set to 'visible' after the custom menu element is added to the dom.
@@ -397,7 +410,17 @@ export const Board = (Props: {
         {title: "Save PNG board image", fn: () => imgCapture(), icon: <I.camera/>},
     ]
     if (!!kifu) topics.push({title: 'Save Kifu', fn: () => saveKifu(), icon: <I.SaveFile/>});
+    const bookMarks = findBookMarks(movesArray)
+    //console.log(bookMarks)
+    if (bookMarks.length > 0) {
+        bookMarks.forEach(bookMark => {
+            if (!!bookMark.bookmark) {
+                topics.push({title: bookMark.bookmark, fn: () =>bookMarkHandler(bookMark.index), icon: bookmark()})
+            }
+        })
+    }
     //let classStatus = "starting"
+
     return <>
         <div class="board-container" onContextMenu={showContextMenu}>
             {(caption!.length > 0) && <div className="caption">{caption}</div>}

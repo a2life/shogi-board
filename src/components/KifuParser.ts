@@ -144,9 +144,11 @@ export class KifuParser {
         } else this.parseData(kifu) //kifu with no moves involved.
 
     }
+
     findLine(target: string, scrArray: string[]) {
         return scrArray.findIndex((e) => e.includes(target));
     }
+
     parseData(kifu: string) {
         const findMatch = (pattern: RegExp) => {
             return (!!kifu.match(pattern)) ? kifu.match(pattern)![1].trim() : ""
@@ -278,6 +280,7 @@ export class KifuParser {
                 let parsed;
                 if (!!found![2]) {
                     const count = found![1]
+                    //determine s | g based on even or odd move count
                     const side = ((parseInt(found![1]) + this.goteban) % 2 === 1) ? 's' : 'g'
                     //   console.log(parseInt(found![1]))
                     //    console.log('this.goteban',this.goteban)
@@ -315,6 +318,9 @@ export class KifuParser {
                 if (line.endOfGame) {
                     thisMove.endOfGame = line.endOfGame
                 }
+                if (line.hand) {
+                    thisMove.hand = line.hand
+                }
                 return thisMove
 
             })
@@ -323,7 +329,6 @@ export class KifuParser {
 
         }
     }
-
 
 
     /**

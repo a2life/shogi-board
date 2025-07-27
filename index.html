@@ -14,12 +14,12 @@
 
 
     <div class="display-5">Shogi board with Vite+PreAct</div>
-    <p class=" display-6">This is a HTML page to exercise the TypeScript Shogi Board app. The app can
+    <p class=" display-6">This is an HTML page to exercise the TypeScript Shogi Board app. The app can
         render multiple Shogi Boards on a single page. More than two dozen ShogiBoard with various configurations are shown on this page.
     </p>
     <p>The page is loaded with the Shogi data array with each element using different parameters for a various board setup. See
         readme for available options.</p>
-    <p>To simplyfy the page arrangement, I use BootStrap on this page. However, the app itself is not dependent on any CSS framework.</p>
+    <p>To simplify the page arrangement, I use BootStrap on this page. However, the app itself is not dependent on any CSS framework.</p>
 </div>
 <div class=" container ">
     <div class="card ">
@@ -52,8 +52,8 @@
             <div class="board-app " id="app-3"></div>
             <div class="mt-5"><p>Using plain vanilla display: flex property
                 to
-                arrange two columns per row, the Shogiboard on left side and some verbiage text on the right side. First
-                Shogiboard data should appear to
+                arrange two columns per row, the ShogiBoard on the left side and some verbiage text on the right side. First
+                ShogiBoard data should appear to
                 the left of this text or above, depending on the screen size</p>
             </div>
         </div>
@@ -62,11 +62,11 @@
         <div class="col">
             <div class="board-app large col " id="app-4"></div></div>
         <div class="col">
-        <p >Boot strap row-column setting is used for displaying
+        <p >Bootstrap row-column setting is used for displaying
             board and article side by side. Using class="large" to display larger board. </p>
-        <p>Click on the right half of the board to advance one move. click on the left half of the board to rewind one move.
+        <p>Click on the right half of the board to advance one move. Click on the left half of the board to rewind one move.
         </p>
-        <p>Right click anywhere on the board to display context menu for more actions.</p>
+        <p>Right click anywhere on the board to display the context menu for more actions.</p>
             </div>
     </div> <!-- end of row -->
 
@@ -108,7 +108,7 @@
 
 
 <script>
-    var initialSetup__ts81 = [] // initialize data array for shogiboard
+    var initialSetup__ts81 = [] // initialize the data array for the ShogiBoard
     initialSetup__ts81.push(
         {
             caption: "data-input attribute demo",
@@ -144,7 +144,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 <script src="/assets/records/tsumeStarters.js"></script>
-<script>
+<script >
     //script to demonstrate delayed input on the board-app div with 'aInput' element.
     let index = 1;
     const maxIndex = initialSetup__ts81.length;
@@ -158,7 +158,8 @@
         const inbox = document.getElementById('aInput');
         const sbData = initialSetup__ts81[index]
         inbox.value = encodeURIComponent(JSON.stringify(sbData));
-        inbox.dispatchEvent(new Event('change'));
+        let ev = new Event('change')
+        inbox.dispatchEvent(ev);
         index += 1
     })
 

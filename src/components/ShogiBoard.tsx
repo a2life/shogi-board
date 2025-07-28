@@ -93,6 +93,7 @@ export const Board = (Props: {
         initialHistory = modifiedProps.miniHistory
         initialAct = modifiedProps.move.move.slice(2, 4)
         markerAt = initialAct;
+        initialComment=initialComment+movesArray[tesuu - 1].comment
         initialCounter = modifiedProps.counter
     }
 

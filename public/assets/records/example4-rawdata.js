@@ -1,5 +1,5 @@
-if (typeof(initialSetup__ts81)==='undefined'){ let initialSetup__ts81=[]}
-initialSetup__ts81.push(
+if (!window.initialSetup__ts81) window.initialSetup__ts81=[]
+window.initialSetup__ts81.push(
     {
         caption: "using raw data for simple moves",
         sOnBoard: `21r,24p`,

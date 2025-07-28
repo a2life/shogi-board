@@ -5,11 +5,11 @@ const codeNames = 'pPlLnNsSgbBrRk' //code representation of each shogi piece
 /**
  *
  * @param prop  {piece:string} is   spcr,  side, piece, column, row. for example, 'g82r', 'g93p',
- * 'gpGp' for Gote, column position pawn, row position Gote(onHand area), and piece is pwn
+ * 'gpGp' for Gote, column position pawn, row position Gote(onHand area), and the piece is pwn
  * @constructor
  */
 export const RenderPiece=(prop:{piece:string,mover:string,animate:boolean ,koma:string})=>{
-   //side need to be capital
+   //side symbols need to be in capital
     const {piece, mover:inPlay, animate,koma}=prop
     const pngName = piece[0].toUpperCase()+pngNames[codeNames.indexOf(piece[3])]
     const animateClass=(animate)?' animate-move':'';

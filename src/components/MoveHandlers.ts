@@ -4,24 +4,27 @@
  * move parser section
  * example of move
 
- "s-7677",  : white move a piece from 77 to 76
- "g-3433",  : black moves a piece from 33 to 34
- "sd55g",   : black drops a gold to 5e.
- "g-3534***do you think this is cool?***", : white moves a piece from 34 to 35. Comment windows displays"do you think this is cool?"
- s+2228  : piece at the 28 position is moved to 22 and then get promoted.
- "x"   : end of moves indicator
+ "s-7677",:white moves a piece from 77 to 76
+ "g-3433",:black moves a piece from 33 to 34
+ "sd55g",:black drops a gold to 5e.
+ "g-3534***do you think this is cool? ***: white moves a piece from 34 to 35. Comment windows displays "do you think this is cool?"
+ s+2228:piece at the location 28 is moved to 22 and then get promoted.
+ "x": an end of moves indicator
  */
+
+
 
 
 /**
  * take pieceSet, analyze move and then reflect on pieceSet and return new pieceSet
- * @param {String} kifString  like s-5216,   side(s), move(-), to(52), from(16)
+ * @param {MoveObject} moveObject  like s-5216,   side(s), move(-), to(52), from(16)
  * @param {String} pieceSet  like "s53s,s16b,g41s,g51k,g61s,ssSs,grGr,grGr,gpGp,gpGp,gpGp,glGl,ggGg"
  *
   */
-export const moveParser = (kifString:string, pieceSet:string) => {
+export const moveParser = (moveObject:MoveObject, pieceSet:string) => {
 
     /// do things here and...
+    const kifString = moveObject.move
     let modifiedPieceSet=pieceSet
     const player=kifString[0]
     const side=(player==='s')?"g":"s"
@@ -37,14 +40,14 @@ export const moveParser = (kifString:string, pieceSet:string) => {
         if (targetPieceIndex>=0){
             const targetPiece=pieceSet.slice(targetPieceIndex,targetPieceIndex+4)
             const capturedPiece=player+targetPiece[3].toLowerCase()+player.toUpperCase()+targetPiece[3].toLowerCase()
-            modifiedPieceSet=pieceSet.replace(targetPiece,capturedPiece);        // if so, move piece to onHand of player side,
+            modifiedPieceSet=pieceSet.replace(targetPiece,capturedPiece);        // if so, move the piece to onHand of player side,
         }
 
 
-        modifiedPieceSet=modifiedPieceSet.replace(from,to) // then adjust board position of a piece being played.
-        if (move==='+') {  //promote target piece.
+        modifiedPieceSet=modifiedPieceSet.replace(from,to) // then adjust the board position of a piece being played.
+        if (move==='+') {  //promote a target piece.
             const toPieceIndex= modifiedPieceSet.indexOf(to);
-          //  console.log('topieceIndex',toPieceIndex)
+          //  console.log('to pieceIndex',toPieceIndex)
             const pieceRank=pieceSet[toPieceIndex+2]
             const promotedRank=pieceRank.toUpperCase()
           //  console.log('to',to,'promotable piece',pieceRank,'promotedRank',promotedRank)
@@ -54,7 +57,7 @@ export const moveParser = (kifString:string, pieceSet:string) => {
     }
 
     if (move==='d'){
-        //find piece in the list
+        //find pieces in the list
         const piece=kifString[4]
         const search=player+piece+player.toUpperCase()+piece
        // console.log('searching',search)
@@ -77,14 +80,15 @@ export const moveParser = (kifString:string, pieceSet:string) => {
  * @param move
  * @param counter
  */
-export const moveAndRemember=(pieces:string,movedFrom:string, move:string,counter:number)=>{
+export const moveAndRemember=(pieces:string, movedFrom:string, move:MoveObject, counter:number)=>{
+   // console.log('move and remember', move)
+    const miniHistory={pieces: pieces, playedOn: movedFrom, counter: move.step??counter}
 
-    const miniHistory={pieces: pieces, playedOn: movedFrom, counter: counter}
-    //let  nextMove = movesArray[counter]
-    if (move.slice(2, 4) === '00') move = move.replace('00', movedFrom)
-    pieces = moveParser(move, pieces) //get updated pieces
-    movedFrom = move.slice(2, 4)
+        if (move.move.slice(2,4) === '00') move.move=move.move.replace('00', movedFrom)
+        pieces = moveParser(move, pieces)
+        movedFrom = move.move.slice(2,4)
     counter++
+
     return {miniHistory,pieces,move,movedFrom,counter}
 
 }

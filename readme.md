@@ -62,12 +62,12 @@ This application is not intended to be used to play shogi. The purpose of this a
     <li>Download Kifu. This option is only available if Kifu is used as a source of data</li>
     <li>Bookmark locations</li>
 </ol>
-
 </ol>
+
 ### Theory of board rendering.
 Placement of shogi pieces on the board is managed by class attributes of HTML 'img' tag.
 For example, to place sente's king on the '55' location, the following image tag is created and inserted to containing div element 
-by the program.
+by the program. In another word, piece placement coordination information is in the CSS file.
 
           <img src="[PathToKoma]/sou.png"  class="koma c5 r5" alt="" />
           
@@ -77,7 +77,7 @@ To move the piece from 55 to 44, the program will manipulate the class so that t
 
           <img src="[PathToKoma]/sou.png"  class="koma c4 r4" alt="" />
 
-The browser will reposition the piece. This gives the illusion that the piece has "moved."
+Seeing the class changes in the DOM, The browser will reposition the piece. This gives the illusion that the piece has "moved."
 
 buttonBar block is dynamically created if "moves" exists. 
 commend block will be dynamically created if there is/are comment(s) in Kifu record. 
@@ -293,7 +293,7 @@ such as Kifu for windows and create a Kifu file to use with the program.
 
 Most Shogi GUI can also generate Kakinoki style kifu files (usually identified with file extension kif-for a Shift-JIS encoded file or kifu for a Unicode encoded file.)
 
-## Using kifu files with the program.
+## Using kifu files with the app.
 There are two ways of using Kakinoki style kifu files.
 #### Method one
 ##### Use parameter kifu: Copy and paste the content of kifu file as a value for kifu element.
@@ -314,16 +314,16 @@ will not process it as a combination of the next character and make kifu informa
 
 # Use of data-input attribute
 
-- It is possible to add data-input attribute to board-app div for delayed input of a kifu data object
+- Add a data-input attribute for delayed input of a kifu data object. for example
 
 `<div class="board-app" data-input="input1"></div>`
 
-In this case, hidden inbox field with element id of input1 is created.
+In this case, hidden input field with element id of input1 is created inside the board-app div element.
 
-Note: corresponding kifudata object (that may be an empty object) still need to be created for the setup array.
+Use empty object for the setup array element.
 
-Given the kifuData in the setup object as kifuDataObject,
-the input field can be stuffed with a value property of the element. For example,
+Given the kifuData in the variable kifuDataObject,
+staff the input field with the JSON stringified kifuDataObject. For instance,
 
 
 ```
@@ -331,7 +331,7 @@ const inputElement = document.getElementById('input1');
 inputElement.value=encodeURIComponent(JSON.stringify(kifuDataObject))
 ```
 
-Then this input can be dispatched to notify the change to the app.
+Then this input can be dispatched to notify the change to the app from a user invoked function (such as button click).
 
 ```
 const trigger = new InputEvent('change');
@@ -342,5 +342,5 @@ The ShogiBoard app side will first decode the URI component and then parse the J
 See the first example on index.html
 
 Note: In original release, Behavior of Vite was to generate two JavaScript files, index.[hash].js and vendor.[hash].js.  Later release of Vite has modified this default behavior to not 
-split the code so there will be a single JavaScript file,  index-[hash].js. In this project, the original setup is preserved with a custom rollup option in the vite.config.ts.  If single index.js is preferred, remove the rollup options
-from vite.config.ts.
+split the code so there will be a single JavaScript file,  index-[hash].js. In this project, the original setup is preserved with a custom rollup option in the vite.config.ts.
+If a monolithic JavaScript file, index-[hash].js is preferred, remove the rollup options from vite.config.ts.

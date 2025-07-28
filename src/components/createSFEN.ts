@@ -20,6 +20,7 @@ export const createSFEN = (pieces: string, moveCounter: number) => {
 
     pieces.split(',').forEach(el => {
         const boardMatched = el.match(onBoardPattern);
+            //console.log('boardMatched', boardMatched);
         if (boardMatched) { //index 1 is s or g index 2 is column index 3 is row.
             const col = Number(boardMatched[2]) - 1
             const row = Number(boardMatched[3]) - 1

@@ -1,11 +1,12 @@
 import {Board} from "./components/ShogiBoard";
 import {defaultParams, ShogiKit} from "./components/defaults";
-import {unifyPieces, preProcessMoves, prepBranchPoints, extractComments} from "./components/utils";
+import {unifyPieces, preProcessMoves, prepBranchPoints} from "./components/utils";
 import {KifuParser} from "./components/KifuParser";
 import {buildGraphicPaths, DataSet} from "./components/SetImageSelection";
 import {parseSFEN} from "./components/SfenParser";
 import {useState, useEffect} from "preact/hooks";
 import {getUrlKifu} from "./components/fetchFile";
+import {findBookMarks, findPathToBookMark, getBookMarkPaths} from "./components/bookmarks";
 
 /**
  * Renders a Shogi board with the given setup.
@@ -45,13 +46,13 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
 
     const inputHandler = (e: Event) => {
         setUrlData({}) //remove urlData if exists
-        sfenData={} //remove sfenData if exists
+        sfenData = {} //remove sfenData if exists
         e.preventDefault();
         setJsonInput(getJsonInput(prop.input))
 
     }
 
-    if(Object.keys(jsonInput).length>0)    prop.setup={...jsonInput} as ShogiKit
+    if (Object.keys(jsonInput).length > 0) prop.setup = {...jsonInput} as ShogiKit
     let kifuDataPack = {} // stuff dataPack in case kifu is available
     let sfenData = {}
     let propTranslate: {
@@ -94,7 +95,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
 
     if (!!prop.setup.sfen) {
         const [sob, gob, soh, goh, side, count] = parseSFEN(prop.setup.sfen);
-        sfenData = {moves: [''], senteOnHand: soh, goteOnHand: goh, senteOnBoard: sob, goteOnBoard: gob}
+        sfenData = {moves: [], senteOnHand: soh, goteOnHand: goh, senteOnBoard: sob, goteOnBoard: gob}
 
     }
 
@@ -103,6 +104,7 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
         kifuDataPack = data.parse();
 
     }
+
     /**
      *
      * @param url :string url path to the kifu. assumes the file pointed to by url is a text file in kifu format
@@ -113,17 +115,18 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
         // if url is set, fetch kifu after component is mounted and force rerender.
         sfenData = {}    //remove existing data if exists
         kifuDataPack = {} //remove previous data if exists
-        if (!!prop.setup.url){ //check if url is set to null. in this case, skip the fetch
-        getUrlKifu(prop.setup.url!).then((result) =>
-            setUrlData(result))}
+        if (!!prop.setup.url) { //check if url is set to null. in this case, skip the fetch
+            getUrlKifu(prop.setup.url!).then((result) =>
+                setUrlData(result))
+        }
     }, [prop.setup.url])
 
     /*
-    calculated and manupulated entities with this modules are below. rest is path thru
+    The Calculated and manupulated entities with this modules are below. Rest is path through
     senteOnBoard, goteOnBoard,senteOnHand,goteOnHand, tesuu,kifu,sentename,gotename,flip
 
-    url param will alter all of the above.
-    kifu param will alter all of the above
+    URL param will alter all of the above.
+    Kifu param will alter all of the above
     sfen param will alter first four
 
     The params that are not affected are
@@ -161,38 +164,49 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
 
 
     const unifiedPieces = unifyPieces(senteOnBoard, goteOnBoard, senteOnHand, goteOnHand);
-    moves = moves || ``;
+
     initialComment = initialComment || '';
+    let {movesArray, lineZeroComment} = preProcessMoves(moves!);
 
-    let {movesArray, lineZeroComment} = preProcessMoves(moves);
-    //   console.log(movesArray);
+    // console.log(getBookMarkPaths(movesArray))
 
-
-    const commentWindow: boolean = (movesArray.toString().replaceAll("***?***", "").indexOf('*')) > 0 || initialComment.length > 1; //
     //if moves array includes the ***comment*** section except for ***?*** which is used to signal masked next branch instruction, or initial comment
     //exists (but string length is more than 1), then commentWindow flag is true.
-    initialComment = (initialComment.length > 0) ? `${initialComment}\n${extractComments(lineZeroComment)}` : extractComments(lineZeroComment);
+    let commentWindow = initialComment.length > 1
+    for (const move of movesArray) {
+        if (move.comment) commentWindow = true
+    }
+    initialComment = (initialComment.length > 0) ? `${initialComment}\n${lineZeroComment}` : lineZeroComment;
 
+    //console.log(movesArray)
+   // const bookmarks=findBookMarks(movesArray); console.log(bookmarks)
+   // console.log(findPathToBookMark(21,movesArray))
 
     const branchList = prepBranchPoints(movesArray)
-    //if data-input attributes exist in target div, additional input box will be added. the input box is hidden but can be accessed from outside
-    //of the app by usual document.getElementById(data-input-value) and fire with dispatchEvent('change');
-    const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
-    return <div class="app-container"><Board pieces={unifiedPieces} moves={movesArray} branchList={branchList} caption={caption || ""}
-                    initialComment={initialComment} tesuu={tesuu || 0}
-                    flags={{
-                        commentWindow,
-                        HasBranch,
-                        showMarker,
-                        animate,
-                        flip,
-                        maskBranch,
-                        maskBranchOnce,
-                        sideComment
-                    }}
-                    kifu={kifu}
-                    senteName={senteName} goteName={goteName} markerAt={markerAt} graphics={{koma, ban, grid, marker}}
-                    id={prop.index}/>
+    //console.log('branchList', branchList)
+    /*
+    When the data-input attributes exist in target div, additional input box will be added. The input box is hidden but can be accessed from outside
+    If the app by usual document.getElementById(data-input-value) and fire with dispatchEvent('change');
+    */
+    //   const HasBranch: boolean = (movesArray && (movesArray.toString().match(/\dJ\d/) || []).length > 0); //check for Branch instruction
+    const HasBranch = branchList && Object.keys(branchList).length > 0
+    return <div class="app-container"><Board pieces={unifiedPieces} moves={movesArray} branchList={branchList}
+                                             caption={caption || ""}
+                                             initialComment={initialComment} tesuu={tesuu || 0}
+                                             flags={{
+                                                 commentWindow,
+                                                 HasBranch,
+                                                 showMarker,
+                                                 animate,
+                                                 flip,
+                                                 maskBranch,
+                                                 maskBranchOnce,
+                                                 sideComment
+                                             }}
+                                             kifu={kifu}
+                                             senteName={senteName} goteName={goteName} markerAt={markerAt}
+                                             graphics={{koma, ban, grid, marker}}
+                                             id={prop.index}/>
         {prop.input && <input id={prop.input} onChange={inputHandler} style="display:none"></input>}
     </div>
 }

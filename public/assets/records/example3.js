@@ -1,4 +1,4 @@
-if (typeof(initialSetup__ts81)==='undefined') initialSetup__ts81=[]
+if (!window.initialSetup__ts81) window.initialSetup__ts81=[]
 initialSetup__ts81.push(
 {
     caption: "example 3",

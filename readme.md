@@ -85,10 +85,10 @@ commend block will be dynamically created if there is/are comment(s) in Kifu rec
 ### Preparing the board
 board rendering mechanism is basically a couple of js modules and one CSS file. 
 - index.js
-- vendor.js (Edit: Starting version 1.4, the vendor.js is no longer generated. All js code is in index.js)
+- vendor.js (see Note)
 - index.css
 
-When you build the project, those three files will be generated with unique hash strings added to the filename.
+When you build the project, those three files will be generated with unique hash strings added to the filenames.
 
 
 Those JavaScript files will be served from /assets folder
@@ -334,11 +334,13 @@ inputElement.value=encodeURIComponent(JSON.stringify(kifuDataObject))
 Then this input can be dispatched to notify the change to the app.
 
 ```
-const trigger = new Event('change');
+const trigger = new InputEvent('change');
 inputElement.dispatchEvent(trigger);
 ```
 
 The ShogiBoard app side will first decode the URI component and then parse the JSON.
 See the first example on index.html
 
-
+Note: In original release, Behavior of Vite was to generate two JavaScript files, index.[hash].js and vendor.[hash].js.  Later release of Vite has modified this default behavior to not 
+split the code so there will be a single JavaScript file,  index-[hash].js. In this project, the original setup is preserved with a custom rollup option in the vite.config.ts.  If single index.js is preferred, remove the rollup options
+from vite.config.ts.

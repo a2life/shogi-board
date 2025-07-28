@@ -1217,4 +1217,4 @@ const rest_of_setup = [
 
 ]
 
-initialSetup__ts81 = [...initialSetup__ts81, ...rest_of_setup];
+window.initialSetup__ts81 = [...window.initialSetup__ts81, ...rest_of_setup];

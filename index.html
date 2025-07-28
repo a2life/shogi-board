@@ -14,10 +14,10 @@
 
 
     <div class="display-5">Shogi board with Vite+PreAct</div>
-    <p class=" display-6">This is an HTML page to exercise the TypeScript Shogi Board app. The app can
-        render multiple Shogi Boards on a single page. More than two dozen ShogiBoard with various configurations are shown on this page.
+    <p class="lead mt-3">This is an HTML page to exercise the TypeScript Shogi Board app that can replay game records. The app can
+        render multiple Shogi Boards on a single page. More than two dozen ShogiBoards with various configurations are shown on this page.
     </p>
-    <p>The page is loaded with the Shogi data array with each element using different parameters for a various board setup. See
+    <p>The page is loaded with the Shogi data array with each element using different parameters for various board setups. See
         readme for available options.</p>
     <p>To simplify the page arrangement, I use BootStrap on this page. However, the app itself is not dependent on any CSS framework.</p>
 </div>
@@ -74,7 +74,7 @@
 
 
 
-    <h3>Next 6 boards wrapped with d-flex flex-wrap div</h3>
+    <h3>Next Six boards wrapped with d-flex flex-wrap div</h3>
     <div class="h5">(has some issue with board with side comment option turned on)</div>
     <div class="d-flex flex-wrap">
         <div class="board-app" id="app-6"></div>
@@ -108,7 +108,7 @@
 
 
 <script>
-    var initialSetup__ts81 = [] // initialize the data array for the ShogiBoard
+    window.initialSetup__ts81 = [] // initialize the data array for the ShogiBoard
     initialSetup__ts81.push(
         {
             caption: "data-input attribute demo",
@@ -158,8 +158,8 @@
         const inbox = document.getElementById('aInput');
         const sbData = initialSetup__ts81[index]
         inbox.value = encodeURIComponent(JSON.stringify(sbData));
-        let ev = new Event('change')
-        inbox.dispatchEvent(ev);
+
+        inbox.dispatchEvent(new InputEvent('change'));
         index += 1
     })
 

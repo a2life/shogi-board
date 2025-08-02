@@ -183,8 +183,8 @@ parameters--
 - gOnBoard or goteOnBoard: string indicating on board pieces for sente. default is initial setup for gote for no handicap game. For example, "99l,28r"
 - showMarker:boolean When set to true, it turns on a marker indicator to show the last move. When markerAt is set, showMarker will be automatically set to true.
 - markerAt: string Indicating the initial grid position that will be highlighted. default is 00 position that means "out of the way."  ex., "24" for position ２四 for the initial display. Afterward, showMarker behavior takes over. If this parameter exists, then the ShowMarker flag will be also set to true.
-- moves : string[], data representing piece moves. ex. ["s-2627","g-8687","s-2526","g-8586"] 
-(this represents ２六歩、８四歩、２五歩、８五歩).
+- moves : string or string[], data representing piece moves. For example, "s2627,g-8687,s-2526,g-8586" or  ["s-2627","g-8687","s-2526","g-8586"] 
+(Both forms represent a series of piece movements ２六歩、８四歩、２五歩、８五歩).
 - kifu: The program can read kakinoki(柿木) style kifu notation. Append the entire kifu record inside a backtick pair (quoted literal.) It will take precedence over other individual parameters (moves,sOnHand,gOnHand,gOnBoard,sOnBoard)
 - url: Specify the url for kifu file in kifu format. The utf8 encoded as well as Shift-JIS encoded text file is supported. 
 Also, CORS policy will be enforced. Therefore, depending on the server's origin and header setting, this parameter may not work. 
@@ -207,11 +207,11 @@ Also, CORS policy will be enforced. Therefore, depending on the server's origin 
 
 Moves do not need to alternate between hands. Usually the notation goes like below.
 
-          ["s-xxxx","g-xxxx","s-xxxx","g-xxxx"]
+          "s-xxxx,g-xxxx,s-xxxx,g-xxxx"
 
 but
 
-          ["s-xxxx","s-xxxx","s-xxxx","g-xxxx"]
+          "s-xxxx,s-xxxx,s-xxxx,g-xxxx"
 
 is also allowed. it will be handy for teaching how to construct a castle.
 
@@ -233,9 +233,9 @@ Piece representations in moves, sOnHand,gOnHand,sOnBoard and gOnBoard parameters
 
 Move notation
 
-Anything after three asterisks and before three asterisks is considered as a comment paragraph and will be displayed in a comment window.
-
-If the first character of the comment is '?' or a whole comment is just '?' (surrounded by three asterisks.) This will affect 
+A string starts with asterisk is considered as a comment line and will be displayed in a comment window.
+In a string form, you can not use comma (,) for a obvious reason. You need to use a String Array form.
+If the first character of the comment is '?'  (that is, the first character after asterisk is '?') or a whole comment is just '?' (surrounded by three asterisks.) This will affect 
 the first branching dropdown list after the comment and option window shows "Next move" instead of default move. The next move must be selected from a dropdown list. The Order of the selection list will be randomized. 
 
 kifstr is 5 or 6 character string.
@@ -254,8 +254,9 @@ See the move examples below.
      "s-7677",  // white move a piece from 77 to 76
      "g-3433",  // black moves a piece from 33 to 34
      "sd55g",   // black drops a gold to 5e.
-     "g-3534***do you think this is cool?******words after carriage return***", // white moves a piece from 34 to 35. Comment windows displays"do you think this is cool?<cr>words after carriage return"
-     s+2228  // piece at the 28 position is moved to 22 and then get promoted.
+     "g-3534',  // white moves a piece from 34 to 35. 
+     "*A string starts with asterisk, suhs as this, is treated as a comment line. A Comment window will display.
+     "s+2228  // piece at the 28 position is moved to 22 and then get promoted.
      "x"   // end of moves indicator
     ]
 

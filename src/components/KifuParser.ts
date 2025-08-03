@@ -1,6 +1,9 @@
 // kifu parser class
+
 /*
 Pattern to be recognized
+Reference :: http://kakinoki.o.oo7.jp/kif_format.html
+
 開始日時：2021/07/23 1:00:00
 終了日時：2021/07/23 2:14:00
 棋戦：朝日杯将棋オープン戦
@@ -103,6 +106,7 @@ const timeSpentPattern = /消費時間：([^\n]*)[\r\n$]/
 const eventPattern = /棋戦：([^\n]*)[\r\n$]/
 const catalogingPattern = /戦型：([^\n]*)[\r\n$]/
 const movesHeaderPattern = "\n手数----指手"
+const movesLinePattern = /\n(\d+)|\n(\*)|\n変化|\n&/ //minimum move line detection before processing with lookups
 const movesPattern = /(\d+)\s+([\w+]+)(?:\((\d+)\))?[ /():0-9]*(J?)(\*?[^\n]*)|変化：(\w+)|.*/ //move line here is already processed with lookups
 const moveName = /\d+\s+([\S　]*)/ //this regex applies to original move line with Kanji and extracts move information (strip off time, etc.,) .
 
@@ -130,20 +134,19 @@ export class KifuParser {
 
 
     constructor(kifu: string) {
-        this.kifu = kifu;
+        this.kifu = kifu; //keep original kifu as a class property
+    //    console.log(this.kifu)
         kifu=kifu.split('\n').map(line=>line.trimStart()).join('\n');
-
 
 
         this.moves = []
 
-        if (kifu.includes(movesHeaderPattern)) { //header part exists, so
-            const headerPart = kifu.slice(0, kifu.search(movesHeaderPattern) + 1) //Limit header part up to headerPattern
-            // +1 to back-up linebreak. Otherwise, the last line will not have a carriage-return and will not
-            //match with goteName pattern, which is usually the last attribute before header pattern
-            //  console.log(headerPart)
+        if (movesLinePattern.test(kifu)) { //if moves line exits then..
+            const headerPart = kifu.slice(0, kifu.search(movesLinePattern)) //Limit header part up to headerPattern
+
+            const movePart = kifu.slice(kifu.search(movesLinePattern))
             this.parseData(headerPart)
-            this.parseMoves(kifu) // if the header pattern exists, then moves part exists.
+            this.parseMoves(movePart) // if the header pattern exists, then moves part exists.
         } else this.parseData(kifu) //kifu with no moves involved.
 
     }
@@ -257,12 +260,13 @@ export class KifuParser {
     }
 
 
-    parseMoves(kifu: string) {  //parse moves and extract line 0 comment if it exists.
+    parseMoves(movePart: string) {  //parse moves and extract line 0 comment if it exists.
 
-        if (kifu.search(movesHeaderPattern)) {
+        /*if (kifu.search(movesLinePattern)) {*/
             // new approach
-            const movesOArray = (kifu.slice(kifu.search(movesHeaderPattern), kifu.length).trim().split('\n')).slice(1)
-            const moveObjectArray = convertStringToMoveObject(movesOArray)
+            //const movesOArray = (kifu.slice(kifu.search(movesLinePattern), kifu.length).trim().split('\n'))
+            // const movesOArray =kifu.trim().split('\n');
+            const moveObjectArray = convertStringToMoveObject(movePart.trim().split('\n'));
             //    console.log('moves object array', moveObjectArray)
 
             this.moves = moveObjectArray.map((line: MoveObject) => {
@@ -330,7 +334,7 @@ export class KifuParser {
 
             //  console.log(this.moveObject)
 
-        }
+       /* }*/
     }
 
 

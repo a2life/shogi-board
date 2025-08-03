@@ -1,7 +1,7 @@
 if (!window.initialSetup__ts81) window.initialSetup__ts81=[]
 initialSetup__ts81.push(
 {
-    caption: "example 3",
+    caption: "Using kifu record with branch moves",
     initialComment:"Comment with <a href='*'>hyperlink</a> and <b>other html rich text features</b>",
     showMarker:1,
         kifu:

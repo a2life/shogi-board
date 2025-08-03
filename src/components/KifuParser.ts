@@ -102,7 +102,7 @@ const timeAllowedPattern = /持ち時間：([^\n]*)[\r\n$]/
 const timeSpentPattern = /消費時間：([^\n]*)[\r\n$]/
 const eventPattern = /棋戦：([^\n]*)[\r\n$]/
 const catalogingPattern = /戦型：([^\n]*)[\r\n$]/
-const movesHeaderPattern = '\n手数----指手';
+const movesHeaderPattern = "\n手数----指手"
 const movesPattern = /(\d+)\s+([\w+]+)(?:\((\d+)\))?[ /():0-9]*(J?)(\*?[^\n]*)|変化：(\w+)|.*/ //move line here is already processed with lookups
 const moveName = /\d+\s+([\S　]*)/ //this regex applies to original move line with Kanji and extracts move information (strip off time, etc.,) .
 
@@ -130,7 +130,10 @@ export class KifuParser {
 
 
     constructor(kifu: string) {
-        this.kifu = kifu
+        this.kifu = kifu;
+        kifu=kifu.split('\n').map(line=>line.trimStart()).join('\n');
+
+
 
         this.moves = []
 

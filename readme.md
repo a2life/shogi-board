@@ -9,7 +9,7 @@ First Deployed in production site: 2024-March
 
 A demo running in website can be seen <a href='https://shogishack.net/annex/js-shogi-board.html'>in this link </a>.
 
-(This is a rewrite of modx/PHP/JS projects from 2012. This new project is written with TypeScript with Preact (In another word, 100% client side solution.) The original PHP/JS/JQuery project is https://github.com/a2life/Web_shogiboard)
+(This is a rewrite of modx/PHP/JS project from 2012. This new project is written with TypeScript with Preact (In another word, 100% client side solution.) The original PHP/JS/JQuery project is https://github.com/a2life/Web_shogiboard)
 
 To get started, clone the repository and then do
 
@@ -88,7 +88,7 @@ board rendering mechanism is basically a couple of js modules and one CSS file.
 - vendor.js (see Note)
 - index.css
 
-When you build the project, those three files will be generated with unique hash strings added to the filenames.
+When you build the project, those three files (with hash appended) will be generated with unique hash strings added to the filenames.
 
 
 Those JavaScript files will be served from /assets folder

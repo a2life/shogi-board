@@ -42,7 +42,7 @@ This application is not intended to be used to play shogi. The purpose of this a
 <li>replay games from kifu record that is available from Shogi kifu databases.</li>
 </ol>
 
-### Highlight of the project
+### Highlights of the project
 <ol>
 <li>The program can take standard Kakinoki(柿木) style Kifu format as one of Initial setup parameters and parse them into playable shogi board display.</li>
 <li>Own instruction set in JavaScript Object format for piece movement and placement is used. Kifu is first translated to this internal instruction set and executed.</li>
@@ -129,10 +129,12 @@ Below example shows the two object literals with data to display on the board
     senteOnHand: 's1',
     goteOnHand: 'r2,p3,l1,g1',
     moves: [
-        "***Juicy initial comment***",
-        "s+5216***Spirit of this problem!***",
+        "*initial comment",
+        "s+5216",
+        "*Spirit of this problem!",
         "g-5261",
-        "sd62s***The rest is easy***",
+        "sd62s",
+        "*The rest is easy",
         "x"
         ],
     caption: "Three move tsume with extra pieces in gote on-hand area"

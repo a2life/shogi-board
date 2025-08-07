@@ -151,7 +151,8 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
         flip,
         maskBranch,
         maskBranchOnce,
-        sideComment
+        sideComment,
+        bookmarkList
     }
         = {
         ...defaultParams,
@@ -201,12 +202,14 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
                                                  flip,
                                                  maskBranch,
                                                  maskBranchOnce,
-                                                 sideComment
+                                                 sideComment,
+                                                 bookmarkList
                                              }}
                                              kifu={kifu}
                                              senteName={senteName} goteName={goteName} markerAt={markerAt}
                                              graphics={{koma, ban, grid, marker}}
                                              id={prop.index}/>
-        {prop.input && <input id={prop.input} onChange={inputHandler} style="display:none"></input>}
+        {prop.input && <input id={prop.input} onChange={inputHandler} class="ts-Data visually-hidden"></input>}
+        <input class="tsData visually-hidden" id={"tsData-"+prop.index}></input>
     </div>
 }

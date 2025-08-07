@@ -1,4 +1,4 @@
-export const ShowBranches = (props: { Notes: { note: string, index: number }[], branchingHandler: (e: Event) => void, index: number ,maskBranch?:boolean }) => {
+export const ShowBranches = (props: { Notes: { note: string, index: number }[], branchingHandler: (e: Event) => void, index: number, id:number ,maskBranch?:boolean }) => {
 
 
     const MoveSelect = ()=><option disabled value="default">Next Move</option>
@@ -13,7 +13,7 @@ export const ShowBranches = (props: { Notes: { note: string, index: number }[], 
     }
     if (props.Notes.length > 1) {
         return (
-            <select class="option-select"  title="branch-selector" onChange={props.branchingHandler}
+            <select class="option-select"  title="branch-selector" id={"selector-"+props.id} onChange={props.branchingHandler}
                 value={props.maskBranch?"default":props.index}   > {props.maskBranch && MoveSelect()}
                 {props.Notes.map((e,index)=> {
               return <>

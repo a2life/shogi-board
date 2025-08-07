@@ -22,7 +22,7 @@ import {endOfMoveComment} from "./eomNote";
 import * as I from "./Icons";
 import DOMPurify from "dompurify";
 import {CustomContextMenu} from "./CustomContextMenu";
-import {findBookMarks, findPathToBookMark} from "./bookmarks";
+import {bookMarkSelector, findBookMarks, findPathToBookMark} from "./bookmarks";
 import {bookmark} from "./Icons";
 
 
@@ -36,7 +36,8 @@ export const Board = (Props: {
         flip: boolean,
         maskBranch: boolean,
         maskBranchOnce: boolean,
-        sideComment: boolean
+        sideComment: boolean,
+        bookmarkList:boolean
     }, kifu: string | undefined,
     senteName: string | undefined, goteName: string | undefined, markerAt: string,
     graphics: { koma: string, ban: string, grid: string, marker: string },
@@ -387,7 +388,7 @@ export const Board = (Props: {
         }
 
     }
-    const bookMarkHandler = (index:number) => {
+   const bookMarkHandler = (index:number) => {
         //console.log('bookmark handler for ',index, findPathToBookMark(index,movesArray));
         if (moveCounter>0) reWindHandler()
         const bookMarkMoves=findPathToBookMark(index,movesArray)
@@ -397,6 +398,7 @@ export const Board = (Props: {
         setHistory(miniHistory)
 
     }
+
     /*
      For utilize fade-in fade-out effect of context menu box ,
      the class has to be set to 'visible' after the custom menu element is added to the dom.
@@ -503,7 +505,8 @@ export const Board = (Props: {
                             {!!Props.branchList[moveCounter] &&
                                 <ShowBranches index={moveCounter} Notes={Props.branchList[moveCounter]}
                                               maskBranch={maskBranch}
-                                              branchingHandler={branchingHandler}/>}
+                                              branchingHandler={branchingHandler}
+                                              id={Props.id}/>}
                         </div>
 
                     </>
@@ -542,7 +545,7 @@ export const Board = (Props: {
         {commentWindow && Props.flags.sideComment && <div class="side-comment">
             {commentDiv(comment)}{logEndOfMove(movesArray, moveCounter)}
         </div>}
-
+        {bookMarks.length > 0 && <div>{bookMarkSelector(bookMarks,flags.bookmarkList,bookMarkHandler,Props.id)}</div>}
     </>
 
 }

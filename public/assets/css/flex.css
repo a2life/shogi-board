@@ -41,3 +41,19 @@
     background-color: rgba(0,0,0, .125);
     border-bottom: 1px solid rgba(0,0,0, .125);
 }
+.bookmark_list {
+    list-style: none;
+    display:flex;
+    flex-direction: column;
+    padding:4px;
+    border: solid;
+    border-width: 1px 1px 0 0;
+    border-color: rgba(0,0,0, .125);
+
+
+}
+.bookmark_list_item {
+    margin-left:0;
+    cursor:pointer;
+
+}

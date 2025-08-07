@@ -39,6 +39,7 @@ export interface ShogiKit {
     maskBranchOnce:boolean;
     sideComment:boolean;
     sfen?:string;
+    bookmarkList:boolean;
 
 }
 
@@ -62,7 +63,8 @@ export const defaultParams: ShogiKit = {
     flip:false,
     maskBranch:false, //hide branch. valid option at the start of dropdown
     maskBranchOnce:false,
-    sideComment:false //false means the comment window will be at the bottom
+    sideComment:false, //false means the comment window will be at the bottom
+    bookmarkList:false  // Bookmarks are always available through the context menu. However, if set to true, it will create an extra list element.
 
 
 

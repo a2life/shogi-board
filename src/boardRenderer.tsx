@@ -173,10 +173,15 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
 
     //if moves array includes the ***comment*** section except for ***?*** which is used to signal masked next branch instruction, or initial comment
     //exists (but string length is more than 1), then commentWindow flag is true.
-    let commentWindow = initialComment.length > 1
+    let commentWindow=false;
     for (const move of movesArray) {
         if (move.comment) commentWindow = true
     }
+
+    commentWindow = commentWindow || initialComment.length > 1 || lineZeroComment.length > 1;
+
+
+
     initialComment = (initialComment.length > 0) ? `${initialComment}\n${lineZeroComment}` : lineZeroComment;
 
     //console.log(movesArray)

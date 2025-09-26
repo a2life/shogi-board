@@ -27,8 +27,8 @@ export const createSFEN = (pieces: string, moveCounter: number) => {
             const piece = isupperCase(boardMatched[4]) ? "+" + boardMatched[4] : boardMatched[4];
             board[row][col] = (boardMatched[1]) == 's' ? piece.toUpperCase() : piece.toLowerCase();
         } else {
-            let piece = el.substr(1, 1)
-            piece = (el.substr(2, 1) == "S") ? piece.toUpperCase() : piece.toLowerCase();
+            let piece = el.slice(1, 2)
+            piece = (el.slice(2, 3) == "S") ? piece.toUpperCase() : piece.toLowerCase();
             onHands[piece] += 1;
         }
     });

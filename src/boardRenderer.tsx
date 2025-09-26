@@ -215,6 +215,6 @@ export function BoardRenderer(prop: { setup: ShogiKit, index: number, input: str
                                              graphics={{koma, ban, grid, marker}}
                                              id={prop.index}/>
         {prop.input && <input id={prop.input} onChange={inputHandler} class="ts-Data visually-hidden"></input>}
-        <input class="tsData visually-hidden" id={"tsData-"+prop.index}></input>
+
     </div>
 }

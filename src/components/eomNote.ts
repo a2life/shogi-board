@@ -30,7 +30,7 @@ export const endOfMoveComment = (s: string | MoveObject |undefined):string[] => 
 
     }
     else  if (typeof s === 'object' && isMoveObject(s)) {
-        const postText = ( s .move).match(/[x]:(?<note>.*)/)
+        const postText = ( s .move).match(/x:(?<note>.*)/)
         // console.log(postText);
         if (Array.isArray(postText)) {
 

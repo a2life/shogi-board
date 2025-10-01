@@ -23,7 +23,7 @@ import * as I from "./Icons";
 import DOMPurify from "dompurify";
 import {CustomContextMenu} from "./CustomContextMenu";
 import {bookMarkSelector, findBookMarks, findPathToBookMark} from "./bookmarks";
-import {bookmark} from "./Icons";
+import {createBOD} from "./createBOD";
 
 
 export const Board = (Props: {
@@ -327,6 +327,11 @@ export const Board = (Props: {
         ).catch((reason) => window.alert(reason));
 
     }
+    const bodToClipHandler = (e: Event) => {{
+        navigator.clipboard.writeText(createBOD(piecesInfo,senteName,goteName,moveCounter,notation())).then(
+            () => window.alert('BOD copied to clipboard')
+        ).catch((reason) => window.alert(reason));
+    }}
 
     const sanitizeComment = (comment: string) => {
         return {__html: DOMPurify.sanitize(comment)}
@@ -398,7 +403,6 @@ export const Board = (Props: {
         setHistory(miniHistory)
 
     }
-
     /*
      For utilize fade-in fade-out effect of context menu box ,
      the class has to be set to 'visible' after the custom menu element is added to the dom.
@@ -410,6 +414,7 @@ export const Board = (Props: {
     let topics = [
         {title: "Rotate the Board", fn: () => flipHandler(), icon: flipIcon},
         {title: "SFEN to Clipboard", fn: (e: Event) => copyToClipHandler(e), icon: <I.copyIcon/>},
+        {title: "BOD to Clipboard", fn: (e:Event) => bodToClipHandler(e), icon: <I.copy2/>},
         {title: "Save PNG board image", fn: () => imgCapture(), icon: <I.camera/>},
     ]
     if (!!kifu) topics.push({title: 'Save Kifu', fn: () => saveKifu(), icon: <I.SaveFile/>});
@@ -418,7 +423,7 @@ export const Board = (Props: {
     if (bookMarks.length > 0) {
         bookMarks.forEach(bookMark => {
             if (!!bookMark.bookmark) {
-                topics.push({title: bookMark.bookmark, fn: () =>bookMarkHandler(bookMark.index), icon: bookmark()})
+                topics.push({title: bookMark.bookmark, fn: () =>bookMarkHandler(bookMark.index), icon: <I.bookmark/>})
             }
         })
     }

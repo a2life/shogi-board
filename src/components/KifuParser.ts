@@ -141,7 +141,7 @@ export class KifuParser {
 
         this.moves = []
 
-        if (movesLinePattern.test(kifu)) { //if moves line exits then..
+        if (movesLinePattern.test(kifu)) { //if moves line exits then...
             const headerPart = kifu.slice(0, kifu.search(movesLinePattern)) //Limit header part up to headerPattern
 
             const movePart = kifu.slice(kifu.search(movesLinePattern))
@@ -198,10 +198,10 @@ export class KifuParser {
             let endRow = startRow + 9 //ending row of 局面　info
             for (let row = startRow; row < endRow; row++) {
                 for (let k = 2; k < 19; k = k + 2) {
-                    let masu = KifuArray[row].substr(k, 1)
+                    let masu = KifuArray[row].slice(k, k+1)
                     if (masu !== "・") {
                         let colRow = (10 - k / 2).toString() + (row - startRow + 1).toString();
-                        let side = KifuArray[row].substr(k - 1, 1);
+                        let side = KifuArray[row].slice(k - 1, k);
                         switch (side) {
                             case " "://This is Sente's piece
                                 this.sOnBoard += colRow;

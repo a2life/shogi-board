@@ -6,7 +6,7 @@ import {buildGraphicPaths, DataSet} from "./components/SetImageSelection";
 import {parseSFEN} from "./components/SfenParser";
 import {useState, useEffect} from "preact/hooks";
 import {getUrlKifu} from "./components/fetchFile";
-import {findBookMarks, findPathToBookMark, getBookMarkPaths} from "./components/bookmarks";
+
 
 /**
  * Renders a Shogi board with the given setup.

@@ -1,10 +1,15 @@
 /**
  * CreateBOD
- * @var pieces string
- * @var teban string
+ * @var pieces:string piece information in forms of s34g,g11l etc., with onHand pieces info formed like sbSb gpGp
+ * @var senteName:string name of Sente if exists otherwise undefined
+ * @var goteName:string name of gote if exits otherwise empty undefined
+ * @var moveCount:number
+ * @var lastMove:string Last move information that only exists undefined
+
+ *
  * returns BOD string
  */
-interface keyObject { [key: string]: any }
+
 export const createBOD = (pieces: string,  senteName:string|undefined,goteName:string|undefined, moveCount:number, lastMove:string) => {
     const cordinationLine="  ９ ８ ７ ６ ５ ４ ３ ２ １"
     const horizontalBorder="+---------------------------+"
@@ -47,13 +52,14 @@ export const createBOD = (pieces: string,  senteName:string|undefined,goteName:s
                 if (value>1){
                     acc+=kanNumber[value]
                 }
-
+              //  acc+='　'
+                acc+='\u3000'
             }
         }
         if (acc.length==0){
             acc="なし"
         }
-        return acc
+        return acc.split(' ').join('') //remove space character
     }
     pieces.split(',').forEach((piece: string) => {
         const [side, column, row, kind] = piece.split('')
